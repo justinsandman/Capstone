@@ -40,6 +40,29 @@ CREATE TABLE IF NOT EXISTS nutrition_log (
     date_logged TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
+
+-- CREATE THE LIFESTYLE LOG TABLE
+CREATE TABLE IF NOT EXISTS lifestyle_log (
+    lifestyle_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    log_type VARCHAR(50) CHECK (log_type IN ('Sleep', 'Water Intake')), 
+    value VARCHAR(50), -- Store sleep hours or water intake
+    date_logged TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+-- CREATE THE GOAL TABLE 
+CREATE TABLE IF NOT EXISTS goals (
+    goal_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    goal_type VARCHAR(50) CHECK (goal_type IN ('Weight Loss', 'Muscle Gain', 'Hydration')), 
+    target_value INT, 
+    current_value INT, 
+    deadline DATE, 
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);    
+
+
 INSERT INTO users (username, email) VALUES
     ('Justin', 'justinsandstedt@gmail.com'); 
 
