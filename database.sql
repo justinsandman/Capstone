@@ -62,7 +62,26 @@ CREATE TABLE IF NOT EXISTS goals (
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );    
 
+-- CREATE THE BUG TRACKING TABLE 
+CREATE TABLE IF NOT EXISTS bug_tracking (
+    bug_id INT AUTO_INCREMENT PRIMARY KEY,
+    reported_by INT, -- user_id if user, or dev name/id
+    description TEXT,
+    severity VARCHAR(10) CHECK (severity IN ('Low', 'Medium', 'High')), 
+    status VARCHAR(20) CHECK (status IN ('New', 'Assigned', 'Reproduced', 'Fixed', 'Tested', 'Closed')),
+    date_reported TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_resolved TIMESTAMP,
+    FOREIGN KEY (reported_by) REFERENCES users(user_id) ON DELETE SET NULL -- Assuming User is Reporter
+);
 
-INSERT INTO users (username, email) VALUES
-    ('Justin', 'justinsandstedt@gmail.com'); 
+-- CREATE THE SYSTEM LOG TABLE 
+CREATE TABLE IF NOT EXISTS system_log (
+    log_id INT AUTO_INCREMENT PRIMARY KEY,
+    event_type VARCHAR(50) CHECK (event_type IN ('Performance Check', 'Security Audit')),
+    event_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    details TEXT
+);
+
+INSERT INTO users (first_name, last_name, email, password_hash, dob, gender, activity_level) VALUES
+    ('Justin', 'Sandstedt', 'justinsandstedt@gmail.com', 'hashedpw', '2002-09-25', 'Male', 'Active'); 
 
