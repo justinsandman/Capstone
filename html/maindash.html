@@ -1,3 +1,15 @@
+<!--
+    Authors: Justin Sandstedt, Matthew Swandal, Gabriel Morgan
+
+    Last Updated: Feb 19, 2025 @ 2:17 PM
+
+    Notes: This file serves as the page for the main dashboard for our fitness and 
+        nutrition tracker, with functions to calculate many dynamic quantities. 
+        Those quantities being dynamic in the sense of changing to the user's
+        goals, as well as more simple things, such as the date. Very simple 
+        right now, but updates to interface and functionality will be made. 
+
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +20,9 @@
 </head>
 <body class="bg-gray-800 text-white flex justify-center items-center min-h-screen">
     <div class="w-full max-w-4xl p-6">
-        <!-- Dashboard Header -->
+        <!-- Dashboard Header 
+             Numbers based on User's goals. 
+        -->
         <div class="bg-gray-700 p-6 rounded-xl text-center">
             <h1 class="text-2xl font-bold">Dashboard</h1>
             <p class="text-sm">Daily Nutrition</p>
@@ -40,6 +54,11 @@
         </div>
     </div>
 
+    <!--
+        Function List:
+        - updateNutrition: 
+        - updateDate:
+    -->
     <script>
         function updateNutrition(protein, carbs, fat, totalCalories, consumedCalories) {
             document.getElementById("protein-goal").innerText = protein;
