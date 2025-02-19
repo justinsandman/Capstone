@@ -4,7 +4,7 @@ CREATE DATABASE IF NOT EXISTS my_database;
 --
 USE my_database;
 
--- Create the table of users
+-- CREATE THE USERS TABLES
 CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL, 
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
     activity_level VARCHAR(20)
 );
 
---
+-- CREATE THE ACTIVITY LOG TABLE
 CREATE TABLE IF NOT EXISTS activity_log (
     activity_id INT AUTO_INCREMENT PRIMARY KEY, 
     user_id INT, 
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS activity_log (
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
--- 
+-- CREATE THE NUTRITION LOG TABLE 
 CREATE TABLE IF NOT EXISTS nutrition_log (
     nutrition_log INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
