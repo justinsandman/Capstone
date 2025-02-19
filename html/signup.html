@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>Sign Up Page</title>
     <style>
         body {
             display: flex;
@@ -13,7 +13,76 @@
             background-color: #1E1E1E;
             color: white;
             font-family: Arial, sans-serif;
-        } 
+            margin: 0;
+        }
+        .signup-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 350px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .signup-container input, .signup-container select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            background: black;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            display: block;
+        }
+        .signup-container input::placeholder {
+            color: gray;
+        }
+        .signup-btn {
+            width: 100%;
+            padding: 10px;
+            background: #D3D3D3;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: black;
+            font-weight: bold;
+        }
     </style>
 </head>
+<body>
+
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        <form id="signup-form">
+            <input type="text" id="first-name" placeholder="First Name" required>
+            <input type="text" id="last-name" placeholder="Last Name" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="date" id="dob" placeholder="Date of Birth" required>
+            <select id="gender" required>
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+            <select id="activity-level" required>
+                <option value="">Select Activity Level</option>
+                <option value="sedentary">Sedentary</option>
+                <option value="lightly active">Lightly Active</option>
+                <option value="active">Active</option>
+                <option value="very active">Very Active</option>
+            </select>
+            <button type="submit" class="signup-btn">Sign Up</button>
+        </form>
+        <p id="timestamp" style="font-size: 12px; margin-top: 10px;"></p>
+    </div>
+
+    <script>
+        document.getElementById("signup-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let timestamp = new Date().toLocaleString();
+            document.getElementById("timestamp").innerText = "Account Created: " + timestamp;
+        });
+    </script>
+
+</body>
 </html>
