@@ -21,15 +21,15 @@ Front-End devlopment files
 * **Journal.html**
     * Interface for journaling feature that gives users the space to journal, write notes, etc.
 * **Login.html**
-    * Interface for the Login page.
+    * Interface for the log-in page.
 * **MainDashboard.html**
     * Interface for the home page of the application, this includes all the features and widget for daily nutrition.
 * **Program.html**
     * Interface for users programs that are customizable. This is where users can set their program that determines their nutrition goals.
 * **settings.html**
     * Interface for the settings pages that hold changable data about the users and support options.
-* **Login.html**
-    * Interface for the Login page.
+* **Signup.html**
+    * Interface for the sign-up page.
 * **SleepLog.html**
     * Interface for sleep log feature that users manually input sleep data from wearables.
 * **WeightLog.html**
