@@ -1,5 +1,10 @@
 # **Fuel Train Develop (FTD)**
-Repository for fitness and nutrition tracker for 2025 capstone
+For our 2025 Computer Science Capstone, we are developing a comprehensive, web-based health and fitness tracker. The final product will allow users to log dietary, exercise, and lifestyle choices. As student-athletes, we value healthy living and want to help others on their wellness journey. We have chosen a web-based platform instead of a phone-based app to provide a greater level of accessibility across devices. 
+
+While many fitness trackers require subscriptions for advanced features, our project will offer these tools free of charge. The application will have three layers: a frontend, a middle layer for communication, and a backend. We have chosen Tailwind CSS for the user interface, Python for backend communication, and MySQL for database management. To guide our design, we are using Figma to create a working prototype.
+
+Our goal is to support users of all experience levels by providing an easy-to-use, accessible tool for tracking health and lifestyle habits. With a clean interface and intuitive features, our tracker will make monitoring progress simple and engaging, empowering users to make informed, healthier choices.
+
 
  
 # **Files**
@@ -7,28 +12,28 @@ Repository for fitness and nutrition tracker for 2025 capstone
 ## **HTML**
 Front-End devlopment files
 
-* **expend.html** 
-    * TODO: Front End for the expenditure page
-* **foodlog.html**
-    * TODO: Front End for the Food Log page
-* **ht.html**
-    * TODO: Front End for the Habit tracker page
-* **journal.html**
-    * TODO: Front End for the Journal page
-* **login.html**
-    * Front End for the Login page
-* **maindash.html**
-    * Front End for the Maindash
-* **program.html**
-    * TODO: Front End for the Programs page
+* **Expenditure.html** 
+    * Interface for the expenditure feature which allows users to track their physical activity levels. (i.e weightlifting, running, cycling)
+* **FoodLog.html**
+    * Interface for the food log feature that allows users to track their food intake and monitor their daily caloric needs. 
+* **HabitTracker.html**
+    * Interface for habit tracking feature that users user to create and track new habits. Essentially a reminder for habits that reset daily.
+* **Journal.html**
+    * Interface for journaling feature that gives users the space to journal, write notes, etc.
+* **Login.html**
+    * Interface for the Login page.
+* **MainDashboard.html**
+    * Interface for the home page of the application, this includes all the features and widget for daily nutrition.
+* **Program.html**
+    * Interface for users programs that are customizable. This is where users can set their program that determines their nutrition goals.
 * **settings.html**
-    * Front End for Settings page
-* **signup.html**
-    * Front End for the Signup page
-* **sl.html**
-    * TODO: Front End for the Sleep Log page
+    * Interface for the settings pages that hold changable data about the users and support options.
+* **Login.html**
+    * Interface for the Login page.
+* **SleepLog.html**
+    * Interface for sleep log feature that users manually input sleep data from wearables.
 * **weightlog.html**
-    * TODO: Front End for the Weight Log page
+    * Interface for weight logging where users can input their bodyweight manually that is visualized on a line plot
 ## SQL
 Database Management files
 * database.sql
@@ -36,6 +41,11 @@ Database Management files
     * TODO: link database to hold created accounts
     * TODO: link database for Nutrition
 ## Python
+
+
+---
+## **Authors**
+**Gabriel Morgan, Matthew Swandal, & Justin Sandstedt**
 
 
 
