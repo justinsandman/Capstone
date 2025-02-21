@@ -1,4 +1,9 @@
-# **Fuel Train Develop (FTD)**
+<p align="center">
+  <img src="FTD%20LOGO.png" alt="FTD Logo" width="250">
+</p>
+
+# **Fuel Train Develop (FTD)** 
+
 For our 2025 Computer Science Capstone, we are developing a comprehensive, web-based health and fitness tracker. The final product will allow users to log dietary, exercise, and lifestyle choices. As student-athletes, we value healthy living and want to help others on their wellness journey. We have chosen a web-based platform instead of a phone-based app to provide a greater level of accessibility across devices. 
 
 While many fitness trackers require subscriptions for advanced features, our project will offer these tools free of charge. The application will have three layers: a frontend, a middle layer for communication, and a backend. We have chosen Tailwind CSS for the user interface, Python for backend communication, and MySQL for database management. To guide our design, we are using Figma to create a working prototype.
