@@ -32,7 +32,7 @@ Front-End devlopment files
     * Interface for the Login page.
 * **SleepLog.html**
     * Interface for sleep log feature that users manually input sleep data from wearables.
-* **weightlog.html**
+* **WeightLog.html**
     * Interface for weight logging where users can input their bodyweight manually that is visualized on a line plot
 ## SQL
 Database Management files
