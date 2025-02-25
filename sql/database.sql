@@ -9,12 +9,12 @@ CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL, 
     last_name VARCHAR(50) NOT NULL, 
-    email VARCHAR(100), 
+    email VARCHAR(100) UNIQUE, 
     password_hash VARCHAR(255), 
-    dob DATE,
-    gender VARCHAR(10),
+    date_of_birth DATE,
+    gender ENUM('Male', 'Female', 'Other'),
     account_created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    activity_level VARCHAR(20)
+    activity_level ENUM('Sedentary', 'Lightly Active', 'Active', 'Very Active'),
 );
 
 -- CREATE THE ACTIVITY LOG TABLE
@@ -82,6 +82,6 @@ CREATE TABLE IF NOT EXISTS system_log (
     details TEXT
 );
 
-INSERT INTO users (first_name, last_name, email, password_hash, dob, gender, activity_level) VALUES
+INSERT INTO users (first_name, last_name, email, password_hash, date_of_birth, gender, activity_level) VALUES
     ('Justin', 'Sandstedt', 'justinsandstedt@gmail.com', 'hashedpw', '2002-09-25', 'Male', 'Active'); 
 
