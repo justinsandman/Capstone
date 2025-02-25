@@ -1,0 +1,135 @@
+<!--
+    File: WeightLog.html
+    Description: Interface for weight logging where users can 
+    input their bodyweight manually that is visualized on a line plot.
+    
+    Authors: Justin Sandstedt, Matthew Swandal, Gabriel Morgan
+    Last Updated: Feb 21, 2025 @ 1:25 PM
+
+    Notes: 
+    - 
+
+    References: 
+    - 
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weight Log</title>
+    <style>
+        /* Set the overall appearance of the page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2E2E2E;
+            color: white;
+            text-align: center;
+            margin: 0;
+        }
+
+        /* Style the header section */
+        .header {
+            background-color: #5D95C3;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Define the main content container */
+        .container {
+            padding: 20px;
+        }
+
+        /* Style the area containing the chart */
+        .chart-container {
+            background: #1E1E1E;
+            padding: 20px;
+            border-radius: 10px;
+            margin: auto;
+            width: 80%;
+        }
+
+        /* Ensure the chart takes full width */
+        canvas {
+            width: 100%;
+        }
+
+        /* Style the buttons for weight actions */
+        .weight-controls {
+            margin: 20px 0;
+        }
+
+        .weight-controls button {
+            background-color: #5D95C3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        /* Input field for entering weight */
+        .weight-input {
+            margin-top: 10px;
+            display: none;
+        }
+
+        .weight-input input {
+            padding: 8px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        /* Display weight change information */
+        .weight-change {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* Style the back button */
+        .back-button {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 20px;
+            background: none;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Page header -->
+    <div class="header">Weight Log</div>
+
+    <!-- Main container for content -->
+    <div class="container">
+        <!-- Buttons for weight-related actions -->
+        <div class="weight-controls">
+            <button>Add Current Weight</button>
+            <button>Set Weight Goal</button>
+        </div>
+
+        <!-- Input field for entering weight -->
+        <div class="weight-input">
+            <input type="number" placeholder="Enter weight">
+        </div>
+
+        <!-- Chart display area -->
+        <div class="chart-container">
+            <canvas></canvas>
+        </div>
+
+        <!-- Display weight change information -->
+        <div class="weight-change">Weight Change: <span>0 lbs</span></div>
+    </div>
+
+    <!-- Back button for navigation -->
+    <button class="back-button">&#8592;</button>
+</body>
+</html>
