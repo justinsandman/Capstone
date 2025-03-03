@@ -3,10 +3,12 @@
     Description: Interface for the Login page.
     
     Authors: Justin Sandstedt, Matthew Swandal, Gabriel Morgan
-    Last Updated: Feb 21, 2025 @ 1:22 PM
+    Last Updated: Mar 2, 2025 @ 10:40 PM
 
     Notes: 
-    - 
+    - Adjusted login button width.
+    - Indicated incorrect email/password with red outline.
+    - Linked login button to MainDashboard.html.
 
     References: 
     - 
@@ -59,6 +61,7 @@
             border-radius: 5px;
             cursor: pointer;
             color: black;
+            font-weight: bold;
         }
         .forgot-password {
             display: block;
@@ -69,17 +72,38 @@
         .forgot-password:hover {
             text-decoration: underline;
         }
+        /* color for incorrect email or password */
+        .error {
+            border: 1px solid red !important;
+        }
     </style>
+    <script>
+        // testing incorrect and correct login and linking to main dashboard
+        function validateLogin() {
+            let email = document.getElementById('email');
+            let password = document.getElementById('password');
+            let valid = email.value === "test@example.com" && password.value === "password123";
+            
+            if (!valid) {
+                email.classList.add('error');
+                password.classList.add('error');
+                alert("Incorrect email or password.");
+                return false;
+            }
+            window.location.href = 'MainDashboard.html';
+            return true;
+        }
+    </script>
 </head>
 <body>
 
     <div class="login-container">
         <img src="FTD LOGO.png" alt="FTD Logo" class="logo">
         <h2>Login</h2>
-        <input type="email" placeholder="Email">
-        <input type="password" placeholder="Password">
-        <button class="login-btn">Login</button>
-        <a href="#" class="forgot-password">Forgot Password?</a>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button class="login-btn" onclick="validateLogin()">Login</button>
+        <a href="ForgotPassword.html" class="forgot-password">Forgot Password?</a>
     </div>
 
 </body>

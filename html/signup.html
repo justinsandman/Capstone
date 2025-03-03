@@ -4,7 +4,7 @@
 
     Authors: Justin Sandstedt, Matthew Swandal, Gabriel Morgan
 
-    Last Updated: Feb 28, 2025 @ 11:15 PM
+    Last Updated: March 2, 2025 @ 11:00 PM
 
     Notes: 
     
@@ -71,6 +71,16 @@
             margin-top: 10px;
             font-size: 14px;
         }
+        /* Ensuring gender and activity level dropdowns match input sizes */
+        #gender, #activity-level {
+            width: 100%; 
+            padding: 10px;
+            margin: 10px 0;
+            background: black;
+            border: 1px solid transparent;
+            color: white;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -83,7 +93,7 @@
             <input type="text" id="last-name" name="last_name" placeholder="Last Name" required>
             <input type="email" id="email" name="email" placeholder="Email" required>
             <input type="password" id="password" name="password" placeholder="Password" required>
-            <input type="date" id="dob" name="dob" required>
+            <input type="text" id="dob" name="dob" placeholder="Date of Birth (MM/DD/YYYY)" required onfocus="this.type='date'" onblur="if(this.value==''){this.type='text'}">
             <select id="gender" name="gender" required>
                 <option value="">Select Gender</option>
                 <option value="male">Male</option>
@@ -92,10 +102,9 @@
             </select>
             <select id="activity-level" name="activity_level" required>
                 <option value="">Select Activity Level</option>
-                <option value="sedentary">Sedentary</option>
-                <option value="lightly active">Lightly Active</option>
-                <option value="active">Active</option>
-                <option value="very active">Very Active</option>
+                <option value="lightly active">Lightly Active (1-3 times a week)</option>
+                <option value="active">Active (4-5 per week)</option>
+                <option value="very active">Very Active (6-7 per week)</option>
             </select>
             <button type="submit" class="signup-btn">Sign Up</button>
         </form>
