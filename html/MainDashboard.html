@@ -69,26 +69,29 @@
 
         /* Macronutrient stats */
         .nutrition-stats {
-            display: flex;
-            flex-direction: column;
+            display: flex;;
+            justify-content: space-between;
             width: 100%;
             max-width: 800px;
             margin: 0 auto 15px auto;
         }
 
         .macro {
-            font-size: 18px;
-            margin-bottom: 8px;
+            flex: 1;
+            text-align: center;
+            padding: 0 10px;
         }
 
         /* Progress bars */
         .progress-bar-container {
-            width: 100%;
+            width: 90%;
             height: 4px;
             background-color: #444;
             border-radius: 4px;
             overflow: hidden;
             margin-top: 4px;
+            position: relative;
+            display: flex;
         }
 
         .progress-bar {
@@ -146,13 +149,13 @@
         .progress-background {
             fill: none;
             stroke: #444;
-            stroke-width: 12;
+            stroke-width: 9;
         }
 
         .progress-fill {
             fill: none;
             stroke: #4A90E2;
-            stroke-width: 12;
+            stroke-width: 9;
             stroke-linecap: round;
             stroke-dasharray: 628;
             stroke-dashoffset: 628;
