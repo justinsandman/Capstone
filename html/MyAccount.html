@@ -1,0 +1,158 @@
+<!--
+    File: MyAccount.html
+    Description: Interface for the account of the user
+
+    Authors: Justin Sandstedt, Matthew Swandal, Gabriel Morgan
+    Last Updated: March 7, 2025 @ 10:00 PM
+
+    Notes: This file serves as the page for the user to be able to input and save their weight height and change any personal information
+
+    References: 
+    
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+    <style>
+        /* Set up the background*/
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        /* Style for the main */
+        .container {
+            width: 50%;
+            background: #1e1e1e;
+            padding: 40px;
+            border-radius: 10px;
+        }
+
+        /* page title */
+        h2 {
+            text-align: center;
+            font-size: 32px;
+        }
+
+        /* labels */
+        label {
+            display: block;
+            margin-top: 15px;
+            font-size: 18px;
+        }
+
+        /*input fields and dropdowns */
+        input, select {
+            width: 100%;
+            padding: 15px;
+            margin-top: 5px;
+            background: #2a2a2a;
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: white;
+            font-size: 18px;
+        }
+
+
+        /* height input fields  */
+        .height-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        /*height fields width */
+        .height-input input {
+            width: 48%;
+        }
+
+        /* Style buttons */
+        .btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* save button */
+        .save-btn {
+            background: #007bff;
+            color: white;
+        }
+
+        /* hover */
+        .save-btn:hover {
+            background: #0056b3;
+        }
+
+        /* back-to-settings button */
+        .settings-btn {
+            background: #555;
+            color: white;
+            margin-top: 10px;
+        }
+
+        /* hover */
+        .settings-btn:hover {
+            background: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main container  -->
+    <div class="container">
+        <h2>My Account</h2>
+        <form>
+            <!-- Display user’s name (read-only, set during signup) -->
+            <label for="name">Name:</label>
+            <input type="text" id="name" value="John Doe" readonly>
+
+            <!-- Display user’s birthday (read-only, set during signup) -->
+            <label for="birthday">Birthday:</label>
+            <input type="date" id="birthday" value="2000-01-01" readonly>
+
+            <!-- Input field for weight in pounds -->
+            <label for="weight">Weight (lbs):</label>
+            <input type="number" id="weight" placeholder="Enter your weight in lbs">
+
+            <!-- Input fields for height (feet and inches) -->
+            <label for="height">Height:</label>
+            <div class="height-input">
+                <input type="number" id="height-ft" placeholder="Feet">
+                <input type="number" id="height-in" placeholder="Inches">
+            </div>
+
+            <!-- Dropdown for selecting gender -->
+            <label for="gender">Gender:</label>
+            <select id="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+
+            <!-- Button to save changes -->
+            <button class="btn save-btn">Save Changes</button>
+
+            <!-- Button to go back to the settings page -->
+            <a href="settings.html"><button type="button" class="btn settings-btn">Back to Settings</button></a>
+        </form>
+    </div>
+
+</body>
+</html>

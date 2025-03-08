@@ -1,0 +1,127 @@
+<!--
+    File: ActivityLevel.html
+    Description: Interface so the user can change their activity level as needed
+
+    Authors: Justin Sandstedt, Matthew Swandal, Gabriel Morgan
+    Last Updated: March 7, 2025 @ 10:00 PM
+
+    Notes: This file serves as the page for the user to be able to change their activity level as it increases or decreases
+
+    References: 
+    
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Level</title>
+    <style>
+        /* Page styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        /* Main content container */
+        .container {
+            width: 40%;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: none;
+            margin-top: 60px;
+        }
+
+        /* Heading style */
+        h2 {
+            text-align: center;
+        }
+
+        /* Activity options layout */
+        .activity-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        /* Style for each activity option */
+        .activity-options label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Radio button styling */
+        input[type="radio"] {
+            accent-color: #007bff;
+        }
+
+        /* Button styling */
+        .save-btn, .back-btn {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            display: inline-block;
+            box-sizing: border-box; /* Ensure consistent sizing */
+            text-decoration: none; /* Remove underline from links */
+        }
+
+        /* Button hover effect */
+        .save-btn:hover, .back-btn:hover {
+            background: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Main content -->
+    <div class="container">
+        <h2>Activity Level</h2>
+
+        <!-- Form for activity selection -->
+        <form>
+            <div class="activity-options">
+                <label>
+                    <input type="radio" name="activity" value="lightly_active"> Lightly Active
+                </label>
+                <label>
+                    <input type="radio" name="activity" value="active"> Active
+                </label>
+                <label>
+                    <input type="radio" name="activity" value="very_active"> Very Active
+                </label>
+            </div>
+
+            <!-- Save button -->
+            <button class="save-btn">Save Changes</button>
+        </form>
+
+        <!-- Back to Settings link -->
+        <a href="settings.html" class="back-btn">Back to Settings</a>
+    </div>
+
+</body>
+</html>
