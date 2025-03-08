@@ -72,24 +72,42 @@
         .forgot-password:hover {
             text-decoration: underline;
         }
-        /* color for incorrect email or password */
+        /* Highlight incorrect email/password */
         .error {
             border: 1px solid red !important;
         }
+        /* Error message styling */
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: -5px;
+            margin-bottom: 10px;
+            display: none;
+        }
     </style>
     <script>
-        // testing incorrect and correct login and linking to main dashboard
         function validateLogin() {
             let email = document.getElementById('email');
             let password = document.getElementById('password');
-            let valid = email.value === "test@example.com" && password.value === "password123";
-            
-            if (!valid) {
+            let errorMessage = document.getElementById('error-message');
+
+            let emailCorrect = email.value === "test@example.com";
+            let passwordCorrect = password.value === "password123";
+
+            // Reset error states
+            email.classList.remove('error');
+            password.classList.remove('error');
+            errorMessage.style.display = 'none';
+
+            if (!emailCorrect || !passwordCorrect) {
                 email.classList.add('error');
                 password.classList.add('error');
-                alert("Incorrect email or password.");
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = "Username or password was incorrect.";
                 return false;
             }
+
+            // Redirect to main dashboard on successful login
             window.location.href = 'MainDashboard.html';
             return true;
         }
@@ -102,11 +120,10 @@
         <h2>Login</h2>
         <input type="email" id="email" placeholder="Email">
         <input type="password" id="password" placeholder="Password">
-        <button class="login-btn" onclick="validateLogin()">Login</button>
+        <p id="error-message" class="error-message">Username or password was incorrect.</p>
+        <button type="button" class="login-btn" onclick="validateLogin()">Login</button>
         <a href="ForgotPassword.html" class="forgot-password">Forgot Password?</a>
     </div>
 
 </body>
 </html>
-
-
