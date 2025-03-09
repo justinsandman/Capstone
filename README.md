@@ -40,6 +40,15 @@ Front-End devlopment files
     * Interface for sleep log feature that users manually input sleep data from wearables.
 * **WeightLog.html**
     * Interface for weight logging where users can input their bodyweight manually that is visualized on a line plot
+* **ActivityLevel.html**
+    * Interface for the user to be able to change their activity level
+* **ForgotPassword.html**
+    * Interface for the user to be able to enter their email to reset password
+* **MyAccount.html**
+    * Interface for the user to be able to manage their account
+* **ResetPassword.html**
+    * Interface for once the user enters their email and it matches where they will be able to enter a new password
+    
 ## SQL
 Database Management files
 * database.sql
@@ -47,6 +56,13 @@ Database Management files
     * TODO: link database to hold created accounts
     * TODO: link database for Nutrition
 ## Python
+* Django.py
+    * TODO: description
+* models.py
+    * TODO: description
+* settings.py
+    * TODO: description
+* views.py
 
 
 ---
