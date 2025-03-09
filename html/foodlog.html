@@ -15,63 +15,325 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Log Page</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #1E1E1E;
-            color: white;
-            font-family: Arial, sans-serif;
-            margin: 0;
-        }
-        .signup-container {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            width: 350px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .signup-container input, .signup-container select {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin: 10px 0;
-            background: black;
-            border: none;
-            color: white;
-            border-radius: 5px;
-            display: block;
-        }
-        .signup-container input::placeholder {
-            color: gray;
-        }
-        .signup-btn {
-            width: 100%;
-            padding: 10px;
-            background: #D3D3D3;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            color: black;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Log</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: white;
+      background-color: #121212;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 90%;
+      margin: 0 auto;
+      background-color: #2C2C2C;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .date-picker {
+      display: flex;
+      overflow-x: auto;
+      margin-bottom: 20px;
+      padding: 10px 0;
+      justify-content: flex-start;
+      align-items: center;
+      white-space: nowrap;
+    }
+    .date-btn {
+      padding: 10px 20px;
+      margin: 0 5px;
+      color: white;
+      background-color: #444;
+      border: 1px solid #2C2C2C;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .date-btn:hover {
+      background-color: #3A3A3A;
+    }
+    .selected-date {
+      background-color: #007bff;
+      color: white;
+    }
+    .progress {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .progress div {
+      width: 100%; 
+      text-align: center;
+      margin: 0 10px;
+    }
+    .progress-label {
+        color: white;
+        font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .progress-bar {
+      width: 100%; /* Full width bar */
+      background-color: #3A3A3A;
+      height: 20px; /* Reduced height for a sleeker look */
+      border-radius: 5px;
+      position: relative;
+      margin-top: 10px;
+    }
+    .progress-bar span {
+      display: block;
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.3s ease-in-out;
+    }
+    .calories-bar {
+      background-color: #007bff; /* Blue */
+    }
+    .protein-bar {
+      background-color: #ff7f7f; /* Peach */
+    }
+    .fat-bar {
+      background-color: #28a745; /* Green */
+    }
+    .carbs-bar {
+      background-color: #ffc107; /* Yellow */
+    }
+    .timeline {
+      display: grid;
+      grid-template-rows: repeat(18, 1fr); /* 6AM to 11PM */
+      grid-gap: 10px;
+      margin-top: 20px;
+    }
+    .hour {
+      text-align: left;
+      padding: 10px;
+      color: white;
+      position: relative;
+      background-color: #202020;
+      border: 1px solid #999292;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .hour:hover {
+      background-color: #3A3A3A;
+    }
+    .plus-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 18px;
+      color: #007BFF;
+      cursor: pointer;
+    }
+    .food-entry {
+      background-color: #188632;
+      padding: 5px;
+      margin-top: 5px;
+      border-radius: 5px;
+      font-size: 12px;
+    }
+  </style>
 </head>
 <body>
-
-    <div class="signup-container">
-        <h2>Food Log</h2>
-        <form id="foodlog">
-
+  <div class="container">
+    <h1>Food Log</h1>
+    
+    <!-- Date Picker Section -->
+    <div class="date-picker" id="date-picker">
+      <!-- Dynamically generated date buttons will go here -->
     </div>
 
-    <script>
-    </script>
+    <!-- Progress Section -->
+    <div class="progress">
+      <div>
+        <div class="progress-label">Calories</div>
+        <div class="progress-bar"><span class="calories-bar" style="width: 50%;"></span></div>
+      </div>
+      <div>
+        <div class="progress-label">Protein</div>
+        <div class="progress-bar"><span class="protein-bar" style="width: 40%;"></span></div>
+      </div>
+      <div>
+        <div class="progress-label">Fat</div>
+        <div class="progress-bar"><span class="fat-bar" style="width: 30%;"></span></div>
+      </div>
+      <div>
+        <div class="progress-label">Carbs</div>
+        <div class="progress-bar"><span class="carbs-bar" style="width: 60%;"></span></div>
+      </div>
+    </div>
 
+    <!-- Timeline Section -->
+    <div class="timeline">
+      <div class="hour">
+        6 AM
+        <span class="plus-btn" onclick="addFood('6AM')">+</span>
+        <div id="6AM-food" class="food-entry"></div>
+      </div>
+      <div class="hour">
+        7 AM
+        <span class="plus-btn" onclick="addFood('7AM')">+</span>
+        <div id="7AM-food" class="food-entry"></div>
+      </div>
+      <div class="hour">
+        8 AM
+        <span class="plus-btn" onclick="addFood('8AM')">+</span>
+        <div id="8AM-food" class="food-entry"></div>
+      </div>
+      <div class="hour">
+        9 AM
+        <span class="plus-btn" onclick="addFood('9AM')">+</span>
+        <div id="9AM-food" class="food-entry"></div>
+      </div>
+      <div class="hour">
+        10 AM
+        <span class="plus-btn" onclick="addFood('10AM')">+</span>
+        <div id="10AM-food" class="food-entry"></div>
+      </div>
+      <div class="hour">
+        11 AM
+        <span class="plus-btn" onclick="addFood('11AM')">+</span>
+        <div id="11AM-food" class="food-entry"></div>
+      </div>
+      <div class="hour">
+        12 PM
+        <span class="plus-btn" onclick="addFood('12PM')">+</span>
+        <div id="12PM-food" class="food-entry"></div>
+      </div>
+      <div class="hour">
+        1 PM
+        <span class="plus-btn" onclick="addFood('1PM')">+</span>
+        <div id="1PM-food" class="food-entry"></div>
+      </div>
+      <div class="hour">
+        2 PM
+        <span class="plus-btn" onclick="addFood('2PM')">+</span>
+        <div id="2PM-food" class="food-entry"></div>
+      </div>
+      <div class="hour">
+        3 PM
+        <span class="plus-btn" onclick="addFood('3PM')">+</span>
+        <div id="3PM-food" class="food-entry"></div>
+      </div>
+      <div class="hour">
+        4 PM
+        <span class="plus-btn" onclick="addFood('4PM')">+</span>
+        <div id="4PM-food" class="food-entry"></div>
+      </div>
+      <div class="hour">
+        5 PM
+        <span class="plus-btn" onclick="addFood('5PM')">+</span>
+        <div id="5PM-food" class="food-entry"></div>
+      </div>
+      <div class="hour">
+        6 PM
+        <span class="plus-btn" onclick="addFood('6PM')">+</span>
+        <div id="6PM-food" class="food-entry"></div>
+      </div>
+      <div class="hour">
+        7 PM
+        <span class="plus-btn" onclick="addFood('7PM')">+</span>
+        <div id="7PM-food" class="food-entry"></div>
+      </div>
+      <div class="hour">
+        8 PM
+        <span class="plus-btn" onclick="addFood('8PM')">+</span>
+        <div id="8PM-food" class="food-entry"></div>
+      </div>
+      <div class="hour">
+        9 PM
+        <span class="plus-btn" onclick="addFood('9PM')">+</span>
+        <div id="9PM-food" class="food-entry"></div>
+      </div>
+      <div class="hour">
+        10 PM
+        <span class="plus-btn" onclick="addFood('10PM')">+</span>
+        <div id="10PM-food" class="food-entry"></div>
+      </div>
+      <div class="hour">
+        11 PM
+        <span class="plus-btn" onclick="addFood('11PM')">+</span>
+        <div id="11PM-food" class="food-entry"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Function to generate the date buttons for the current week
+    function generateDateButtons() {
+      const today = new Date();
+      const datePickerContainer = document.getElementById('date-picker');
+      const currentDate = today.getDate();
+      const currentMonth = today.getMonth();
+      const currentYear = today.getFullYear();
+
+      // Get the start of the current week (Sunday)
+      const startOfWeek = new Date(currentYear, currentMonth, currentDate - today.getDay());
+
+      // Create date buttons for the current week
+      for (let i = 0; i < 7; i++) {
+        const dateButton = document.createElement('button');
+        const currentDay = new Date(startOfWeek);
+        currentDay.setDate(startOfWeek.getDate() + i);
+        const formattedDate = currentDay.toLocaleDateString();
+
+        dateButton.textContent = formattedDate;
+        dateButton.classList.add('date-btn');
+        dateButton.onclick = () => selectDate(formattedDate);
+
+        // Highlight today
+        if (i === today.getDay()) {
+          dateButton.classList.add('selected-date');
+        }
+
+        datePickerContainer.appendChild(dateButton);
+      }
+    }
+
+    // Select a date
+    function selectDate(date) {
+      alert('Selected Date: ' + date);
+      // You can store and process the selected date here
+    }
+
+    // Call the function to generate date buttons on page load
+    generateDateButtons();
+
+    function addFood(hour) {
+      const foodEntry = prompt("Enter food item:");
+      if (foodEntry) {
+        document.getElementById(`${hour}-food`).innerText = foodEntry;
+
+        // Update progress bars based on user input (simplified logic)
+        updateProgress(foodEntry);
+      }
+    }
+
+    function updateProgress(food) {
+      // Dummy logic to update progress
+      // Here you would calculate the calories/macros based on the food entered
+      const caloriesProgress = 52;  // example
+      const proteinProgress = 40;   // Example
+      const fatProgress = 30;       // Example
+      const carbsProgress = 60;     // Example
+
+      // Update the progress bars
+      document.querySelector('.calories-bar').style.width = `${caloriesProgress}%`;
+      document.querySelector('.protein-bar').style.width = `${proteinProgress}%`;
+      document.querySelector('.fat-bar').style.width = `${fatProgress}%`;
+      document.querySelector('.carbs-bar').style.width = `${carbsProgress}%`;
+    }
+  </script>
 </body>
 </html>
+
+
+
+
+
