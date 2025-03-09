@@ -11,3 +11,153 @@
     References: 
     
 -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 80%;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .section {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .add-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .goal-select {
+            margin-top: 10px;
+        }
+
+        .workout-entry {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .entry-column {
+            flex: 1;
+            text-align: center;
+        }
+
+        .back-btn {
+            margin-top: 40px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .back-btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Program</h2>
+
+        <div class="goal-select">
+            <label for="goal">Select Goal:</label>
+            <select id="goal" name="goal">
+                <option value="">Choose Goal</option>
+            </select>
+        </div>
+
+        <div class="section" id="weightlifting-section">
+            <div class="section-title">
+                <h3>Weight Lifting</h3>
+                <button class="add-btn" onclick="addWorkout('weightlifting')">+</button>
+            </div>
+            <div class="workout-entry">
+                <div class="entry-column">Workout Name</div>
+                <div class="entry-column">Sets</div>
+                <div class="entry-column">Reps</div>
+            </div>
+        </div>
+
+        <div class="section" id="cardio-section">
+            <div class="section-title">
+                <h3>Cardio</h3>
+                <button class="add-btn" onclick="addWorkout('cardio')">+</button>
+            </div>
+            <div class="workout-entry">
+                <div class="entry-column">Workout Name</div>
+                <div class="entry-column">Duration/Time</div>
+            </div>
+        </div>
+
+        <div class="section" id="other-section">
+            <div class="section-title">
+                <h3>Other</h3>
+                <button class="add-btn" onclick="addWorkout('other')">+</button>
+            </div>
+            <div class="workout-entry">
+                <div class="entry-column">Activity Name</div>
+                <div class="entry-column">Amount/Time</div>
+            </div>
+        </div>
+
+        <a href="MainDashboard.html" class="back-btn">Back</a>
+
+    </div>
+
+    <script>
+        function addWorkout(section) {
+            alert(`Add workout to ${section}`);
+        }
+    </script>
+
+</body>
+</html>
+
