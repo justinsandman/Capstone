@@ -4,11 +4,152 @@
     input sleep data from wearables.
     
     Authors: Justin Sandstedt, Matthew Swandal, Gabriel Morgan
-    Last Updated: Feb 21, 2025 @ 1:25 PM
+    Last Updated: March 13, 2025 @ 11:25 PM
 
     Notes: 
     - 
 
     References: 
+    - https://chartscss.org/charts/bar/ 
     - 
 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Log</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* General body styling */
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        /* Container for sleep log input */
+        .sleep-log-container {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .sleep-log-container h2 {
+            margin-bottom: 20px;
+        }
+        
+        /* Styling for input groups */
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            background-color: #2e2e2e;
+            color: white;
+        }
+        
+        /* Button styling */
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        /* Back button styling */
+        .back-button {
+            background-color: #ff4d4d;
+        }
+        
+        .back-button:hover {
+            background-color: #cc0000;
+        }
+        
+        /* Container for chart display */
+        .chart-container {
+            width: 80%;
+            max-width: 600px;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sleep log input form -->
+    <div class="sleep-log-container">
+        <h2>Sleep Log</h2>
+        <div class="input-group">
+            <label for="sleep-time">Sleep Time:</label>
+            <input type="time" id="sleep-time">
+        </div>
+        <div class="input-group">
+            <label for="wake-time">Wake Time:</label>
+            <input type="time" id="wake-time">
+        </div>
+        <button>Log Sleep</button>
+        <button class="back-button" onclick="window.location.href='MainDashboard.html'">Back to Dashboard</button>
+    </div>
+    
+    <!-- Chart displaying weekly sleep data -->
+    <div class="chart-container">
+        <canvas id="sleepChart"></canvas>
+    </div>
+    
+    <script>
+        // Initialize bar chart for sleep data
+        const ctx = document.getElementById('sleepChart').getContext('2d');
+        const sleepChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                datasets: [{
+                    label: 'Hours Slept',
+                    data: [7, 6.5, 8, 7.5, 6, 9, 8],
+                    backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                    borderColor: 'rgba(0, 123, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 10
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
