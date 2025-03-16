@@ -5,159 +5,177 @@
     nutrition goals.
 
     Authors: Justin Sandstedt, Matthew Swandal, Gabriel Morgan
-    Last Updated: March 9, 2025 @ 4:00 PM
+    Last Updated: March 15, 2025 @ 9:45 PM
 
     Notes: 
     References: 
     
 -->
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Program</title>
     <style>
+        /* General body styling */
         body {
             font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
+            background-color: #121212; /* Dark mode theme */
+            color: white; /* White text */
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             height: 100vh;
-            flex-direction: column;
+            justify-content: center; /* Center content */
         }
 
+        /* Container for goal selection */
         .container {
-            width: 80%;
             background: #1e1e1e;
+            width: 90%;
             padding: 20px;
             border-radius: 10px;
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        h2 {
             text-align: center;
         }
 
-        .section {
+        /* Chart container for macro tracking */
+        .chart-container {
+            background: #222;
+            width: 90%;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
             margin-top: 20px;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            position: relative;
+        }
+
+        /* Title spacing for the chart */
+        .chart-container h3 {
+            margin-bottom: 40px;
+        }
+
+        /* Layout for the macro bar chart */
+        .bar-chart {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 100%;
             width: 100%;
         }
 
-        .section-title {
+        /* Individual bar styling */
+        .bar {
+            width: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            position: relative;
+            height: 100%;
+            border: 2px solid white; /* Bar outline */
+            background: rgba(255, 255, 255, 0.1); /* Light transparent fill */
+        }
+
+        /* Individual macro sections inside bars */
+        .bar div {
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
+            min-height: 30px;
+            padding: 5px;
+            font-weight: bold;
         }
 
-        .add-btn {
-            background: #007bff;
+        /* Color coding for different macros */
+        .fat {
+            background: #33FF57; /* Green for fat */
+            color: black;
+        }
+
+        .protein {
+            background: #3357FF; /* Blue for protein */
             color: white;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            font-size: 20px;
-            cursor: pointer;
         }
 
-        .goal-select {
-            margin-top: 10px;
+        .carbs {
+            background: #FF5733; /* Red for carbs */
+            color: black;
         }
 
-        .workout-entry {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-            background: #2a2a2a;
-            padding: 10px;
+        /* Label for calorie tracking */
+        .calories-label {
+            position: absolute;
+            top: -30px;
+            background: black;
+            color: white;
+            padding: 5px;
             border-radius: 5px;
+            font-size: 14px;
         }
 
-        .entry-column {
-            flex: 1;
-            text-align: center;
-        }
-
+        /* Styling for the back button */
         .back-btn {
-            margin-top: 40px;
+            margin: 20px;
             padding: 10px 20px;
             background: #007bff;
             color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+            font-weight: bold;
             text-decoration: none;
-            text-align: center;
-        }
-
-        .back-btn:hover {
-            background: #0056b3;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-
+    <!-- Container for selecting nutrition goal -->
     <div class="container">
         <h2>Program</h2>
-
-        <div class="goal-select">
-            <label for="goal">Select Goal:</label>
-            <select id="goal" name="goal">
-                <option value="">Choose Goal</option>
-            </select>
-        </div>
-
-        <div class="section" id="weightlifting-section">
-            <div class="section-title">
-                <h3>Weight Lifting</h3>
-                <button class="add-btn" onclick="addWorkout('weightlifting')">+</button>
-            </div>
-            <div class="workout-entry">
-                <div class="entry-column">Workout Name</div>
-                <div class="entry-column">Sets</div>
-                <div class="entry-column">Reps</div>
-            </div>
-        </div>
-
-        <div class="section" id="cardio-section">
-            <div class="section-title">
-                <h3>Cardio</h3>
-                <button class="add-btn" onclick="addWorkout('cardio')">+</button>
-            </div>
-            <div class="workout-entry">
-                <div class="entry-column">Workout Name</div>
-                <div class="entry-column">Duration/Time</div>
-            </div>
-        </div>
-
-        <div class="section" id="other-section">
-            <div class="section-title">
-                <h3>Other</h3>
-                <button class="add-btn" onclick="addWorkout('other')">+</button>
-            </div>
-            <div class="workout-entry">
-                <div class="entry-column">Activity Name</div>
-                <div class="entry-column">Amount/Time</div>
-            </div>
-        </div>
-
-        <a href="MainDashboard.html" class="back-btn">Back</a>
-
+        <label for="goal">Select Goal:</label>
+        <select id="goal" name="goal">
+            <option value="">Choose Goal</option>
+            <option value="cut">Weight Loss (Cut)</option>
+            <option value="bulk">Weight Gain (Bulk)</option>
+            <option value="maintain">Maintain Weight</option>
+        </select>
     </div>
-
-    <script>
-        function addWorkout(section) {
-            alert(`Add workout to ${section}`);
-        }
-    </script>
+    
+    <!-- Chart section for displaying macro intake -->
+    <div class="chart-container">
+        <h3>Current Program</h3>
+        <div class="bar-chart">
+            <!-- Sample bars showing daily macro distribution -->
+            <div class="bar">
+                <span class="calories-label">0 / 2700 Calories</span>
+                <div class="carbs">Carbs: 0 / 250g</div>
+                <div class="protein">Protein: 0 / 250g</div>
+                <div class="fat">Fat: 0 / 100g</div>
+            </div>
+            <div class="bar">
+                <span class="calories-label">0 / 2700 Calories</span>
+                <div class="carbs">Carbs: 0 / 250g</div>
+                <div class="protein">Protein: 0 / 250g</div>
+                <div class="fat">Fat: 0 / 100g</div>
+            </div>
+            <div class="bar">
+                <span class="calories-label">0 / 2700 Calories</span>
+                <div class="carbs">Carbs: 0 / 250g</div>
+                <div class="protein">Protein: 0 / 250g</div>
+                <div class="fat">Fat: 0 / 100g</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Back button to return to the main dashboard -->
+    <a href="MainDashboard.html" class="back-btn">&#8592; Back</a>
 
 </body>
 </html>
-

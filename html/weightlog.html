@@ -4,7 +4,7 @@
     input their bodyweight manually that is visualized on a line plot.
     
     Authors: Justin Sandstedt, Matthew Swandal, Gabriel Morgan
-    Last Updated: Feb 21, 2025 @ 1:25 PM
+    Last Updated: March 15, 2025 @ 10:25 PM
 
     Notes: 
     - 
@@ -19,117 +19,178 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weight Log</title>
     <style>
-        /* Set the overall appearance of the page */
+        /* General body styling */
         body {
             font-family: Arial, sans-serif;
-            background-color: #2E2E2E;
-            color: white;
-            text-align: center;
+            background-color: #121212; /* Dark background */
+            color: white; /* White text */
             margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content */
         }
 
-        /* Style the header section */
-        .header {
-            background-color: #5D95C3;
-            padding: 15px;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        /* Define the main content container */
+        /* Container for the weight input and goal */
         .container {
-            padding: 20px;
-        }
-
-        /* Style the area containing the chart */
-        .chart-container {
-            background: #1E1E1E;
+            background: #1e1e1e;
+            width: 90%;
             padding: 20px;
             border-radius: 10px;
-            margin: auto;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Container for the weight progress graph */
+        .chart-container {
+            background: #222;
+            width: 90%;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 10px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        /* The graph area where bars will be shown */
+        .graph {
             width: 80%;
+            height: 300px;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            border-left: 2px solid white; /* Y-axis */
+            border-bottom: 2px solid white; /* X-axis */
+            padding: 10px;
+            position: relative;
         }
 
-        /* Ensure the chart takes full width */
-        canvas {
+        /* Styling for individual bars in the graph */
+        .bar {
+            width: 50px;
+            background: #007bff; /* Blue bars */
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            position: relative;
+            border-radius: 5px 5px 0 0; /* Rounded top */
+        }
+
+        /* Heights for each bar (mock data representation) */
+        .bar:nth-child(1) { height: 50px; }
+        .bar:nth-child(2) { height: 100px; }
+        .bar:nth-child(3) { height: 130px; }
+        .bar:nth-child(4) { height: 110px; }
+        .bar:nth-child(5) { height: 140px; }
+        .bar:nth-child(6) { height: 160px; }
+        .bar:nth-child(7) { height: 180px; }
+
+        /* Labels inside bars showing weight values */
+        .bar span {
+            position: absolute;
+            top: -20px; /* Position above the bar */
+            font-size: 14px;
+        }
+
+        /* Target weight marker (dashed red line) */
+        .target-line {
             width: 100%;
+            height: 2px;
+            background: red;
+            position: absolute;
+            top: 120px; /* Adjust based on target weight */
+            border-top: 2px dashed white;
         }
 
-        /* Style the buttons for weight actions */
-        .weight-controls {
+        /* Labels for each day of the week */
+        .days {
+            display: flex;
+            justify-content: space-around;
+            width: 80%;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        /* Container for logging new weight input */
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80%;
             margin: 20px 0;
         }
 
-        .weight-controls button {
-            background-color: #5D95C3;
-            color: white;
+        /* Styling for input fields and button */
+        .form-container input, .form-container button {
+            margin: 10px;
+            padding: 10px;
+            width: 80%;
+            font-size: 16px;
+            border-radius: 5px;
             border: none;
+        }
+
+        /* Button styling */
+        .form-container button {
+            background: #007bff;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Back button styling */
+        .back-btn {
+            margin: 20px;
             padding: 10px 20px;
-            margin: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-
-        /* Input field for entering weight */
-        .weight-input {
-            margin-top: 10px;
-            display: none;
-        }
-
-        .weight-input input {
-            padding: 8px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: none;
-        }
-
-        /* Display weight change information */
-        .weight-change {
-            margin-top: 20px;
-            font-size: 18px;
-        }
-
-        /* Style the back button */
-        .back-button {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            font-size: 20px;
-            background: none;
+            background: #007bff;
             color: white;
-            border: none;
-            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <!-- Page header -->
-    <div class="header">Weight Log</div>
-
-    <!-- Main container for content -->
+    <!-- Container for title and target weight input -->
     <div class="container">
-        <!-- Buttons for weight-related actions -->
-        <div class="weight-controls">
-            <button>Add Current Weight</button>
-            <button>Set Weight Goal</button>
+        <h2>Weight Log</h2>
+        <label for="goalWeight">Set Target Weight:</label>
+        <input type="number" id="goalWeight" placeholder="Enter target weight (lbs)">
+    </div>
+    
+    <!-- Graph container with a target line -->
+    <div class="chart-container">
+        <h3>Weight Progress</h3>
+        <div class="graph">
+            <div class="target-line"></div> <!-- Target weight indicator -->
+            <div class="bar"><span>180</span></div>
+            <div class="bar"><span>178</span></div>
+            <div class="bar"><span>176</span></div>
+            <div class="bar"><span>177</span></div>
+            <div class="bar"><span>175</span></div>
+            <div class="bar"><span>173</span></div>
+            <div class="bar"><span>172</span></div>
         </div>
-
-        <!-- Input field for entering weight -->
-        <div class="weight-input">
-            <input type="number" placeholder="Enter weight">
+        <!-- Days of the week below the graph -->
+        <div class="days">
+            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
         </div>
-
-        <!-- Chart display area -->
-        <div class="chart-container">
-            <canvas></canvas>
-        </div>
-
-        <!-- Display weight change information -->
-        <div class="weight-change">Weight Change: <span>0 lbs</span></div>
     </div>
 
-    <!-- Back button for navigation -->
-    <button class="back-button">&#8592;</button>
+    <!-- Input field for logging new weight -->
+    <div class="form-container">
+        <input type="number" id="weightInput" placeholder="Enter today's weight (lbs)">
+        <button>Log Weight</button>
+    </div>
+
+    <!-- Back button to return to the main dashboard -->
+    <a href="MainDashboard.html" class="back-btn">&#8592; Back</a>
 </body>
 </html>
