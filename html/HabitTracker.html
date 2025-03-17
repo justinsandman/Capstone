@@ -4,7 +4,7 @@
     create and track new habits. Essentially a reminder for habits that reset daily.
     
     Authors: Justin Sandstedt, Matthew Swandal, Gabriel Morgan
-    Last Updated: Feb 21, 2025 @ 1:20 PM
+    Last Updated: March 16, 2025 @ 11:40 PM
 
     Notes: 
     - 
@@ -12,3 +12,183 @@
     References: 
     - 
 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habit Tracker</title>
+    <style>
+        /* General styling for dark theme */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            justify-content: flex-start;
+        }
+
+        /* Main container */
+        .container {
+            background: #1e1e1e;
+            width: 90%;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Habit input field and button */
+        .habit-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .habit-form input {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .habit-form button {
+            width: 50%;
+            padding: 10px;
+            font-size: 16px;
+            background: #007bff;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Habit list section */
+        .habit-list {
+            width: 90%;
+            background: #222;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .habit {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #444;
+        }
+
+        .habit input {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Progress bar container */
+        .progress-container {
+            width: 90%;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            width: 100%;
+            background: #444;
+            border-radius: 5px;
+            overflow: hidden;
+            height: 20px;
+            margin-top: 10px;
+        }
+
+        .progress {
+            width: 50%; /* Placeholder width */
+            height: 100%;
+            background: #33FF57;
+        }
+
+        /* Reset button */
+        .reset-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: red;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Back button */
+        .back-btn {
+            margin: 20px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Title section -->
+    <div class="container">
+        <h2>Habit Tracker</h2>
+        <p>Track and complete your daily habits!</p>
+    </div>
+
+    <!-- Form to add a new habit -->
+    <div class="habit-form">
+        <input type="text" id="habitInput" placeholder="Enter new habit">
+        <button>Add Habit</button>
+    </div>
+
+    <!-- Section displaying tracked habits -->
+    <div class="habit-list">
+        <h3>Today's Habits</h3>
+        <div class="habit">
+            <span>Drink 8 cups of water</span>
+            <input type="checkbox">
+        </div>
+        <div class="habit">
+            <span>Exercise for 30 minutes</span>
+            <input type="checkbox">
+        </div>
+        <div class="habit">
+            <span>Read for 20 minutes</span>
+            <input type="checkbox">
+        </div>
+        <div class="habit">
+            <span>Sleep 8 hours</span>
+            <input type="checkbox">
+        </div>
+    </div>
+
+    <!-- Progress bar for daily completion -->
+    <div class="progress-container">
+        <p>Daily Progress</p>
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+    </div>
+
+    <!-- Button to reset habits (to be implemented in script) -->
+    <button class="reset-btn">Reset for New Day</button>
+
+    <!-- Back button to return to the main dashboard -->
+    <a href="MainDashboard.html" class="back-btn">&#8592; Back</a>
+</body>
+</html>
