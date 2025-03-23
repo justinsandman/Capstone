@@ -368,44 +368,44 @@
       }
     }
 
+    let currentWeekStartDate = getCurrentWeekStartDate(); // Initialize to current week's start
+
     // Get today's date and calculate the current week dates (starting on Sunday)
-    function getCurrentWeekDates() {
+    function getCurrentWeekStartDate() {
       const today = new Date();
       const dayOfWeek = today.getDay();
       const startDate = new Date(today);
       startDate.setDate(today.getDate() - dayOfWeek); // Start on Sunday
-
-      const weekDates = [];
-      for (let i = 0; i < 7; i++) {
-        const currentDate = new Date(startDate);
-        currentDate.setDate(startDate.getDate() + i);
-        weekDates.push(currentDate);
-      }
-      return weekDates;
+      return startDate;
     }
+
 
     function updateWeekDates() {
-      const weekDates = getCurrentWeekDates();
-      const dayButtons = document.querySelectorAll('.day-button');
+      const weekDates = [];
+      for (let i = 0; i < 7; i++) {
+        const currentDate = new Date(currentWeekStartDate);
+        currentDate.setDate(currentWeekStartDate.getDate() + i);
+        weekDates.push(currentDate);
+      }
 
+      const dayButtons = document.querySelectorAll('.day-button');
       weekDates.forEach((date, index) => {
-        const dayButton = dayButtons[index];
-        const dateString = date.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
-        dayButton.textContent = dateString;
-        
-        // Remove the dot from all buttons
-        dayButton.querySelector('.dot')?.remove();
-        dayButton.classList.remove('selected');
-        
-        // Add a dot if it's today's date
-        if (date.toDateString() === new Date().toDateString()) {
-          const dot = document.createElement('div');
-          dot.classList.add('dot');
-          dayButton.appendChild(dot);
-          dayButton.classList.add('selected');
-        }
+      const dayButton = dayButtons[index];
+      const dateString = date.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
+      dayButton.textContent = dateString;
+
+      // Add dot to today's date
+      dayButton.querySelector('.dot')?.remove();
+      dayButton.classList.remove('selected');
+      if (date.toDateString() === new Date().toDateString()) {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        dayButton.appendChild(dot);
+        dayButton.classList.add('selected');
+      }
       });
     }
+
 
     // Handle day button click
     const dayButtons = document.querySelectorAll('.day-button');
@@ -426,19 +426,19 @@
       });
     });
 
-    // Sample week navigation
     const prevWeekButton = document.getElementById('prev-week');
     const nextWeekButton = document.getElementById('next-week');
 
     prevWeekButton.addEventListener('click', () => {
-      // Logic to go to previous week
-      alert("Go to previous week");
+      currentWeekStartDate.setDate(currentWeekStartDate.getDate() - 7); // Go to previous week
+      updateWeekDates(); // Update the displayed week
     });
 
     nextWeekButton.addEventListener('click', () => {
-      // Logic to go to next week
-      alert("Go to next week");
+      currentWeekStartDate.setDate(currentWeekStartDate.getDate() + 7); // Go to next week
+      updateWeekDates(); // Update the displayed week
     });
+
 
     // Handle hour button click
     const hourButtons = document.querySelectorAll('.hour-button');
