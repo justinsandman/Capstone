@@ -225,6 +225,36 @@
       border: 1px solid #ccc;
       border-radius: 5px;
     }
+
+    .tabs {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      padding: 10px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      flex: 1;
+      text-align: center;
+    }
+
+    .tab.active {
+      background-color: #0056b3;
+    }
+
+    .tab-content {
+      display: none;
+      flex-direction: column;
+    }
+
+    .tab-content.active {
+      display: flex;
+    }
+
   </style>
 </head>
 <body>
@@ -244,7 +274,7 @@
       <button class="arrow" id="next-week">&#8594;</button>
     </div>
 
-    <div class="progress-bars">
+  <div class="progress-bars">
       <div class="progress-bar-container">
         <span>Calories</span>
         <div class="progress-bar" id="calories-bar">
@@ -271,53 +301,73 @@
       </div>
     </div>
 
-    <div class="hourly-buttons">
-      <button class="hour-button" id="6am">6 AM</button>
-      <button class="hour-button" id="7am">7 AM</button>
-      <button class="hour-button" id="8am">8 AM</button>
-      <button class="hour-button" id="9am">9 AM</button>
-      <button class="hour-button" id="10am">10 AM</button>
-      <button class="hour-button" id="11am">11 AM</button>
-      <button class="hour-button" id="12pm">12 PM</button>
-      <button class="hour-button" id="1pm">1 PM</button>
-      <button class="hour-button" id="2pm">2 PM</button>
-      <button class="hour-button" id="3pm">3 PM</button>
-      <button class="hour-button" id="4pm">4 PM</button>
-      <button class="hour-button" id="5pm">5 PM</button>
-      <button class="hour-button" id="6pm">6 PM</button>
-      <button class="hour-button" id="7pm">7 PM</button>
-      <button class="hour-button" id="8pm">8 PM</button>
-      <button class="hour-button" id="9pm">9 PM</button>
-      <button class="hour-button" id="10pm">10 PM</button>
-      <button class="hour-button" id="11pm">11 PM</button>
-    </div>
+  <div class="hourly-buttons">
+    <button class="hour-button" id="6am">6 AM</button>
+    <button class="hour-button" id="7am">7 AM</button>
+    <button class="hour-button" id="8am">8 AM</button>
+    <button class="hour-button" id="9am">9 AM</button>
+    <button class="hour-button" id="10am">10 AM</button>
+    <button class="hour-button" id="11am">11 AM</button>
+    <button class="hour-button" id="12pm">12 PM</button>
+    <button class="hour-button" id="1pm">1 PM</button>
+    <button class="hour-button" id="2pm">2 PM</button>
+    <button class="hour-button" id="3pm">3 PM</button>
+    <button class="hour-button" id="4pm">4 PM</button>
+    <button class="hour-button" id="5pm">5 PM</button>
+    <button class="hour-button" id="6pm">6 PM</button>
+    <button class="hour-button" id="7pm">7 PM</button>
+    <button class="hour-button" id="8pm">8 PM</button>
+    <button class="hour-button" id="9pm">9 PM</button>
+    <button class="hour-button" id="10pm">10 PM</button>
+    <button class="hour-button" id="11pm">11 PM</button>
+  </div>
 
     <!-- Overlay for Food Log Entry -->
-    <div class="overlay" id="food-log-overlay">
-      <div class="overlay-content">
-        <div class="tabs">
-          <button class="tab" id="manual-tab">Manual Entry</button>
-          <button class="tab" id="search-tab">Search</button>
-        </div>
-        <div class="tab-content">
-          <div class="manual-entry" id="manual-entry">
-            <input type="text" placeholder="Food Name">
-            <input type="number" placeholder="Calories">
-            <input type="number" placeholder="Protein (g)">
-            <input type="number" placeholder="Fat (g)">
-            <input type="number" placeholder="Carbs (g)">
-            <button class="save-entry">Save</button>
-          </div>
-          <div class="search-entry" id="search-entry">
-            <input type="text" placeholder="Search for Food">
-            <button class="search-food">Search</button>
-          </div>
-        </div>
+  <div class="overlay" id="food-log-overlay">
+    <div class="overlay-content">
+      <div class="tabs">
+        <button class="tab active" id="manual-tab" onclick="switchTab('manual')">Manual Entry</button>
+        <button class="tab" id="search-tab" onclick="switchTab('search')">Search</button>
       </div>
+
+    <div class="tab-content active" id="manual-entry">
+      <input type="text" placeholder="Food Name">
+      <input type="number" placeholder="Calories">
+      <input type="number" placeholder="Protein (g)">
+      <input type="number" placeholder="Fat (g)">
+      <input type="number" placeholder="Carbs (g)">
+      <button class="save-entry">Save</button>
     </div>
+
+    <div class="tab-content" id="search-entry">
+      <input type="text" placeholder="Search for Food">
+      <button class="search-food">Search</button>
+    </div>
+    </div>
+  </div>
+  </div>
   </div>
 
   <script>
+    function switchTab(tabName) {
+      const manualTab = document.getElementById("manual-tab");
+      const searchTab = document.getElementById("search-tab");
+      const manualContent = document.getElementById("manual-entry");
+      const searchContent = document.getElementById("search-entry");
+
+      if (tabName === "manual") {
+        manualContent.classList.add("active");
+        searchContent.classList.remove("active");
+        manualTab.classList.add("active");
+        searchTab.classList.remove("active");
+      }else{
+        manualContent.classList.remove("active");
+        searchContent.classList.add("active");
+        manualTab.classList.remove("active");
+        searchTab.classList.add("active");
+      }
+    }
+
     // Get today's date and calculate the current week dates (starting on Sunday)
     function getCurrentWeekDates() {
       const today = new Date();
@@ -392,17 +442,27 @@
 
     // Handle hour button click
     const hourButtons = document.querySelectorAll('.hour-button');
-    hourButtons.forEach(button => {
+      hourButtons.forEach(button => {
       button.addEventListener('click', () => {
-        document.getElementById('food-log-overlay').style.display = 'flex';
+      document.getElementById('food-log-overlay').style.display = 'flex';
       });
     });
 
-    // Close overlay on tab change or save entry
+    // Prevent the overlay from closing when switching tabs
     document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.getElementById('food-log-overlay').style.display = 'none';
+      tab.addEventListener('click', (event) => {
+      event.stopPropagation();  // Prevent the event from closing the overlay
       });
+    });
+
+    // Close overlay on overlay click
+    document.getElementById('food-log-overlay').addEventListener('click', () => {
+    document.getElementById('food-log-overlay').style.display = 'none';
+    });
+
+    // Prevent overlay from closing when clicking inside the content area
+    document.querySelector('.overlay-content').addEventListener('click', (event) => {
+    event.stopPropagation();
     });
 
     // Initialize the current week dates
@@ -410,6 +470,3 @@
   </script>
 </body>
 </html>
-
-
-
