@@ -1,0 +1,33 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "shaped-terrain-453715-n9:us-south1:ftdconnect",
+            "group": "FTDConnect",
+            "database": "FTDConnect",
+            "username": "justinsandstedt",
+            "connectionTimeout": 30
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "shaped-terrain-453715-n9:us-south1:ftdconnect",
+            "database": "ftddemo",
+            "username": "justinsandstedt",
+            "connectionTimeout": 30
+        }
+    ]
+}
