@@ -5,9 +5,9 @@
 DATABASES = {
     'default': {
         'ENGINE': '', #django.db.backends.mysql
-        'NAME': 'database_name',
-        'USER': 'username',
-        'PASSWORD': 'password',
+        'NAME': 'userlog',
+        'USER': 'optiplex 7070',
+        'PASSWORD': '',
         'HOST': 'instance-ip',
         'PORT': '3306',
     }
