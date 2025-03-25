@@ -28,6 +28,21 @@
             "database": "ftddemo",
             "username": "justinsandstedt",
             "connectionTimeout": 30
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "Capstone",
+            "database": "my_database",
+            "username": "root",
+            "password": "MSwandal@04",
+            "connectionTimeout": 30
         }
     ]
 }
