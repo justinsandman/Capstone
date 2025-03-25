@@ -4,11 +4,11 @@
 
 DATABASES = {
     'default': {
-        'ENGINE': '', #django.db.backends.mysql
-        'NAME': 'database_name',
-        'USER': 'username',
-        'PASSWORD': 'password',
-        'HOST': 'instance-ip',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'my_database',  # DB name
+        'USER': 'my_user',  #  PostgreSQL username
+        'PASSWORD': 'mypassword',  #  PostgreSQL password
+        'HOST': 'localhost',  # Since its running locally
+        'PORT': '5432',  # Default PostgreSQL port
     }
 }

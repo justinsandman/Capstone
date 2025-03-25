@@ -1,6 +1,7 @@
 --
 CREATE DATABASE IF NOT EXISTS my_database;
-
+CREATE USER my_user WITH ENCRYPTED PASSWORD '';
+GRANT ALL PRIVILEGES ON DATABASE my_database TO my_user;
 --
 USE my_database;
 
@@ -82,6 +83,7 @@ CREATE TABLE IF NOT EXISTS system_log (
     details TEXT
 );
 
+-- NEED TO CREATE NUTRITENT AND FOOD JOIN TABLE 
 INSERT INTO users (first_name, last_name, email, password_hash, date_of_birth, gender, activity_level) VALUES
     ('Justin', 'Sandstedt', 'justinsandstedt@gmail.com', 'hashedpw', '2002-09-25', 'Male', 'Active'); 
 
