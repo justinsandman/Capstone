@@ -6,7 +6,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'my_database',  
-        'USER': 'my_user',  
+        'USER': 'root',  
         'PASSWORD': 'Texasman25!', 
         'HOST': 'localhost',  
         'PORT': '3306',  # Default MySQL port

@@ -14,6 +14,21 @@
             "username": "root",
             "password": "MSwandal@04",
             "connectionTimeout": 30
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "username": "root",
+            "name": "CapstoneFTD",
+            "database": "my_database",
+            "connectionTimeout": 30,
+            "password": "Texasman25!"
         }
     ]
 }
