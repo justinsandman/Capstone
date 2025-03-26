@@ -255,26 +255,10 @@
       display: flex;
     }
 
-    .back-button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      font-size: 1em;
-      cursor: pointer;
-      position: absolute;
-      top: 20px;
-      left: 20px;
-    }
-
-    .back-button:hover {
-      background-color: #0056b3;
-    }
   </style>
 </head>
 <body>
   <div class="food-log-container">
-    <button class="back-button" onclick="goToDashboard()">← Return to Dashboard</button>
     <h1 class="title">Food Log</h1>
     <div class="week-navigation">
       <button class="arrow" id="prev-week">&#8592;</button>
@@ -352,7 +336,7 @@
       <input type="number" placeholder="Protein (g)">
       <input type="number" placeholder="Fat (g)">
       <input type="number" placeholder="Carbs (g)">
-      <button class="save-entry" id="save-entry">Save</button>`
+      <button class="save-entry" id="save-entry">Save</button>
     </div>
 
     <div class="tab-content" id="search-entry">
@@ -422,9 +406,6 @@
       });
     }
 
-    function goToDashboard() {
-      window.location.href = 'MainDashboard.html'; // Adjust the path if needed
-    }
 
     // Handle day button click
     const dayButtons = document.querySelectorAll('.day-button');
@@ -492,7 +473,7 @@
     let currentFat = 0;
     let currentCarbs = 0;
 
-    // PLACEHOLDERS FOR MACRO GOALS
+    // Define goals
     const calorieGoal = 2000;
     const proteinGoal = 150;
     const fatGoal = 70;
@@ -536,14 +517,76 @@
       // Calculate percentage
       let percentage = (currentValue / goal) * 100;
       if (percentage > 100) percentage = 100; // Cap at 100%
-
       // Update bar width
       progressBar.style.background = `linear-gradient(to right, #4caf50 ${percentage}%, #ddd ${percentage}%)`;
-
       // Update text
       progressText.textContent = `${currentValue} / ${goal}`;
     }
 
+    let foodEntries = {}; // Object to store food entries by hour
+
+    // Function to open the food log overlay for a specific hour
+    function openFoodLog(hour) {
+      document.getElementById('food-log-overlay').style.display = 'flex';
+      document.getElementById('food-log-overlay').setAttribute('data-hour', hour);
+    }
+
+    // Handle hour button clicks
+    hourButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        openFoodLog(button.id);
+      });
+    });
+
+    // Save manual entry and display it under the correct hour
+    const saveEntryButton = document.querySelector('.save-entry');
+    saveEntryButton.addEventListener('click', () => {
+      const hour = document.getElementById('food-log-overlay').getAttribute('data-hour');
+      const foodName = document.querySelector('#manual-entry input:nth-child(1)').value;
+      const calories = document.querySelector('#manual-entry input:nth-child(2)').value;
+      const protein = document.querySelector('#manual-entry input:nth-child(3)').value;
+      const fat = document.querySelector('#manual-entry input:nth-child(4)').value;
+      const carbs = document.querySelector('#manual-entry input:nth-child(5)').value;
+    
+      // Ensure the hour entry exists in the foodEntries object
+      if (!foodEntries[hour]) {
+        foodEntries[hour] = [];
+      }
+    
+      // Push the new food entry
+      foodEntries[hour].push({
+        foodName, 
+        calories, 
+        protein, 
+        fat, 
+        carbs
+      });
+
+      // Update the hour button with the new entry
+      updateHourDisplay(hour);
+
+      // Close the overlay
+      document.getElementById('food-log-overlay').style.display = 'none';
+
+      // Clear the input fields
+      document.querySelector('#manual-entry input:nth-child(1)').value = '';
+      document.querySelector('#manual-entry input:nth-child(2)').value = '';
+      document.querySelector('#manual-entry input:nth-child(3)').value = '';
+      document.querySelector('#manual-entry input:nth-child(4)').value = '';
+      document.querySelector('#manual-entry input:nth-child(5)').value = '';
+    });
+
+    // Function to update the displayed food entries under the corresponding hour
+    function updateHourDisplay(hour) {
+      const hourButton = document.getElementById(hour);
+      let displayText = foodEntries[hour].map(entry => {
+        // Make sure the entry values are correctly displayed
+        return `${entry.foodName}: ${entry.calories} Cal, P: ${entry.protein}g, F: ${entry.fat}g, C: ${entry.carbs}g`;
+      }).join('\n');
+    
+      // Update the hour button text
+      hourButton.textContent = `${hour.toUpperCase()}\n${displayText}`;
+    }
   </script>
 </body>
 </html>
