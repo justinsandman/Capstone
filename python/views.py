@@ -17,7 +17,7 @@ def dashboard(request):
 
 # Signup Page 
 def signup(request):
-    if request.method == 'POST' # 
+    if request.method == 'POST': # 
         form = SignupForm(request.POST)
         if form.is_valid():
             user = form.save()
