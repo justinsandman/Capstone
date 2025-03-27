@@ -24,7 +24,7 @@ class User(AbstractUser):
         return self.username # Django's built-in username field 
 
 # Activity Log model (Tracks workouts)
-class ActivtyLog(models.Model):
+class ActivityLog(models.Model):
     ACTIVITY_TYPES = [('Cardio', 'Cardio'), ('Strength', 'Strength'), ('Stretching', 'Stretching')]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -100,3 +100,4 @@ class SystemLog(models.Model):
 
     def __str__(self):
         return f"{self.event_type} - {self.event_date}"
+    

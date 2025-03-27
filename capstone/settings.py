@@ -2,15 +2,15 @@
 #
 # Python file to hold DB connection necessities.
 
-import os
+from pathlib import Path  # Importing Path from pathlib
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent  
 
-SECRET_KEY = '52495'  # Replace this with a strong, unique key
+SECRET_KEY = '52495'  # 
 
 DEBUG = True  # Change to False in production
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']  
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -19,7 +19,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Add your apps here
+    'capstone',
+    'nutrition',
 ]
 
 MIDDLEWARE = [
@@ -32,12 +33,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'capstone.urls'  # project’s name
+ROOT_URLCONF = 'capstone.urls'  # project name
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [BASE_DIR / 'templates'],  # Path
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -50,16 +51,16 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'capstone.wsgi.application'  #  project’s name
+WSGI_APPLICATION = 'capstone.wsgi.application'  # project name
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'my_database',  
-        'USER': 'root',  
-        'PASSWORD': 'Texasman25!', 
-        'HOST': 'localhost',  
-        'PORT': '3306',  
+        'NAME': 'my_database',
+        'USER': 'root',
+        'PASSWORD': 'Texasman25!',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -77,6 +78,4 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
-
+STATICFILES_DIRS = [BASE_DIR / 'static']  # Path

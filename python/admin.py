@@ -7,7 +7,7 @@
 # References: 
 
 from django.contrib import admin 
-from .models import User, ActivityLog, NutritionLog, LifestyleLog, Goal, BugTracking, SystemLog
+from ..nutrition.models import User, ActivityLog, NutritionLog, LifestyleLog, Goal, BugTracking, SystemLog
 
 # Register models so they appear in Django admin panel 
 @admin.resgister(User)
