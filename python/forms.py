@@ -24,5 +24,5 @@ class LoginForm(AuthenticationForm):
 # Food Log Form
 class FoodLogForm(forms.ModelForm):
     class Meta:
-        model = FoodLog
+        model = NutritionLog
         fields = ["food_name", "quantity", "date_logged"]

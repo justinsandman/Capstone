@@ -40,7 +40,7 @@ def food_log(request):
     else:
         form = FoodLogForm()  # This should only be defined for GET requests
 
-    logs = FoodLog.objects.filter(user=request.user).order_by('-date_logged')
+    logs = NutritionLog.objects.filter(user=request.user).order_by('-date_logged')
     return render(request, 'foodlog.html', {'form': form, 'logs': logs})
 
 # Fetch Food Nutrition Data
