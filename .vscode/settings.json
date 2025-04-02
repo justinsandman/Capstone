@@ -30,5 +30,6 @@
             "connectionTimeout": 30,
             "password": "Texasman25!"
         }
-    ]
+    ],
+    "livePreview.defaultPreviewPath": "/templates/foodlog.html"
 }

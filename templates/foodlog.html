@@ -23,570 +23,511 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Food Log</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      background-color: #121212;
-      color: white;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Log</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            background-color: #121212;
+            color: white;
+        }
 
-    .food-log-container {
-      width: 80%;
-      max-width: 1200px;
-      margin-top: 20px;
-      text-align: center;
-    }
+        .food-log-container {
+            width: 80%;
+            max-width: 1200px;
+            margin-top: 20px;
+            text-align: center;
+        }
 
-    .title {
-      font-size: 2.5em;
-      margin-bottom: 10px;
-      color: white;
-    }
+        .title {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: white;
+        }
 
-    .week-navigation {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 20px;
-    }
+        .week-navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-    .arrow {
-      background: none;
-      border: none;
-      font-size: 1.5em;
-      cursor: pointer;
-      color: white;
-    }
+        .arrow {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: white;
+        }
 
-    .current-week {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.5em;
-      margin: 0 15px;
-    }
+        .current-week {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            margin: 0 15px;
+        }
 
-    .day-button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      margin: 0 5px;
-      cursor: pointer;
-      position: relative;
-    }
+        .day-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            cursor: pointer;
+            position: relative;
+        }
 
-    .day-button:hover {
-      background-color: #0056b3;
-    }
+        .day-button:hover {
+            background-color: #0056b3;
+        }
 
-    .day-button.selected {
-      background-color: #007bff;
-    }
+        .day-button.selected {
+            background-color: #007bff;
+        }
 
-    .dot {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 8px;
-      height: 8px;
-      background-color: #fff;
-      border-radius: 50%;
-    }
+        .dot {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background-color: #fff;
+            border-radius: 50%;
+        }
 
-    .progress-bars {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
+        .progress-bars {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
 
-    .progress-bar-container {
-      position: relative;
-      width: 22%; /* Adjust width to fit 4 bars side by side */
-      text-align: center;
-      padding: 5px 0;
-    }
+        .progress-bar-container {
+            position: relative;
+            width: 22%;
+            text-align: center;
+            padding: 5px 0;
+        }
 
-    .progress-bar {
-      width: 100%;
-      height: 20px;
-      background-color: #ddd;
-      position: relative;
-    }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #ddd;
+            position: relative;
+        }
 
-    .progress-bar span {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      top: 50%; /* Vertically center the label */
-      transform: translate(-50%, -50%); /* Ensure perfect centering */
-      color: white;
-    }
+        .progress-bar span {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+        }
 
-    .progress-text {
-      color: white;
-      font-weight: bold;
-    }
+        .progress-text {
+            color: white;
+            font-weight: bold;
+        }
 
-    .hourly-buttons {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      justify-items: center; /* Center horizontally */
-      margin-bottom: 20px;
-    }
+        .hourly-buttons {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            justify-items: center;
+            margin-bottom: 20px;
+        }
 
-    .hour-button {
-      background-color: #525353;
-      color: white;
-      border: none;
-      padding: 15px;
-      cursor: pointer;
-      width: 100%; /* Make the width 100% to span the full width */
-    }
+        .hour-button {
+            background-color: #525353;
+            color: white;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            width: 100%;
+            white-space: pre-line;
+        }
 
-    .hour-button:hover {
-      background-color: #7b7e7b;
-    }
+        .hour-button:hover {
+            background-color: #7b7e7b;
+        }
 
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(75, 74, 74, 0.7);
-      justify-content: center;
-      align-items: center;
-    }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(75, 74, 74, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
 
-    .overlay-content {
-      background-color: rgb(49, 49, 49);
-      padding: 20px;
-      border-radius: 10px;
-      width: 80%;
-      max-width: 600px;
-    }
+        .overlay-content {
+            background-color: rgb(49, 49, 49);
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+        }
 
-    .tabs {
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 20px;
-    }
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
 
-    .tab {
-      padding: 10px;
-      cursor: pointer;
-      background-color: #007bff;
-      color: white;
-      border: none;
-    }
+        .tab {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            flex: 1;
+            text-align: center;
+        }
 
-    .tab:hover {
-      background-color: #0056b3;
-    }
+        .tab.active {
+            background-color: #0056b3;
+        }
 
-    .tab-content {
-      display: flex;
-      flex-direction: column;
-    }
+        .tab-content {
+            display: none;
+            flex-direction: column;
+        }
 
-    .manual-entry input {
-      margin: 5px;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
+        .tab-content.active {
+            display: flex;
+        }
 
-    .save-entry {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 10px;
-      cursor: pointer;
-    }
+        .manual-entry input {
+            margin: 5px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
 
-    .save-entry:hover {
-      background-color: #0056b3;
-    }
+        .save-entry {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
 
-    .search-entry input {
-      margin: 5px;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
+        .save-entry:hover {
+            background-color: #0056b3;
+        }
 
-    .tabs {
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 20px;
-    }
+        .search-entry input {
+            margin: 5px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .back-button {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
 
-    .tab {
-      padding: 10px;
-      cursor: pointer;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      flex: 1;
-      text-align: center;
-    }
-
-    .tab.active {
-      background-color: #0056b3;
-    }
-
-    .tab-content {
-      display: none;
-      flex-direction: column;
-    }
-
-    .tab-content.active {
-      display: flex;
-    }
-
-  </style>
+        .back-button:hover {
+            background-color: #777;
+        }
+    </style>
 </head>
 <body>
-  <div class="food-log-container">
-    <h1 class="title">Food Log</h1>
-    <div class="week-navigation">
-      <button class="arrow" id="prev-week">&#8592;</button>
-      <div class="current-week" id="current-week">
-        <button class="day-button" id="sunday">Sun</button>
-        <button class="day-button" id="monday">Mon</button>
-        <button class="day-button" id="tuesday">Tue</button>
-        <button class="day-button" id="wednesday">Wed</button>
-        <button class="day-button" id="thursday">Thu</button>
-        <button class="day-button" id="friday">Fri</button>
-        <button class="day-button" id="saturday">Sat</button>
-      </div>
-      <button class="arrow" id="next-week">&#8594;</button>
-    </div>
-
-  <div class="progress-bars">
-      <div class="progress-bar-container">
-        <span>Calories</span>
-        <div class="progress-bar" id="calories-bar">
-          <span class="progress-text">0 / 2000</span>
+    <div class="food-log-container">
+        <button class="back-button" onclick="location.href='MainDashboard.html'">Back to Dashboard</button>
+        <h1 class="title">Food Log</h1>
+        <div class="week-navigation">
+            <button class="arrow" id="prev-week">&#8592;</button>
+            <div class="current-week" id="current-week">
+                <button class="day-button" id="sunday">Sun</button>
+                <button class="day-button" id="monday">Mon</button>
+                <button class="day-button" id="tuesday">Tue</button>
+                <button class="day-button" id="wednesday">Wed</button>
+                <button class="day-button" id="thursday">Thu</button>
+                <button class="day-button" id="friday">Fri</button>
+                <button class="day-button" id="saturday">Sat</button>
+            </div>
+            <button class="arrow" id="next-week">&#8594;</button>
         </div>
-      </div>
-      <div class="progress-bar-container">
-        <span>Protein</span>
-        <div class="progress-bar" id="protein-bar">
-          <span class="progress-text">0 / 150g</span>
+
+        <div class="progress-bars">
+            <div class="progress-bar-container">
+                <span>Calories</span>
+                <div class="progress-bar" id="calories-bar">
+                    <span class="progress-text">0 / 2000</span>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <span>Protein</span>
+                <div class="progress-bar" id="protein-bar">
+                    <span class="progress-text">0 / 150g</span>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <span>Fat</span>
+                <div class="progress-bar" id="fat-bar">
+                    <span class="progress-text">0 / 70g</span>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <span>Carbs</span>
+                <div class="progress-bar" id="carbs-bar">
+                    <span class="progress-text">0 / 250g</span>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="progress-bar-container">
-        <span>Fat</span>
-        <div class="progress-bar" id="fat-bar">
-          <span class="progress-text">0 / 70g</span>
+
+        <div class="hourly-buttons">
+            <button class="hour-button" id="6am">6 AM</button>
+            <button class="hour-button" id="7am">7 AM</button>
+            <button class="hour-button" id="8am">8 AM</button>
+            <button class="hour-button" id="9am">9 AM</button>
+            <button class="hour-button" id="10am">10 AM</button>
+            <button class="hour-button" id="11am">11 AM</button>
+            <button class="hour-button" id="12pm">12 PM</button>
+            <button class="hour-button" id="1pm">1 PM</button>
+            <button class="hour-button" id="2pm">2 PM</button>
+            <button class="hour-button" id="3pm">3 PM</button>
+            <button class="hour-button" id="4pm">4 PM</button>
+            <button class="hour-button" id="5pm">5 PM</button>
+            <button class="hour-button" id="6pm">6 PM</button>
+            <button class="hour-button" id="7pm">7 PM</button>
+            <button class="hour-button" id="8pm">8 PM</button>
+            <button class="hour-button" id="9pm">9 PM</button>
+            <button class="hour-button" id="10pm">10 PM</button>
+            <button class="hour-button" id="11pm">11 PM</button>
         </div>
-      </div>
-      <div class="progress-bar-container">
-        <span>Carbs</span>
-        <div class="progress-bar" id="carbs-bar">
-          <span class="progress-text">0 / 250g</span>
+
+        <div class="overlay" id="food-log-overlay">
+            <div class="overlay-content">
+                <div class="tabs">
+                    <button class="tab active" id="manual-tab" onclick="switchTab('manual')">Manual Entry</button>
+                    <button class="tab" id="search-tab" onclick="switchTab('search')">Search</button>
+                </div>
+
+                <div class="tab-content active" id="manual-entry">
+                    <input type="text" placeholder="Food Name">
+                    <input type="number" placeholder="Calories">
+                    <input type="number" placeholder="Protein (g)">
+                    <input type="number" placeholder="Fat (g)">
+                    <input type="number" placeholder="Carbs (g)">
+                    <button class="save-entry" id="save-entry">Save</button>
+                </div>
+
+                <div class="tab-content" id="search-entry">
+                    <input type="text" placeholder="Search for Food">
+                    <button class="search-food">Search</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
-  <div class="hourly-buttons">
-    <button class="hour-button" id="6am">6 AM</button>
-    <button class="hour-button" id="7am">7 AM</button>
-    <button class="hour-button" id="8am">8 AM</button>
-    <button class="hour-button" id="9am">9 AM</button>
-    <button class="hour-button" id="10am">10 AM</button>
-    <button class="hour-button" id="11am">11 AM</button>
-    <button class="hour-button" id="12pm">12 PM</button>
-    <button class="hour-button" id="1pm">1 PM</button>
-    <button class="hour-button" id="2pm">2 PM</button>
-    <button class="hour-button" id="3pm">3 PM</button>
-    <button class="hour-button" id="4pm">4 PM</button>
-    <button class="hour-button" id="5pm">5 PM</button>
-    <button class="hour-button" id="6pm">6 PM</button>
-    <button class="hour-button" id="7pm">7 PM</button>
-    <button class="hour-button" id="8pm">8 PM</button>
-    <button class="hour-button" id="9pm">9 PM</button>
-    <button class="hour-button" id="10pm">10 PM</button>
-    <button class="hour-button" id="11pm">11 PM</button>
-  </div>
+    <script>
+        function switchTab(tabName) {
+            const manualTab = document.getElementById("manual-tab");
+            const searchTab = document.getElementById("search-tab");
+            const manualContent = document.getElementById("manual-entry");
+            const searchContent = document.getElementById("search-entry");
 
-    <!-- Overlay for Food Log Entry -->
-  <div class="overlay" id="food-log-overlay">
-    <div class="overlay-content">
-      <div class="tabs">
-        <button class="tab active" id="manual-tab" onclick="switchTab('manual')">Manual Entry</button>
-        <button class="tab" id="search-tab" onclick="switchTab('search')">Search</button>
-      </div>
+            if (tabName === "manual") {
+                manualContent.classList.add("active");
+                searchContent.classList.remove("active");
+                manualTab.classList.add("active");
+                searchTab.classList.remove("active");
+            } else {
+                manualContent.classList.remove("active");
+                searchContent.classList.add("active");
+                manualTab.classList.remove("active");
+                searchTab.classList.add("active");
+            }
+        }
 
-    <div class="tab-content active" id="manual-entry">
-      <input type="text" placeholder="Food Name">
-      <input type="number" placeholder="Calories">
-      <input type="number" placeholder="Protein (g)">
-      <input type="number" placeholder="Fat (g)">
-      <input type="number" placeholder="Carbs (g)">
-      <button class="save-entry" id="save-entry">Save</button>
-    </div>
+        let currentWeekStartDate = getCurrentWeekStartDate();
+        let selectedDay = new Date().toDateString();
+        let dayData = {};
 
-    <div class="tab-content" id="search-entry">
-      <input type="text" placeholder="Search for Food">
-      <button class="search-food">Search</button>
-    </div>
-    </div>
-  </div>
-  </div>
-  </div>
+        function getCurrentWeekStartDate() {
+            const today = new Date();
+            const dayOfWeek = today.getDay();
+            const startDate = new Date(today);
+            startDate.setDate(today.getDate() - dayOfWeek);
+            return startDate;
+        }
 
-  <script>
-    function switchTab(tabName) {
-      const manualTab = document.getElementById("manual-tab");
-      const searchTab = document.getElementById("search-tab");
-      const manualContent = document.getElementById("manual-entry");
-      const searchContent = document.getElementById("search-entry");
+        function updateWeekDates() {
+            const weekDates = [];
+            for (let i = 0; i < 7; i++) {
+                const currentDate = new Date(currentWeekStartDate);
+                currentDate.setDate(currentWeekStartDate.getDate() + i);
+                weekDates.push(currentDate);
+            }
 
-      if (tabName === "manual") {
-        manualContent.classList.add("active");
-        searchContent.classList.remove("active");
-        manualTab.classList.add("active");
-        searchTab.classList.remove("active");
-      }else{
-        manualContent.classList.remove("active");
-        searchContent.classList.add("active");
-        manualTab.classList.remove("active");
-        searchTab.classList.add("active");
-      }
-    }
+            const dayButtons = document.querySelectorAll('.day-button');
+            weekDates.forEach((date, index) => {
+                const dayButton = dayButtons[index];
+                const dateString = date.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
+                dayButton.textContent = dateString;
 
-    let currentWeekStartDate = getCurrentWeekStartDate(); // Initialize to current week's start
+                dayButton.querySelector('.dot')?.remove();
+                dayButton.classList.remove('selected');
+                if (date.toDateString() === selectedDay) {
+                    const dot = document.createElement('div');
+                    dot.classList.add('dot');
+                    dayButton.appendChild(dot);
+                    dayButton.classList.add('selected');
+                }
+            });
+        }
 
-    // Get today's date and calculate the current week dates (starting on Sunday)
-    function getCurrentWeekStartDate() {
-      const today = new Date();
-      const dayOfWeek = today.getDay();
-      const startDate = new Date(today);
-      startDate.setDate(today.getDate() - dayOfWeek); // Start on Sunday
-      return startDate;
-    }
+        const dayButtons = document.querySelectorAll('.day-button');
+        dayButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                dayButtons.forEach(b => {
+                    b.classList.remove('selected');
+                    const dot = b.querySelector('.dot');
+                    if (dot) dot.remove();
+                });
 
-
-    function updateWeekDates() {
-      const weekDates = [];
-      for (let i = 0; i < 7; i++) {
-        const currentDate = new Date(currentWeekStartDate);
-        currentDate.setDate(currentWeekStartDate.getDate() + i);
-        weekDates.push(currentDate);
-      }
-
-      const dayButtons = document.querySelectorAll('.day-button');
-      weekDates.forEach((date, index) => {
-      const dayButton = dayButtons[index];
-      const dateString = date.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
-      dayButton.textContent = dateString;
-
-      // Add dot to today's date
-      dayButton.querySelector('.dot')?.remove();
-      dayButton.classList.remove('selected');
-      if (date.toDateString() === new Date().toDateString()) {
-        const dot = document.createElement('div');
-        dot.classList.add('dot');
-        dayButton.appendChild(dot);
-        dayButton.classList.add('selected');
-      }
-      });
-    }
-
-
-    // Handle day button click
-    const dayButtons = document.querySelectorAll('.day-button');
-    dayButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        // Remove selected class and dot from all buttons
-        dayButtons.forEach(b => {
-          b.classList.remove('selected');
-          const dot = b.querySelector('.dot');
-          if (dot) dot.remove();
+                button.classList.add('selected');
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                button.appendChild(dot);
+                selectedDay = new Date(button.textContent).toDateString();
+                loadDayData();
+            });
         });
 
-        // Add selected class and dot to the clicked button
-        button.classList.add('selected');
-        const dot = document.createElement('div');
-        dot.classList.add('dot');
-        button.appendChild(dot);
-      });
-    });
+        const prevWeekButton = document.getElementById('prev-week');
+        const nextWeekButton = document.getElementById('next-week');
 
-    const prevWeekButton = document.getElementById('prev-week');
-    const nextWeekButton = document.getElementById('next-week');
+        prevWeekButton.addEventListener('click', () => {
+            currentWeekStartDate.setDate(currentWeekStartDate.getDate() - 7);
+            updateWeekDates();
+        });
 
-    prevWeekButton.addEventListener('click', () => {
-      currentWeekStartDate.setDate(currentWeekStartDate.getDate() - 7); // Go to previous week
-      updateWeekDates(); // Update the displayed week
-    });
+        nextWeekButton.addEventListener('click', () => {
+            currentWeekStartDate.setDate(currentWeekStartDate.getDate() + 7);
+            updateWeekDates();
+        });
 
-    nextWeekButton.addEventListener('click', () => {
-      currentWeekStartDate.setDate(currentWeekStartDate.getDate() + 7); // Go to next week
-      updateWeekDates(); // Update the displayed week
-    });
+        const hourButtons = document.querySelectorAll('.hour-button');
+        hourButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                document.getElementById('food-log-overlay').style.display = 'flex';
+                document.getElementById('food-log-overlay').setAttribute('data-hour', button.id);
+            });
+        });
 
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', (event) => {
+                event.stopPropagation();
+            });
+        });
 
-    // Handle hour button click
-    const hourButtons = document.querySelectorAll('.hour-button');
-      hourButtons.forEach(button => {
-      button.addEventListener('click', () => {
-      document.getElementById('food-log-overlay').style.display = 'flex';
-      });
-    });
+        document.getElementById('food-log-overlay').addEventListener('click', () => {
+            document.getElementById('food-log-overlay').style.display = 'none';
+        });
 
-    // Prevent the overlay from closing when switching tabs
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', (event) => {
-      event.stopPropagation();  // Prevent the event from closing the overlay
-      });
-    });
+        document.querySelector('.overlay-content').addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
 
-    // Close overlay on overlay click
-    document.getElementById('food-log-overlay').addEventListener('click', () => {
-    document.getElementById('food-log-overlay').style.display = 'none';
-    });
+        updateWeekDates();
 
-    // Prevent overlay from closing when clicking inside the content area
-    document.querySelector('.overlay-content').addEventListener('click', (event) => {
-    event.stopPropagation();
-    });
+        const calorieGoal = 2000;
+        const proteinGoal = 150;
+        const fatGoal = 70;
+        const carbGoal = 250;
 
-    // Initialize the current week dates
-    updateWeekDates();
+        document.getElementById("save-entry").addEventListener("click", function () {
+            const hour = document.getElementById('food-log-overlay').getAttribute('data-hour');
+            const foodName = document.querySelector('#manual-entry input:nth-child(1)').value;
+            const calories = parseInt(document.querySelector('#manual-entry input:nth-child(2)').value, 10) || 0;
+            const protein = parseInt(document.querySelector('#manual-entry input:nth-child(3)').value, 10) || 0;
+            const fat = parseInt(document.querySelector('#manual-entry input:nth-child(4)').value, 10) || 0;
+            const carbs = parseInt(document.querySelector('#manual-entry input:nth-child(5)').value, 10) || 0;
 
-    let currentCalories = 0;
-    let currentProtein = 0;
-    let currentFat = 0;
-    let currentCarbs = 0;
+            if (!dayData[selectedDay]) {
+                dayData[selectedDay] = {};
+            }
 
-    // Define goals
-    const calorieGoal = 2000;
-    const proteinGoal = 150;
-    const fatGoal = 70;
-    const carbGoal = 250;
+            if (!dayData[selectedDay][hour]) {
+                dayData[selectedDay][hour] = [];
+            }
 
-    document.getElementById("save-entry").addEventListener("click", function () {
-      // Get input values
-      const calories = parseInt(document.querySelector("#manual-entry input:nth-of-type(2)").value) || 0;
-      const protein = parseInt(document.querySelector("#manual-entry input:nth-of-type(3)").value) || 0;
-      const fat = parseInt(document.querySelector("#manual-entry input:nth-of-type(4)").value) || 0;
-      const carbs = parseInt(document.querySelector("#manual-entry input:nth-of-type(5)").value) || 0;
+            dayData[selectedDay][hour].push({
+                foodName,
+                calories,
+                protein,
+                fat,
+                carbs
+            });
 
-      // Update current totals
-      currentCalories += calories;
-      currentProtein += protein;
-      currentFat += fat;
-      currentCarbs += carbs;
+            loadDayData();
 
-      // Update progress bars
-      updateProgress("calories-bar", currentCalories, calorieGoal);
-      updateProgress("protein-bar", currentProtein, proteinGoal);
-      updateProgress("fat-bar", currentFat, fatGoal);
-      updateProgress("carbs-bar", currentCarbs, carbGoal);
+            document.getElementById('food-log-overlay').style.display = 'none';
 
-      // Close overlay
-      document.getElementById('food-log-overlay').style.display = 'none';
+            document.querySelector('#manual-entry input:nth-child(1)').value = '';
+            document.querySelector('#manual-entry input:nth-child(2)').value = '';
+            document.querySelector('#manual-entry input:nth-child(3)').value = '';
+            document.querySelector('#manual-entry input:nth-child(4)').value = '';
+            document.querySelector('#manual-entry input:nth-child(5)').value = '';
+        });
 
-      // Clear inputs after saving
-      document.querySelector("#manual-entry input:nth-of-type(1)").value = "";
-      document.querySelector("#manual-entry input:nth-of-type(2)").value = "";
-      document.querySelector("#manual-entry input:nth-of-type(3)").value = "";
-      document.querySelector("#manual-entry input:nth-of-type(4)").value = "";
-      document.querySelector("#manual-entry input:nth-of-type(5)").value = "";
-    });
+        function updateProgress(barId, currentValue, goal) {
+            const progressBar = document.getElementById(barId);
+            const progressText = progressBar.querySelector(".progress-text");
 
-    // Function to update progress bars
-    function updateProgress(barId, currentValue, goal) {
-      const progressBar = document.getElementById(barId);
-      const progressText = progressBar.querySelector(".progress-text");
+            let percentage = (currentValue / goal) * 100;
+            if (percentage > 100) percentage = 100;
+            progressBar.style.background = `linear-gradient(to right, #4caf50 ${percentage}%, #ddd ${percentage}%)`;
+            progressText.textContent = `${currentValue} / ${goal}`;
+        }
 
-      // Calculate percentage
-      let percentage = (currentValue / goal) * 100;
-      if (percentage > 100) percentage = 100; // Cap at 100%
-      // Update bar width
-      progressBar.style.background = `linear-gradient(to right, #4caf50 ${percentage}%, #ddd ${percentage}%)`;
-      // Update text
-      progressText.textContent = `${currentValue} / ${goal}`;
-    }
+        function loadDayData() {
+            let currentCalories = 0;
+            let currentProtein = 0;
+            let currentFat = 0;
+            let currentCarbs = 0;
 
-    let foodEntries = {}; // Object to store food entries by hour
+            const hourButtons = document.querySelectorAll('.hour-button');
+            hourButtons.forEach(button => {
+                button.textContent = button.id.toUpperCase();
+            });
 
-    // Function to open the food log overlay for a specific hour
-    function openFoodLog(hour) {
-      document.getElementById('food-log-overlay').style.display = 'flex';
-      document.getElementById('food-log-overlay').setAttribute('data-hour', hour);
-    }
+            if (dayData[selectedDay]) {
+                for (const hour in dayData[selectedDay]) {
+                    const hourButton = document.getElementById(hour);
+                    let displayText = dayData[selectedDay][hour].map(entry => {
+                        currentCalories += entry.calories;
+                        currentProtein += entry.protein;
+                        currentFat += entry.fat;
+                        currentCarbs += entry.carbs;
+                        return `${entry.foodName}: ${entry.calories} Cal, P: ${entry.protein}g, F: ${entry.fat}g, C: ${entry.carbs}g`;
+                    }).join('\n');
+                    hourButton.textContent = `${hour.toUpperCase()}\n${displayText}`;
+                }
+            }
 
-    // Handle hour button clicks
-    hourButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        openFoodLog(button.id);
-      });
-    });
-
-    // Save manual entry and display it under the correct hour
-    const saveEntryButton = document.querySelector('.save-entry');
-    saveEntryButton.addEventListener('click', () => {
-      const hour = document.getElementById('food-log-overlay').getAttribute('data-hour');
-      const foodName = document.querySelector('#manual-entry input:nth-child(1)').value;
-      const calories = document.querySelector('#manual-entry input:nth-child(2)').value;
-      const protein = document.querySelector('#manual-entry input:nth-child(3)').value;
-      const fat = document.querySelector('#manual-entry input:nth-child(4)').value;
-      const carbs = document.querySelector('#manual-entry input:nth-child(5)').value;
-    
-      // Ensure the hour entry exists in the foodEntries object
-      if (!foodEntries[hour]) {
-        foodEntries[hour] = [];
-      }
-    
-      // Push the new food entry
-      foodEntries[hour].push({
-        foodName, 
-        calories, 
-        protein, 
-        fat, 
-        carbs
-      });
-
-      // Update the hour button with the new entry
-      updateHourDisplay(hour);
-
-      // Close the overlay
-      document.getElementById('food-log-overlay').style.display = 'none';
-
-      // Clear the input fields
-      document.querySelector('#manual-entry input:nth-child(1)').value = '';
-      document.querySelector('#manual-entry input:nth-child(2)').value = '';
-      document.querySelector('#manual-entry input:nth-child(3)').value = '';
-      document.querySelector('#manual-entry input:nth-child(4)').value = '';
-      document.querySelector('#manual-entry input:nth-child(5)').value = '';
-    });
-
-    // Function to update the displayed food entries under the corresponding hour
-    function updateHourDisplay(hour) {
-      const hourButton = document.getElementById(hour);
-      let displayText = foodEntries[hour].map(entry => {
-        // Make sure the entry values are correctly displayed
-        return `${entry.foodName}: ${entry.calories} Cal, P: ${entry.protein}g, F: ${entry.fat}g, C: ${entry.carbs}g`;
-      }).join('\n');
-    
-      // Update the hour button text
-      hourButton.textContent = `${hour.toUpperCase()}\n${displayText}`;
-    }
-  </script>
+            updateProgress("calories-bar", currentCalories, calorieGoal);
+            updateProgress("protein-bar", currentProtein, proteinGoal);
+            updateProgress("fat-bar", currentFat, fatGoal);
+            updateProgress("carbs-bar", currentCarbs, carbGoal);
+        }
+    </script>
 </body>
 </html>
