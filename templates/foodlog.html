@@ -145,7 +145,7 @@
         }
 
         .hour-button {
-            background-color: #525353;
+            background-color: #535252;
             color: white;
             border: none;
             padding: 15px;
@@ -334,7 +334,6 @@
                 </div>
             </div>
         </div>
-    </div>
 
     <script>
         function switchTab(tabName) {
@@ -454,79 +453,104 @@
         const carbGoal = 250;
 
         document.getElementById("save-entry").addEventListener("click", function () {
-            const hour = document.getElementById('food-log-overlay').getAttribute('data-hour');
-            const foodName = document.querySelector('#manual-entry input:nth-child(1)').value;
-            const calories = parseInt(document.querySelector('#manual-entry input:nth-child(2)').value, 10) || 0;
-            const protein = parseInt(document.querySelector('#manual-entry input:nth-child(3)').value, 10) || 0;
-            const fat = parseInt(document.querySelector('#manual-entry input:nth-child(4)').value, 10) || 0;
-            const carbs = parseInt(document.querySelector('#manual-entry input:nth-child(5)').value, 10) || 0;
+          const hour = document.getElementById('food-log-overlay').getAttribute('data-hour');
+          const foodName = document.querySelector('#manual-entry input:nth-child(1)').value;
+          const calories = parseInt(document.querySelector('#manual-entry input:nth-child(2)').value, 10) || 0;
+          const protein = parseInt(document.querySelector('#manual-entry input:nth-child(3)').value, 10) || 0;
+          const fat = parseInt(document.querySelector('#manual-entry input:nth-child(4)').value, 10) || 0;
+          const carbs = parseInt(document.querySelector('#manual-entry input:nth-child(5)').value, 10) || 0;
 
-            if (!dayData[selectedDay]) {
-                dayData[selectedDay] = {};
-            }
+          if (!dayData[selectedDay]) {
+            dayData[selectedDay] = {};
+          }
+          if (!dayData[selectedDay][hour]) {
+            dayData[selectedDay][hour] = [];
+          }
 
-            if (!dayData[selectedDay][hour]) {
-                dayData[selectedDay][hour] = [];
-            }
+          dayData[selectedDay][hour].push({ foodName, calories, protein, fat, carbs });
 
-            dayData[selectedDay][hour].push({
-                foodName,
-                calories,
-                protein,
-                fat,
-                carbs
-            });
+          // Save the updated data to localStorage
+          localStorage.setItem("foodLog", JSON.stringify(dayData));
 
-            loadDayData();
+          loadDayData();
+          document.getElementById('food-log-overlay').style.display = 'none';
 
-            document.getElementById('food-log-overlay').style.display = 'none';
-
-            document.querySelector('#manual-entry input:nth-child(1)').value = '';
-            document.querySelector('#manual-entry input:nth-child(2)').value = '';
-            document.querySelector('#manual-entry input:nth-child(3)').value = '';
-            document.querySelector('#manual-entry input:nth-child(4)').value = '';
-            document.querySelector('#manual-entry input:nth-child(5)').value = '';
+          // Clear input fields
+          document.querySelector('#manual-entry input:nth-child(1)').value = '';
+          document.querySelector('#manual-entry input:nth-child(2)').value = '';
+          document.querySelector('#manual-entry input:nth-child(3)').value = '';
+          document.querySelector('#manual-entry input:nth-child(4)').value = '';
+          document.querySelector('#manual-entry input:nth-child(5)').value = '';
         });
 
-        function updateProgress(barId, currentValue, goal) {
-            const progressBar = document.getElementById(barId);
-            const progressText = progressBar.querySelector(".progress-text");
-
-            let percentage = (currentValue / goal) * 100;
-            if (percentage > 100) percentage = 100;
-            progressBar.style.background = `linear-gradient(to right, #4caf50 ${percentage}%, #ddd ${percentage}%)`;
-            progressText.textContent = `${currentValue} / ${goal}`;
-        }
-
         function loadDayData() {
-            let currentCalories = 0;
-            let currentProtein = 0;
-            let currentFat = 0;
-            let currentCarbs = 0;
+          let currentCalories = 0;
+          let currentProtein = 0;
+          let currentFat = 0;
+          let currentCarbs = 0;
 
-            const hourButtons = document.querySelectorAll('.hour-button');
-            hourButtons.forEach(button => {
-                button.textContent = button.id.toUpperCase();
-            });
+          // Retrieve data from localStorage
+          const storedData = localStorage.getItem('foodLog');
+          if (storedData) {
+            dayData = JSON.parse(storedData);
+          }
 
-            if (dayData[selectedDay]) {
-                for (const hour in dayData[selectedDay]) {
-                    const hourButton = document.getElementById(hour);
-                    let displayText = dayData[selectedDay][hour].map(entry => {
-                        currentCalories += entry.calories;
-                        currentProtein += entry.protein;
-                        currentFat += entry.fat;
-                        currentCarbs += entry.carbs;
-                        return `${entry.foodName}: ${entry.calories} Cal, P: ${entry.protein}g, F: ${entry.fat}g, C: ${entry.carbs}g`;
-                    }).join('\n');
-                    hourButton.textContent = `${hour.toUpperCase()}\n${displayText}`;
-                }
+          const hourButtons = document.querySelectorAll('.hour-button');
+          hourButtons.forEach(button => {
+            button.textContent = button.id.toUpperCase();
+          });
+
+          if (dayData[selectedDay]) {
+            for (const hour in dayData[selectedDay]) {
+              const hourButton = document.getElementById(hour);
+              let displayText = dayData[selectedDay][hour].map(entry => {
+                currentCalories += entry.calories;
+                currentProtein += entry.protein;
+                currentFat += entry.fat;
+                currentCarbs += entry.carbs;
+                return `${entry.foodName}: ${entry.calories} Cal, P: ${entry.protein}g, F: ${entry.fat}g, C: ${entry.carbs}g`;
+              }).join('\n');
+              hourButton.textContent = `${hour.toUpperCase()}\n${displayText}`;
             }
+          }
 
             updateProgress("calories-bar", currentCalories, calorieGoal);
             updateProgress("protein-bar", currentProtein, proteinGoal);
             updateProgress("fat-bar", currentFat, fatGoal);
             updateProgress("carbs-bar", currentCarbs, carbGoal);
+        }
+
+        // Load data on page load
+        document.addEventListener("DOMContentLoaded", function () {
+          loadDayData();
+        });
+
+        function updateProgress(barId, currentValue, goal) {
+            const progressBar = document.getElementById(barId);
+            const progressText = progressBar.querySelector(".progress-text");
+            let percentage = (currentValue / goal) * 100;
+            if (percentage > 100) percentage = 100;
+
+            // Define colors for each nutrient
+            let color;
+            switch (barId) {
+                case "calories-bar":
+                    color = "#007bff";
+                    break;
+                case "protein-bar":
+                    color = "peachpuff";
+                    break;
+                case "fat-bar":
+                    color = "yellow";
+                    break;
+                case "carbs-bar":
+                    color = "green";
+                    break;
+                default:
+                color = "#4caf50"; // Default green
+            }
+            progressBar.style.background = `linear-gradient(to right, ${color} ${percentage}%, #ddd ${percentage}%)`;
+            progressText.textContent = `${currentValue} / ${goal}`;
         }
     </script>
 </body>
