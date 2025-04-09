@@ -87,10 +87,6 @@
             background-color: #0056b3;
         }
 
-        .day-button.selected {
-            background-color: #007bff;
-        }
-
         .dot {
             position: absolute;
             bottom: 0;
@@ -118,21 +114,17 @@
         .progress-bar {
             width: 100%;
             height: 20px;
-            background-color: #ddd;
+            background-color: #c624db; 
             position: relative;
         }
 
-        .progress-bar span {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-        }
 
         .progress-text {
-            color: white;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%); 
+            color: white; 
             font-weight: bold;
         }
 
@@ -152,6 +144,7 @@
             cursor: pointer;
             width: 100%;
             white-space: pre-line;
+            text-align: left; /* Align text left for readability */
         }
 
         .hour-button:hover {
@@ -161,6 +154,7 @@
         .overlay {
             display: none;
             position: fixed;
+            z-index: 100;
             top: 0;
             left: 0;
             width: 100%;
@@ -176,12 +170,17 @@
             border-radius: 10px;
             width: 80%;
             max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         .tabs {
             display: flex;
             justify-content: space-around;
             margin-bottom: 20px;
+            flex-shrink: 0;
         }
 
         .tab {
@@ -201,37 +200,37 @@
         .tab-content {
             display: none;
             flex-direction: column;
+            flex-grow: 1;
         }
 
         .tab-content.active {
             display: flex;
         }
 
-        .manual-entry input {
-            margin: 5px;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .save-entry {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-        }
-
-        .save-entry:hover {
-            background-color: #0056b3;
-        }
-
+        .manual-entry input,
         .search-entry input {
             margin: 5px;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            background-color: #fff;
+            color: #333;
         }
+
+        .save-entry, .search-food {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            margin: 10px 5px 5px 5px;
+            border-radius: 5px;
+        }
+
+        .save-entry:hover, .search-food:hover {
+            background-color: #0056b3;
+        }
+
         .back-button {
             background-color: #555;
             color: white;
@@ -239,10 +238,39 @@
             padding: 10px 20px;
             margin-bottom: 20px;
             cursor: pointer;
+            float: left;
         }
 
         .back-button:hover {
             background-color: #777;
+        }
+
+        #search-results {
+           margin-top: 15px;
+           max-height: 200px;
+           overflow-y: auto;
+           border: 1px solid #555;
+           padding: 5px;
+           background-color: #333;
+           border-radius: 5px;
+        }
+
+        .search-result-item {
+           background-color: #555;
+           color: white;
+           border: none;
+           padding: 8px 10px;
+           margin-bottom: 5px;
+           cursor: pointer;
+           width: 100%;
+           text-align: left;
+           border-radius: 4px;
+           display: block;
+           box-sizing: border-box;
+        }
+
+        .search-result-item:hover {
+           background-color: #007bff;
         }
     </style>
 </head>
@@ -320,22 +348,27 @@
                 </div>
 
                 <div class="tab-content active" id="manual-entry">
-                    <input type="text" placeholder="Food Name">
-                    <input type="number" placeholder="Calories">
-                    <input type="number" placeholder="Protein (g)">
-                    <input type="number" placeholder="Fat (g)">
-                    <input type="number" placeholder="Carbs (g)">
+                    <input type="text" id="manual-food-name" placeholder="Food Name">
+                    <input type="number" id="manual-calories" placeholder="Calories">
+                    <input type="number" id="manual-protein" placeholder="Protein (g)">
+                    <input type="number" id="manual-fat" placeholder="Fat (g)">
+                    <input type="number" id="manual-carbs" placeholder="Carbs (g)">
                     <button class="save-entry" id="save-entry">Save</button>
                 </div>
 
                 <div class="tab-content" id="search-entry">
-                    <input type="text" placeholder="Search for Food">
-                    <button class="search-food">Search</button>
+                    <input type="text" id="search-input" placeholder="Search for Food">
+                    <button class="search-food" id="search-button">Search</button>
+                    <div id="search-results"></div>
                 </div>
             </div>
         </div>
 
     <script>
+        // --- USDA API Configuration ---
+        const USDA_API_KEY = 'N6E6LaUcOvYctm2FqZleH5Ap4hz7jX9wrgCwwvig'; // 
+        const nutrientIds = { calories: 1008, protein: 1003, fat: 1004, carbs: 1005 };
+
         function switchTab(tabName) {
             const manualTab = document.getElementById("manual-tab");
             const searchTab = document.getElementById("search-tab");
@@ -347,7 +380,7 @@
                 searchContent.classList.remove("active");
                 manualTab.classList.add("active");
                 searchTab.classList.remove("active");
-            } else {
+            } else { // search
                 manualContent.classList.remove("active");
                 searchContent.classList.add("active");
                 manualTab.classList.remove("active");
@@ -364,6 +397,7 @@
             const dayOfWeek = today.getDay();
             const startDate = new Date(today);
             startDate.setDate(today.getDate() - dayOfWeek);
+            startDate.setHours(0, 0, 0, 0);
             return startDate;
         }
 
@@ -376,36 +410,46 @@
             }
 
             const dayButtons = document.querySelectorAll('.day-button');
+             dayButtons.forEach(b => {
+                 b.classList.remove('selected');
+                 const dot = b.querySelector('.dot');
+                 if (dot) dot.remove();
+             });
+
             weekDates.forEach((date, index) => {
                 const dayButton = dayButtons[index];
-                const dateString = date.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
-                dayButton.textContent = dateString;
+                 const existingDot = dayButton.querySelector('.dot');
+                 if (existingDot) existingDot.remove();
+                 const dateString = date.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
+                 dayButton.textContent = dateString;
 
-                dayButton.querySelector('.dot')?.remove();
-                dayButton.classList.remove('selected');
                 if (date.toDateString() === selectedDay) {
+                     dayButton.classList.add('selected');
                     const dot = document.createElement('div');
                     dot.classList.add('dot');
                     dayButton.appendChild(dot);
-                    dayButton.classList.add('selected');
                 }
-            });
+             });
         }
 
         const dayButtons = document.querySelectorAll('.day-button');
         dayButtons.forEach(button => {
             button.addEventListener('click', () => {
+                const clickedDate = new Date(currentWeekStartDate);
+                const buttonIndex = Array.from(dayButtons).indexOf(button);
+                clickedDate.setDate(currentWeekStartDate.getDate() + buttonIndex);
+                selectedDay = clickedDate.toDateString();
+
                 dayButtons.forEach(b => {
                     b.classList.remove('selected');
                     const dot = b.querySelector('.dot');
                     if (dot) dot.remove();
                 });
-
                 button.classList.add('selected');
                 const dot = document.createElement('div');
                 dot.classList.add('dot');
                 button.appendChild(dot);
-                selectedDay = new Date(button.textContent).toDateString();
+
                 loadDayData();
             });
         });
@@ -428,17 +472,16 @@
             button.addEventListener('click', () => {
                 document.getElementById('food-log-overlay').style.display = 'flex';
                 document.getElementById('food-log-overlay').setAttribute('data-hour', button.id);
+                 document.getElementById('search-results').innerHTML = '';
+                 document.getElementById('search-input').value = '';
+                 switchTab('manual');
             });
         });
 
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', (event) => {
-                event.stopPropagation();
-            });
-        });
-
-        document.getElementById('food-log-overlay').addEventListener('click', () => {
-            document.getElementById('food-log-overlay').style.display = 'none';
+        document.getElementById('food-log-overlay').addEventListener('click', (event) => {
+             if (event.target === event.currentTarget) {
+                document.getElementById('food-log-overlay').style.display = 'none';
+             }
         });
 
         document.querySelector('.overlay-content').addEventListener('click', (event) => {
@@ -453,105 +496,167 @@
         const carbGoal = 250;
 
         document.getElementById("save-entry").addEventListener("click", function () {
-          const hour = document.getElementById('food-log-overlay').getAttribute('data-hour');
-          const foodName = document.querySelector('#manual-entry input:nth-child(1)').value;
-          const calories = parseInt(document.querySelector('#manual-entry input:nth-child(2)').value, 10) || 0;
-          const protein = parseInt(document.querySelector('#manual-entry input:nth-child(3)').value, 10) || 0;
-          const fat = parseInt(document.querySelector('#manual-entry input:nth-child(4)').value, 10) || 0;
-          const carbs = parseInt(document.querySelector('#manual-entry input:nth-child(5)').value, 10) || 0;
+            const hour = document.getElementById('food-log-overlay').getAttribute('data-hour');
+            if (!hour) return;
 
-          if (!dayData[selectedDay]) {
-            dayData[selectedDay] = {};
-          }
-          if (!dayData[selectedDay][hour]) {
-            dayData[selectedDay][hour] = [];
-          }
+            const manualEntryForm = document.getElementById('manual-entry');
+            const foodName = manualEntryForm.querySelector('#manual-food-name').value.trim();
+            const calories = parseInt(manualEntryForm.querySelector('#manual-calories').value, 10) || 0;
+            const protein = parseInt(manualEntryForm.querySelector('#manual-protein').value, 10) || 0;
+            const fat = parseInt(manualEntryForm.querySelector('#manual-fat').value, 10) || 0;
+            const carbs = parseInt(manualEntryForm.querySelector('#manual-carbs').value, 10) || 0;
 
-          dayData[selectedDay][hour].push({ foodName, calories, protein, fat, carbs });
+            if (!foodName) { alert("Please enter a food name."); return; }
+            if (calories < 0 || protein < 0 || fat < 0 || carbs < 0) { alert("Nutrient values cannot be negative."); return; }
 
-          // Save the updated data to localStorage
-          localStorage.setItem("foodLog", JSON.stringify(dayData));
+            if (!dayData[selectedDay]) dayData[selectedDay] = {};
+            if (!dayData[selectedDay][hour]) dayData[selectedDay][hour] = [];
 
-          loadDayData();
-          document.getElementById('food-log-overlay').style.display = 'none';
+            dayData[selectedDay][hour].push({ foodName, calories, protein, fat, carbs });
 
-          // Clear input fields
-          document.querySelector('#manual-entry input:nth-child(1)').value = '';
-          document.querySelector('#manual-entry input:nth-child(2)').value = '';
-          document.querySelector('#manual-entry input:nth-child(3)').value = '';
-          document.querySelector('#manual-entry input:nth-child(4)').value = '';
-          document.querySelector('#manual-entry input:nth-child(5)').value = '';
+            localStorage.setItem("foodLog", JSON.stringify(dayData));
+            loadDayData();
+            document.getElementById('food-log-overlay').style.display = 'none';
+
+            manualEntryForm.querySelector('#manual-food-name').value = '';
+            manualEntryForm.querySelector('#manual-calories').value = '';
+            manualEntryForm.querySelector('#manual-protein').value = '';
+            manualEntryForm.querySelector('#manual-fat').value = '';
+            manualEntryForm.querySelector('#manual-carbs').value = '';
         });
 
         function loadDayData() {
-          let currentCalories = 0;
-          let currentProtein = 0;
-          let currentFat = 0;
-          let currentCarbs = 0;
+            let currentTotals = { calories: 0, protein: 0, fat: 0, carbs: 0 };
+            const storedData = localStorage.getItem('foodLog');
+            dayData = storedData ? JSON.parse(storedData) : {};
 
-          // Retrieve data from localStorage
-          const storedData = localStorage.getItem('foodLog');
-          if (storedData) {
-            dayData = JSON.parse(storedData);
-          }
+            const allHourButtons = document.querySelectorAll('.hour-button');
+            allHourButtons.forEach(button => {
+                 let timeText = '';
+                 if (button.id.endsWith('am')) timeText = button.id.replace('am', ' AM');
+                 else if (button.id.endsWith('pm')) timeText = button.id.replace('pm', ' PM');
+                 button.textContent = timeText || button.id.toUpperCase();
+                 button.style.backgroundColor = '#535252';
+            });
 
-          const hourButtons = document.querySelectorAll('.hour-button');
-          hourButtons.forEach(button => {
-            button.textContent = button.id.toUpperCase();
-          });
+            if (dayData[selectedDay]) {
+                for (const hour in dayData[selectedDay]) {
+                    const hourButton = document.getElementById(hour);
+                    if (hourButton && dayData[selectedDay][hour]?.length > 0) {
+                        let displayText = dayData[selectedDay][hour].map(entry => {
+                            currentTotals.calories += entry.calories || 0;
+                            currentTotals.protein += entry.protein || 0;
+                            currentTotals.fat += entry.fat || 0;
+                            currentTotals.carbs += entry.carbs || 0;
+                            return `${entry.foodName} (${entry.calories || 0} Cal)`;
+                        }).join('\n');
 
-          if (dayData[selectedDay]) {
-            for (const hour in dayData[selectedDay]) {
-              const hourButton = document.getElementById(hour);
-              let displayText = dayData[selectedDay][hour].map(entry => {
-                currentCalories += entry.calories;
-                currentProtein += entry.protein;
-                currentFat += entry.fat;
-                currentCarbs += entry.carbs;
-                return `${entry.foodName}: ${entry.calories} Cal, P: ${entry.protein}g, F: ${entry.fat}g, C: ${entry.carbs}g`;
-              }).join('\n');
-              hourButton.textContent = `${hour.toUpperCase()}\n${displayText}`;
+                        let timeText = '';
+                        if (hour.endsWith('am')) timeText = hour.replace('am', ' AM');
+                        else if (hour.endsWith('pm')) timeText = hour.replace('pm', ' PM');
+                        hourButton.textContent = `${timeText || hour.toUpperCase()}\n${displayText}`;
+                        hourButton.style.backgroundColor = '#7b7e7b';
+                    }
+                }
             }
-          }
 
-            updateProgress("calories-bar", currentCalories, calorieGoal);
-            updateProgress("protein-bar", currentProtein, proteinGoal);
-            updateProgress("fat-bar", currentFat, fatGoal);
-            updateProgress("carbs-bar", currentCarbs, carbGoal);
+            updateProgress("calories-bar", currentTotals.calories, calorieGoal);
+            updateProgress("protein-bar", currentTotals.protein, proteinGoal);
+            updateProgress("fat-bar", currentTotals.fat, fatGoal);
+            updateProgress("carbs-bar", currentTotals.carbs, carbGoal);
         }
 
-        // Load data on page load
         document.addEventListener("DOMContentLoaded", function () {
-          loadDayData();
+            loadDayData();
+            updateWeekDates();
         });
 
+        // --- Reverted Update Progress Bar Function ---
         function updateProgress(barId, currentValue, goal) {
             const progressBar = document.getElementById(barId);
+            if (!progressBar) { console.error(`Progress bar element not found: ${barId}`); return; }
             const progressText = progressBar.querySelector(".progress-text");
-            let percentage = (currentValue / goal) * 100;
-            if (percentage > 100) percentage = 100;
+            if (!progressText) { console.error(`Progress text element not found within: ${barId}`); return; }
 
-            // Define colors for each nutrient
+            let percentage = goal > 0 ? (currentValue / goal) * 100 : 0;
+            const displayPercentage = Math.min(percentage, 100);
+
             let color;
             switch (barId) {
-                case "calories-bar":
-                    color = "#007bff";
-                    break;
-                case "protein-bar":
-                    color = "peachpuff";
-                    break;
-                case "fat-bar":
-                    color = "yellow";
-                    break;
-                case "carbs-bar":
-                    color = "green";
-                    break;
-                default:
-                color = "#4caf50"; // Default green
+                case "calories-bar": color = "#007bff"; break;
+                case "protein-bar": color = "peachpuff"; break;
+                case "fat-bar": color = "yellow"; break;
+                case "carbs-bar": color = "green"; break;
+                default: color = "#4caf50";
             }
-            progressBar.style.background = `linear-gradient(to right, ${color} ${percentage}%, #ddd ${percentage}%)`;
-            progressText.textContent = `${currentValue} / ${goal}`;
+
+         
+            progressBar.style.background = `linear-gradient(to right, ${color} ${displayPercentage}%, #ddd ${displayPercentage}%)`;
+
+         
+            progressText.textContent = `${Math.round(currentValue)} / ${goal}`; 
         }
+
+
+        // --- USDA API Search Functions ---
+        async function searchFoodDatabase() {
+            const query = document.getElementById('search-input').value.trim();
+            const resultsContainer = document.getElementById('search-results');
+            resultsContainer.innerHTML = '';
+
+            if (!query) { resultsContainer.innerHTML = '<p style="color: yellow;">Please enter a food name to search.</p>'; return; }
+            if (!USDA_API_KEY || USDA_API_KEY === 'API Key') { resultsContainer.innerHTML = '<p style="color: red;">API Key is not configured.</p>'; console.error("USDA API Key is missing."); return; }
+
+            resultsContainer.innerHTML = '<p>Searching...</p>';
+            const url = `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${USDA_API_KEY}&query=${encodeURIComponent(query)}&dataType=Foundation,SR Legacy,Branded&pageSize=15`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                const data = await response.json();
+                displaySearchResults(data.foods || []);
+            } catch (error) {
+                console.error("Error fetching from USDA API:", error);
+                resultsContainer.innerHTML = `<p style="color: red;">Error searching for food: ${error.message}.</p>`;
+            }
+        }
+
+        function displaySearchResults(foods) {
+            const resultsContainer = document.getElementById('search-results');
+            resultsContainer.innerHTML = '';
+
+            if (!foods || foods.length === 0) { resultsContainer.innerHTML = '<p>No results found.</p>'; return; }
+
+            foods.forEach(food => {
+                const itemButton = document.createElement('button');
+                itemButton.classList.add('search-result-item');
+                itemButton.textContent = `${food.description}${food.brandOwner ? ` (${food.brandOwner})` : ''}`;
+                itemButton.type = 'button';
+                itemButton.addEventListener('click', () => populateManualFormWithFood(food));
+                resultsContainer.appendChild(itemButton);
+            });
+        }
+
+        function populateManualFormWithFood(food) {
+            const getNutrientValue = (id) => {
+                const nutrient = food.foodNutrients?.find(n => n.nutrientId === id || n.nutrientNumber === String(id));
+                return nutrient ? Math.round(nutrient.value ?? 0) : 0;
+            };
+
+            document.getElementById('manual-food-name').value = food.description ?? '';
+            document.getElementById('manual-calories').value = getNutrientValue(nutrientIds.calories);
+            document.getElementById('manual-protein').value = getNutrientValue(nutrientIds.protein);
+            document.getElementById('manual-fat').value = getNutrientValue(nutrientIds.fat);
+            document.getElementById('manual-carbs').value = getNutrientValue(nutrientIds.carbs);
+
+            switchTab('manual');
+        }
+
+        document.getElementById('search-button').addEventListener('click', searchFoodDatabase);
+        document.getElementById('search-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') { event.preventDefault(); searchFoodDatabase(); }
+        });
+
     </script>
 </body>
 </html>
