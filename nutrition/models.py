@@ -1,13 +1,7 @@
-# Authors: Justin Sandstedt, Matthew Swandal, Gabriel Morgan
-#
-# Python file where habits will be stored and tracked. 
-# Will expand upon later. 
-
-from django.db import models 
+from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 # User model (Extends the already built-in Django User model)
-
 class User(AbstractUser):
     ACTIVITY_LEVELS = [
         ('Sedentary', 'Sedentary'),
@@ -20,8 +14,21 @@ class User(AbstractUser):
     date_of_birth = models.DateField(null=True, blank=True)
     activity_level = models.CharField(max_length=20, choices=ACTIVITY_LEVELS, default='Sedentary')
 
+    # Ensure custom related_name to avoid conflict with default 'auth.User'
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='nutrition_user_set',  # Avoids conflict
+        blank=True
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='nutrition_user_permissions',  # Avoids conflict
+        blank=True
+    )
+
     def __str__(self):
-        return self.username # Django's built-in username field 
+        return self.username  # Django's built-in username field
+
 
 # Activity Log model (Tracks workouts)
 class ActivityLog(models.Model):
@@ -36,6 +43,7 @@ class ActivityLog(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.activity_type} on {self.date_logged.date()}"
 
+
 # Nutrition Log model (Tracks food intake)
 class NutritionLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -49,6 +57,7 @@ class NutritionLog(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.food_item} on {self.date_logged.date()}"
 
+
 # Lifestyle Log model (Tracks sleep & water intake)
 class LifestyleLog(models.Model):
     LOG_TYPES = [('Sleep', 'Sleep'), ('Water Intake', 'Water Intake')]
@@ -60,6 +69,7 @@ class LifestyleLog(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.log_type}: {self.value} on {self.date_logged.date()}"
+
 
 # Goal model (Tracks fitness goals)
 class Goal(models.Model):
@@ -73,6 +83,7 @@ class Goal(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.goal_type} by {self.deadline}"
+
 
 # Bug Tracking model (Tracks reported issues)
 class BugTracking(models.Model):
@@ -90,6 +101,7 @@ class BugTracking(models.Model):
     def __str__(self):
         return f"Bug {self.id} - {self.status}"
 
+
 # System Log model (Tracks system events)
 class SystemLog(models.Model):
     EVENT_TYPES = [('Performance Check', 'Performance Check'), ('Security Audit', 'Security Audit')]
@@ -100,4 +112,3 @@ class SystemLog(models.Model):
 
     def __str__(self):
         return f"{self.event_type} - {self.event_date}"
-    

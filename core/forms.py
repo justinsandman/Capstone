@@ -6,7 +6,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from ..nutrition.models import NutritionLog
+from nutrition.models import NutritionLog
 
 # User Signup Form
 class SignupForm(UserCreationForm):
@@ -25,4 +25,6 @@ class LoginForm(AuthenticationForm):
 class FoodLogForm(forms.ModelForm):
     class Meta:
         model = NutritionLog
-        fields = ["food_name", "quantity", "date_logged"]
+        fields = ["food_item"] 
+
+

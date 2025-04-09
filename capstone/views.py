@@ -8,8 +8,8 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from nutrition.models import ActivityLog, NutritionLog
-from ..python.utils import fetch_nutrition_data # Utility function to get food data 
-from ..python.forms import SignupForm, LoginForm, FoodLogForm 
+from core.utils import fetch_nutrition_data # Utility function to get food data 
+from core.forms import SignupForm, LoginForm, FoodLogForm 
 
 # Main Dashboard
 def dashboard(request):
