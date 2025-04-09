@@ -11,5 +11,336 @@
     - 
 
     References: 
-    - 
+    - Universal Selector (selects all elements of any time) https://www.w3schools.com/cssref/sel_all.php
 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fitness Tracker</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #121212;
+      color: #f5f5f5;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    form {
+      background: #2C2C2C;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      background: #333;
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #555;
+    }
+
+    .log {
+      background: #2C2C2C;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .log-entry {
+      border-bottom: 1px solid #eee;
+      padding: 1rem 0;
+    }
+
+    .log-entry:last-child {
+      border-bottom: none;
+    }
+
+    .exercise-group {
+      margin-bottom: 1rem;
+    }
+
+    .exercise-group .form-group {
+      margin-bottom: 0.5rem;
+    }
+
+    .remove-exercise {
+      background: #f44336;
+      color: #fff;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .remove-exercise:hover {
+      background: #d32f2f;
+    }
+
+    .edit-btn {
+      background: #ffa500;
+      color: #fff;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .edit-btn:hover {
+      background: #e68900;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Fitness Tracker</h1>
+    <form id="workout-form">
+      <div class="form-group">
+        <label for="type">Workout Type</label>
+        <select id="type" required>
+          <option value="">Select Type</option>
+          <option value="cardio">Cardio</option>
+          <option value="weightlifting">Weightlifting</option>
+        </select>
+      </div>
+
+      <div id="dynamic-fields"></div>
+
+      <div class="form-group">
+        <label for="date">Date</label>
+        <input type="date" id="date" required />
+      </div>
+
+      <button type="submit">Add Workout</button>
+    </form>
+
+    <div class="log" id="workout-log">
+      <h2>Workout Log</h2>
+      <div id="entries"></div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('workout-form');
+    const typeSelect = document.getElementById('type');
+    const dynamicFields = document.getElementById('dynamic-fields');
+    const entriesContainer = document.getElementById('entries');
+    const workoutExercises = [];
+    let editingEntry = null;
+
+    typeSelect.addEventListener('change', () => {
+      const type = typeSelect.value;
+      dynamicFields.innerHTML = '';
+
+      if (type === 'weightlifting') {
+        dynamicFields.innerHTML = `
+          <div class="form-group">
+            <label for="workout-name">Workout Name</label>
+            <input type="text" id="workout-name" required />
+          </div>
+          <div id="exercises-container"></div>
+          <button type="button" id="add-exercise">Add Exercise</button>
+        `;
+
+        document.getElementById('add-exercise').addEventListener('click', () => {
+          addExerciseField();
+        });
+      } else if (type === 'cardio') {
+        dynamicFields.innerHTML = `
+          <div class="form-group">
+            <label for="time">Time (minutes)</label>
+            <input type="number" id="time" required />
+          </div>
+          <div class="form-group">
+            <label for="pace">Pace (min/mile)</label>
+            <input type="text" id="pace" required />
+          </div>
+          <div class="form-group">
+            <label for="heart-rate">Heart Rate (bpm)</label>
+            <input type="number" id="heart-rate" required />
+          </div>
+        `;
+      }
+
+      if (editingEntry) {
+        populateFormForEditing(editingEntry);
+      }
+    });
+
+    function addExerciseField() {
+      const exerciseIndex = workoutExercises.length;
+      const exerciseGroup = document.createElement('div');
+      exerciseGroup.classList.add('exercise-group');
+      exerciseGroup.innerHTML = `
+        <div class="form-group">
+          <label for="exercise-name-${exerciseIndex}">Exercise Name</label>
+          <input type="text" id="exercise-name-${exerciseIndex}" required />
+        </div>
+        <div class="form-group">
+          <label for="sets-${exerciseIndex}">Sets</label>
+          <input type="number" id="sets-${exerciseIndex}" required />
+        </div>
+        <div class="form-group">
+          <label for="reps-${exerciseIndex}">Reps</label>
+          <input type="number" id="reps-${exerciseIndex}" required />
+        </div>
+        <div class="form-group">
+          <label for="weight-${exerciseIndex}">Weight (lbs)</label>
+          <input type="number" id="weight-${exerciseIndex}" required />
+        </div>
+        <button type="button" class="remove-exercise">Remove Exercise</button>
+      `;
+
+      document.getElementById('exercises-container').appendChild(exerciseGroup);
+
+      const removeButton = exerciseGroup.querySelector('.remove-exercise');
+      removeButton.addEventListener('click', () => {
+        workoutExercises.splice(exerciseIndex, 1);
+        exerciseGroup.remove();
+      });
+
+      workoutExercises.push(exerciseGroup);
+    }
+
+    function populateFormForEditing(entry) {
+      const { type, date, details } = entry;
+      document.getElementById('date').value = date;
+      typeSelect.value = type;
+
+      dynamicFields.innerHTML = '';
+      if (type === 'weightlifting') {
+        dynamicFields.innerHTML = `
+          <div class="form-group">
+            <label for="workout-name">Workout Name</label>
+            <input type="text" id="workout-name" value="${details.workoutName}" required />
+          </div>
+          <div id="exercises-container"></div>
+          <button type="button" id="add-exercise">Add Exercise</button>
+        `;
+        
+        details.exercises.forEach((exercise, index) => {
+          addExerciseField();
+          document.getElementById(`exercise-name-${index}`).value = exercise.name;
+          document.getElementById(`sets-${index}`).value = exercise.sets;
+          document.getElementById(`reps-${index}`).value = exercise.reps;
+          document.getElementById(`weight-${index}`).value = exercise.weight;
+        });
+      } else if (type === 'cardio') {
+        dynamicFields.innerHTML = `
+          <div class="form-group">
+            <label for="time">Time (minutes)</label>
+            <input type="number" id="time" value="${details.time}" required />
+          </div>
+          <div class="form-group">
+            <label for="pace">Pace (min/mile)</label>
+            <input type="text" id="pace" value="${details.pace}" required />
+          </div>
+          <div class="form-group">
+            <label for="heart-rate">Heart Rate (bpm)</label>
+            <input type="number" id="heart-rate" value="${details.heartRate}" required />
+          </div>
+        `;
+      }
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const type = typeSelect.value;
+      const date = document.getElementById('date').value;
+      let details = {};
+
+      if (type === 'weightlifting') {
+        const exercises = [];
+        workoutExercises.forEach((exerciseGroup, index) => {
+          const name = document.getElementById(`exercise-name-${index}`).value;
+          const sets = document.getElementById(`sets-${index}`).value;
+          const reps = document.getElementById(`reps-${index}`).value;
+          const weight = document.getElementById(`weight-${index}`).value;
+          exercises.push({ name, sets, reps, weight });
+        });
+        details = { workoutName: document.getElementById('workout-name').value, exercises };
+      } else if (type === 'cardio') {
+        const time = document.getElementById('time').value;
+        const pace = document.getElementById('pace').value;
+        const heartRate = document.getElementById('heart-rate').value;
+        details = { time, pace, heartRate };
+      }
+
+      const entryDiv = document.createElement('div');
+      entryDiv.classList.add('log-entry');
+      let exercisesHtml = '';
+      if (type === 'weightlifting') {
+        details.exercises.forEach(exercise => {
+          exercisesHtml += `<p><strong>${exercise.name}</strong><br />${exercise.sets} sets x ${exercise.reps} reps @ ${exercise.weight} lbs</p>`;
+        });
+      }
+      const cardioHtml = type === 'cardio' ? `<p>Time: ${details.time} mins<br />Pace: ${details.pace}<br />Heart Rate: ${details.heartRate} bpm</p>` : '';
+      
+      entryDiv.innerHTML = `
+        <strong>${type.toUpperCase()}</strong><br />
+        ${exercisesHtml}
+        ${cardioHtml}
+        <small>${date}</small>
+        <button class="edit-btn">Edit</button>
+      `;
+
+      entryDiv.querySelector('.edit-btn').addEventListener('click', () => {
+        editingEntry = { type, date, details };
+        populateFormForEditing(editingEntry);
+      });
+
+      entriesContainer.prepend(entryDiv);
+
+      form.reset();
+      dynamicFields.innerHTML = '';
+      workoutExercises.length = 0;
+    });
+  </script>
+</body>
+</html>
+
+
