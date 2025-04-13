@@ -593,6 +593,11 @@
             updateProgress("protein-bar", currentTotals.protein, proteinGoal);
             updateProgress("fat-bar", currentTotals.fat, fatGoal);
             updateProgress("carbs-bar", currentTotals.carbs, carbGoal);
+
+    if (selectedDay === new Date().toDateString()) {
+        localStorage.setItem("todayNutritionTotals", JSON.stringify(currentTotals));
+    }
+
         }
 
         function removeEntry(hour, index) {
