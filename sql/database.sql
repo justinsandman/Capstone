@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS lifestyle_log (
 CREATE TABLE IF NOT EXISTS goals (
     goal_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
-    goal_type ENUM('Weight Loss', 'Muscle Gain', 'Hydration'),
+    goal_type ENUM('Weight Loss', 'Muscle Gain', 'Muscle Maintain'),
     target_value INT, 
     current_value INT, 
     deadline DATE, 
