@@ -47,6 +47,27 @@ def login_view(request):
 def settings(request):
     return render(request, 'Settings.html')
 
+def food_log(request):
+    return render(request, 'foodlog.html')
+
+def weight_log(request):
+    return render(request, 'weightlog.html')
+
+def habit_tracker(request):
+    return render (request, 'HabitTracker.html')
+
+def program(request):
+    return render(request, 'program.html')
+
+def expenditure(request):
+    return render(request, 'expenditure.html')
+
+def sleep_log(request):
+    return render(request, 'sleeplog.html')
+
+def journal(request):
+    return render(request, 'journal.html')
+
 def dashboard(request):
     return render(request, 'MainDashboard.html')
 

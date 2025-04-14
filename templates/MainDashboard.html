@@ -236,14 +236,14 @@
 
     <!-- Grid layout for feature navigation buttons -->
     <div class="button-grid">
-        <a href="FoodLog.html">Food Log</a>
-        <a href="Expenditure.html">Expenditure</a>
-        <a href="weightlog.html">Weight Log</a>
-        <a href="SleepLog.html">Sleep Log</a>
-        <a href="HabitTracker.html">Habit Tracker</a>
-        <a href="journal.html">Journal</a>
-        <a href="program.html">Program</a>
-        <a href="Settings.html">Settings</a>
+        <a href="{% url 'food_log' %}">Food Log</a>
+        <a href="{% url 'expenditure' %}">Expenditure</a>
+        <a href="{% url 'weight_log' %}">Weight Log</a>
+        <a href="{% url 'sleep_log' %}">Sleep Log</a>
+        <a href="{% url 'habit_tracker' %}">Habit Tracker</a>
+        <a href="{% url 'journal' %}">Journal</a>
+        <a href="{% url 'program' %}">Program</a>
+        <a href="{% url 'settings' %}">Settings</a>
     </div>
     <!--
         Function List:
