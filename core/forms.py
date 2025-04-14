@@ -6,17 +6,17 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
+from nutrition.models import FoodLog
+
+
 class SignupForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'password1', 'password2']
 
 class FoodLogForm(forms.Form):
-        food_name = forms.CharField(label='Food Name', max_length=100)
-        calories = forms.IntegerField(label='Calories')
-        protein = forms.FloatField(label='Protein (g)')
-        fat = forms.FloatField(label='Fat (g)')
-        carbs = forms.FloatField(label='Carbs (g)')
+        model = FoodLog
+        fields = ['food_item', 'calories', 'proteins', 'carbs', 'fats']
 
 # Weight Log
 class WeightLogForm(forms.Form):

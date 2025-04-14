@@ -7,7 +7,7 @@
 # References: 
 
 from django.contrib import admin 
-from nutrition.models import User, ActivityLog, NutritionLog, LifestyleLog, Goal, BugTracking, SystemLog
+from nutrition.models import User, ActivityLog, FoodLog, LifestyleLog, Goal, BugTracking, SystemLog
 
 # Register models so they appear in Django admin panel 
 @admin.register(User)
@@ -20,8 +20,8 @@ class ActivityLogAdmin(admin.ModelAdmin):
     list_display = ('user', 'activity_type', 'duration', 'calories_burned', 'date_logged')
     list_filter = ('activity_type',)
 
-@admin.register(NutritionLog)
-class NutritionLogAdmin(admin.ModelAdmin):
+@admin.register(FoodLog)
+class FoodLogAdmin(admin.ModelAdmin):
     list_display = ('user', 'food_item', 'calories', 'proteins', 'carbs', 'fats', 'date_logged')
     search_fields = ('food_item',)
 

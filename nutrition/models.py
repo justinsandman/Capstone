@@ -46,8 +46,8 @@ class ActivityLog(models.Model):
         return f"{self.user.username} - {self.activity_type} on {self.date_logged.date()}"
 
 
-# Nutrition Log model (Tracks food intake)
-class NutritionLog(models.Model):
+#
+class FoodLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     food_item = models.CharField(max_length=255)
     calories = models.PositiveIntegerField()
