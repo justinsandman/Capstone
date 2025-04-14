@@ -1,15 +1,19 @@
 # Authors: Justin Sandstedt, Matthew Swandal, Gabriel Morgan
 #
-# 
+# URLs for navigating various pages in the app.
 
-from django.urls import path
-from . import views  # Ensure views are correctly imported
+from django.contrib import admin 
+from django.urls import path, include
+from . import views
 
 urlpatterns = [
-    path("", views.dashboard, name="dashboard"),
-    path("signup/", views.signup, name="signup"),
-    path("food_log/", views.food_log, name="food_log"),
-    path("activity_log/", views.activity_log, name="activity_log"),
-    path("get_food_nutrition/", views.get_food_nutrition, name="get_food_nutrition"),  # For fetching nutrition
-]
 
+
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('signup/', views.signup_view, name='signup'),
+    path('login/', views.login_view, name='login'),
+
+    path('', views.dashboard, name='dashboard'),  # Main dashboard
+    path('settings/', views.settings, name='settings'),  # Settings page route
+
+]

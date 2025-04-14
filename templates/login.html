@@ -72,56 +72,33 @@
         .forgot-password:hover {
             text-decoration: underline;
         }
-        /* Highlight incorrect email/password */
-        .error {
-            border: 1px solid red !important;
-        }
-        /* Error message styling */
         .error-message {
             color: red;
             font-size: 14px;
             margin-top: -5px;
             margin-bottom: 10px;
-            display: none;
         }
     </style>
-    <script>
-        function validateLogin() {
-            let email = document.getElementById('email');
-            let password = document.getElementById('password');
-            let errorMessage = document.getElementById('error-message');
-
-            let emailCorrect = email.value === "test@example.com";
-            let passwordCorrect = password.value === "password123";
-
-            // Reset error states
-            email.classList.remove('error');
-            password.classList.remove('error');
-            errorMessage.style.display = 'none';
-
-            if (!emailCorrect || !passwordCorrect) {
-                email.classList.add('error');
-                password.classList.add('error');
-                errorMessage.style.display = 'block';
-                errorMessage.textContent = "Username or password was incorrect.";
-                return false;
-            }
-
-            // Redirect to main dashboard on successful login
-            window.location.href = 'MainDashboard.html';
-            return true;
-        }
-    </script>
 </head>
 <body>
 
     <div class="login-container">
         <img src="FTD LOGO.png" alt="FTD Logo" class="logo">
         <h2>Login</h2>
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Password">
-        <p id="error-message" class="error-message">Username or password was incorrect.</p>
-        <button type="button" class="login-btn" onclick="validateLogin()">Login</button>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <p class="error-message">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+
         <a href="ForgotPassword.html" class="forgot-password">Forgot Password?</a>
     </div>
 

@@ -3,60 +3,50 @@
 # Python file to retrieve data from Cloud SQL DB, process user 
 # input, render HTML templates with DB content, & handle certain logic.
 
-from django.shortcuts import render, redirect 
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from nutrition.models import ActivityLog, NutritionLog
-from core.utils import fetch_nutrition_data # Utility function to get food data 
-from core.forms import SignupForm, LoginForm, FoodLogForm 
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages 
+from django.contrib.auth.models import User
+from core.forms import SignupForm  
 
-# Main Dashboard
-def dashboard(request):
-    return render(request, 'MainDashboard.html')
-
-# Signup Page 
-def signup(request):
-    if request.method == 'POST':  
+def signup_view(request):
+    if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
-            return redirect('dashboard')  # Redirect to a named URL, not an HTML file
+            login(request, user)  
+            return redirect('dashboard')  
+        else:
+            print("Form is invalid:", form.errors)  
     else:
-        form = SignupForm()  # This should only be defined when method is GET
+        form = SignupForm()
+
     return render(request, 'signup.html', {'form': form})
 
-# Food Log Page 
-@login_required
-def food_log(request):
+#
+#
+#
+def login_view(request):
     if request.method == 'POST':
-        form = FoodLogForm(request.POST)
-        if form.is_valid():
-            food_entry = form.save(commit=False)
-            food_entry.user = request.user 
-            food_entry.save()
-            return redirect('food_log')  # Use named URL patterns
-    else:
-        form = FoodLogForm()  # This should only be defined for GET requests
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
 
-    logs = NutritionLog.objects.filter(user=request.user).order_by('-date_logged')
-    return render(request, 'foodlog.html', {'form': form, 'logs': logs})
+        if user is not None:
+            login(request, user)
+            return redirect('dashboard')  # Redirect to the dashboard after login
+        else:
+            messages.error(request, "Invalid username or password")  # Display error message
+            return redirect('login')  # Stay on the login page
 
-# Fetch Food Nutrition Data
-@login_required
-def get_food_nutrition(request):  # Fixed typo
-    food_name = request.GET.get('food')
-    if food_name:
-        try:
-            data = fetch_nutrition_data(food_name)  # Calls API utility function
-            return JsonResponse(data, safe=False)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)  # Handle API errors
-    return JsonResponse({'error': 'No Food Specified'}, status=400)
+    return render(request, 'login.html')
 
-# Activity Log Page 
-@login_required
-def activity_log(request):
-    logs = ActivityLog.objects.filter(user=request.user).order_by('-date_logged')
-    return render(request, 'ActivityLevel.html', {'logs': logs})
+#
+#
+#
+def settings(request):
+    return render(request, 'Settings.html')
+
+def dashboard(request):
+    return render(request, 'MainDashboard.html')
+

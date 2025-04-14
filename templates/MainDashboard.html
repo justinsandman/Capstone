@@ -157,8 +157,8 @@
             stroke: #4A90E2;
             stroke-width: 9;
             stroke-linecap: round;
-            stroke-dasharray: 628;
-            stroke-dashoffset: 628;
+            stroke-dasharray: 565.5;
+            stroke-dashoffset: 565.5;
         }
 
         /* Button Grid */
@@ -264,14 +264,17 @@
 
         function updateProgress(consumed, goal) {
             const progressCircle = document.getElementById("progress-circle");
-            const circumference = 2 * Math.PI * 90;
+            const radius = 90;
+            const circumference = 2 * Math.PI * radius;
 
             let percentage = (consumed / goal) * 100;
             percentage = Math.min(100, Math.max(0, percentage));
 
             const offset = circumference - (percentage / 100) * circumference;
             progressCircle.style.strokeDashoffset = offset;
-        }
+            progressCircle.style.strokeDasharray = circumference;
+}
+
 
         function updateMacronutrientProgress(protein, carbs, fat, proteinGoal, carbGoal, fatGoal) {
             document.getElementById("protein-bar").style.width = (protein / proteinGoal) * 100 + "%";
@@ -279,8 +282,37 @@
             document.getElementById("fat-bar").style.width = (fat / fatGoal) * 100 + "%";
         }
 
-        updateProgress(1500, 2500);
-        updateMacronutrientProgress(120, 180, 50, 200, 250, 100);
+        
+        function loadDashboardFromStorage() {
+            const totals = JSON.parse(localStorage.getItem("todayNutritionTotals")) || {
+                calories: 0,
+                protein: 0,
+                fat: 0,
+                carbs: 0
+            };
+
+            const calorieGoal = 2500;
+            const proteinGoal = 200;
+            const fatGoal = 100;
+            const carbGoal = 250;
+
+            // Update progress bars
+            updateProgress(totals.calories, calorieGoal);
+            updateMacronutrientProgress(totals.protein, totals.carbs, totals.fat, proteinGoal, carbGoal, fatGoal);
+
+            // Update text
+            document.getElementById("protein-text").innerText = totals.protein;
+            document.getElementById("carbs-text").innerText = totals.carbs;
+            document.getElementById("fat-text").innerText = totals.fat;
+
+            // Update calorie info
+            document.querySelector(".calories-info > p:first-child").innerText = `${totals.calories} Calories Consumed`;
+            document.querySelector(".calories-info > p:last-child").innerText = `${Math.max(0, calorieGoal - totals.calories)} Calories Remaining`;
+            document.querySelector(".main-calories").innerText = `${Math.max(0, calorieGoal - totals.calories)} `;
+        }
+
+        loadDashboardFromStorage();
+
     </script>
 </body>
 </html>
