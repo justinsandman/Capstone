@@ -114,17 +114,15 @@
         .progress-bar {
             width: 100%;
             height: 20px;
-            background-color: #c624db; 
             position: relative;
         }
-
 
         .progress-text {
             position: absolute;
             left: 50%;
             top: 50%;
-            transform: translate(-50%, -50%); 
-            color: white; 
+            transform: translate(-50%, -50%);
+            color: white;
             font-weight: bold;
         }
 
@@ -144,7 +142,7 @@
             cursor: pointer;
             width: 100%;
             white-space: pre-line;
-            text-align: left; /* Align text left for readability */
+            text-align: left;
         }
 
         .hour-button:hover {
@@ -246,32 +244,83 @@
         }
 
         #search-results {
-           margin-top: 15px;
-           max-height: 200px;
-           overflow-y: auto;
-           border: 1px solid #555;
-           padding: 5px;
-           background-color: #333;
-           border-radius: 5px;
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #555;
+            padding: 5px;
+            background-color: #333;
+            border-radius: 5px;
         }
 
         .search-result-item {
-           background-color: #555;
-           color: white;
-           border: none;
-           padding: 8px 10px;
-           margin-bottom: 5px;
-           cursor: pointer;
-           width: 100%;
-           text-align: left;
-           border-radius: 4px;
-           display: block;
-           box-sizing: border-box;
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 8px 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            border-radius: 4px;
+            display: block;
+            box-sizing: border-box;
         }
 
         .search-result-item:hover {
-           background-color: #007bff;
+            background-color: #007bff;
         }
+
+        .entry-action-buttons {
+          display: inline;
+          float: right;
+        }
+
+        .remove-btn {
+            background-color: #b22222 !important;
+        }
+
+        .remove-btn:hover {
+            background-color: #ff0000 !important;
+        }
+
+
+        .entry-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: -20px 0; 
+        }
+
+        .entry-description {
+        flex: 1;
+        }
+
+        .entry-action-buttons {
+        display: flex;
+        gap: 4px;
+        }
+
+        .entry-action-buttons button {
+        padding: 4px 8px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        border-radius: 4px;
+        }
+
+        .entry-action-buttons button:first-child {
+        background-color: #555;
+        }
+
+        .entry-action-buttons .remove-btn {
+        background-color: #b22222;
+        }
+
+        .entry-action-buttons .remove-btn:hover {
+        background-color: #ff0000;
+        }
+
     </style>
 </head>
 <body>
@@ -301,13 +350,13 @@
             </div>
             <div class="progress-bar-container">
                 <span>Protein</span>
-                <div class="progress-bar" id="protein-bar">
+                <div class="progress-bar" id="protein-bar" style="background-color: #f5c299;">
                     <span class="progress-text">0 / 150g</span>
                 </div>
             </div>
             <div class="progress-bar-container">
                 <span>Fat</span>
-                <div class="progress-bar" id="fat-bar">
+                <div class="progress-bar" id="fat-bar" style="background-color: #ff6347;">
                     <span class="progress-text">0 / 70g</span>
                 </div>
             </div>
@@ -366,7 +415,7 @@
 
     <script>
         // --- USDA API Configuration ---
-        const USDA_API_KEY = 'N6E6LaUcOvYctm2FqZleH5Ap4hz7jX9wrgCwwvig'; // 
+        const USDA_API_KEY = 'N6E6LaUcOvYctm2FqZleH5Ap4hz7jX9wrgCwwvig';
         const nutrientIds = { calories: 1008, protein: 1003, fat: 1004, carbs: 1005 };
 
         function switchTab(tabName) {
@@ -380,7 +429,7 @@
                 searchContent.classList.remove("active");
                 manualTab.classList.add("active");
                 searchTab.classList.remove("active");
-            } else { // search
+            } else {
                 manualContent.classList.remove("active");
                 searchContent.classList.add("active");
                 manualTab.classList.remove("active");
@@ -391,6 +440,7 @@
         let currentWeekStartDate = getCurrentWeekStartDate();
         let selectedDay = new Date().toDateString();
         let dayData = {};
+        let editingEntry = null;
 
         function getCurrentWeekStartDate() {
             const today = new Date();
@@ -410,26 +460,26 @@
             }
 
             const dayButtons = document.querySelectorAll('.day-button');
-             dayButtons.forEach(b => {
-                 b.classList.remove('selected');
-                 const dot = b.querySelector('.dot');
-                 if (dot) dot.remove();
-             });
+            dayButtons.forEach(b => {
+                b.classList.remove('selected');
+                const dot = b.querySelector('.dot');
+                if (dot) dot.remove();
+            });
 
             weekDates.forEach((date, index) => {
                 const dayButton = dayButtons[index];
-                 const existingDot = dayButton.querySelector('.dot');
-                 if (existingDot) existingDot.remove();
-                 const dateString = date.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
-                 dayButton.textContent = dateString;
+                const existingDot = dayButton.querySelector('.dot');
+                if (existingDot) existingDot.remove();
+                const dateString = date.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
+                dayButton.textContent = dateString;
 
                 if (date.toDateString() === selectedDay) {
-                     dayButton.classList.add('selected');
+                    dayButton.classList.add('selected');
                     const dot = document.createElement('div');
                     dot.classList.add('dot');
                     dayButton.appendChild(dot);
                 }
-             });
+            });
         }
 
         const dayButtons = document.querySelectorAll('.day-button');
@@ -472,16 +522,16 @@
             button.addEventListener('click', () => {
                 document.getElementById('food-log-overlay').style.display = 'flex';
                 document.getElementById('food-log-overlay').setAttribute('data-hour', button.id);
-                 document.getElementById('search-results').innerHTML = '';
-                 document.getElementById('search-input').value = '';
-                 switchTab('manual');
+                document.getElementById('search-results').innerHTML = '';
+                document.getElementById('search-input').value = '';
+                switchTab('manual');
             });
         });
 
         document.getElementById('food-log-overlay').addEventListener('click', (event) => {
-             if (event.target === event.currentTarget) {
+            if (event.target === event.currentTarget) {
                 document.getElementById('food-log-overlay').style.display = 'none';
-             }
+            }
         });
 
         document.querySelector('.overlay-content').addEventListener('click', (event) => {
@@ -512,7 +562,14 @@
             if (!dayData[selectedDay]) dayData[selectedDay] = {};
             if (!dayData[selectedDay][hour]) dayData[selectedDay][hour] = [];
 
-            dayData[selectedDay][hour].push({ foodName, calories, protein, fat, carbs });
+            if (editingEntry) {
+                // Replace the edited entry
+                dayData[selectedDay][hour][editingEntry.index] = { foodName, calories, protein, fat, carbs };
+                editingEntry = null;
+            } else {
+                // Add new entry
+                dayData[selectedDay][hour].push({ foodName, calories, protein, fat, carbs });
+            }
 
             localStorage.setItem("foodLog", JSON.stringify(dayData));
             loadDayData();
@@ -532,29 +589,39 @@
 
             const allHourButtons = document.querySelectorAll('.hour-button');
             allHourButtons.forEach(button => {
-                 let timeText = '';
-                 if (button.id.endsWith('am')) timeText = button.id.replace('am', ' AM');
-                 else if (button.id.endsWith('pm')) timeText = button.id.replace('pm', ' PM');
-                 button.textContent = timeText || button.id.toUpperCase();
-                 button.style.backgroundColor = '#535252';
+                let timeText = '';
+                if (button.id.endsWith('am')) timeText = button.id.replace('am', ' AM');
+                else if (button.id.endsWith('pm')) timeText = button.id.replace('pm', ' PM');
+                button.textContent = timeText || button.id.toUpperCase();
+                button.style.backgroundColor = '#535252';
             });
 
             if (dayData[selectedDay]) {
                 for (const hour in dayData[selectedDay]) {
                     const hourButton = document.getElementById(hour);
                     if (hourButton && dayData[selectedDay][hour]?.length > 0) {
-                        let displayText = dayData[selectedDay][hour].map(entry => {
+                        let displayText = dayData[selectedDay][hour].map((entry, index) => {
                             currentTotals.calories += entry.calories || 0;
                             currentTotals.protein += entry.protein || 0;
                             currentTotals.fat += entry.fat || 0;
                             currentTotals.carbs += entry.carbs || 0;
-                            return `${entry.foodName} (${entry.calories || 0} Cal)`;
+                            return `
+                                <div class="entry-line">
+                                    <span class="entry-text">${entry.foodName} (${entry.calories || 0} Cal) (${entry.protein || 0} P) (${entry.fat || 0} F) (${entry.carbs || 0} C)</span>
+                                    <span class="entry-action-buttons">
+                                        <button onclick="event.stopPropagation(); editEntry('${hour}', ${index})">Edit</button>
+                                        <button class="remove-btn" onclick="event.stopPropagation(); removeEntry('${hour}', ${index})">Remove</button>
+                                    </span>
+                                </div>
+                            `;
+
+
                         }).join('\n');
 
                         let timeText = '';
                         if (hour.endsWith('am')) timeText = hour.replace('am', ' AM');
                         else if (hour.endsWith('pm')) timeText = hour.replace('pm', ' PM');
-                        hourButton.textContent = `${timeText || hour.toUpperCase()}\n${displayText}`;
+                        hourButton.innerHTML = `${timeText || hour.toUpperCase()}<br>${displayText}`;
                         hourButton.style.backgroundColor = '#7b7e7b';
                     }
                 }
@@ -564,6 +631,31 @@
             updateProgress("protein-bar", currentTotals.protein, proteinGoal);
             updateProgress("fat-bar", currentTotals.fat, fatGoal);
             updateProgress("carbs-bar", currentTotals.carbs, carbGoal);
+
+            if (selectedDay === new Date().toDateString()) {
+                localStorage.setItem("todayNutritionTotals", JSON.stringify(currentTotals));
+            }
+        }
+
+        function removeEntry(hour, index) {
+            if (dayData[selectedDay] && dayData[selectedDay][hour]) {
+                dayData[selectedDay][hour].splice(index, 1);
+                localStorage.setItem("foodLog", JSON.stringify(dayData));
+                loadDayData();
+            }
+        }
+
+        function editEntry(hour, index) {
+            editingEntry = { hour, index };
+            const entry = dayData[selectedDay][hour][index];
+            document.getElementById('food-log-overlay').style.display = 'flex';
+            document.getElementById('food-log-overlay').setAttribute('data-hour', hour);
+            document.getElementById('manual-food-name').value = entry.foodName;
+            document.getElementById('manual-calories').value = entry.calories;
+            document.getElementById('manual-protein').value = entry.protein;
+            document.getElementById('manual-fat').value = entry.fat;
+            document.getElementById('manual-carbs').value = entry.carbs;
+            switchTab('manual');
         }
 
         document.addEventListener("DOMContentLoaded", function () {
@@ -584,19 +676,16 @@
             let color;
             switch (barId) {
                 case "calories-bar": color = "#007bff"; break;
-                case "protein-bar": color = "peachpuff"; break;
-                case "fat-bar": color = "yellow"; break;
+                case "protein-bar": color = "#f5c299"; break;
+                case "fat-bar": color = "#ff6347"; break;
                 case "carbs-bar": color = "green"; break;
                 default: color = "#4caf50";
             }
 
-         
             progressBar.style.background = `linear-gradient(to right, ${color} ${displayPercentage}%, #ddd ${displayPercentage}%)`;
 
-         
-            progressText.textContent = `${Math.round(currentValue)} / ${goal}`; 
+            progressText.textContent = `${Math.round(currentValue)} / ${goal}`;
         }
-
 
         // --- USDA API Search Functions ---
         async function searchFoodDatabase() {
@@ -656,7 +745,6 @@
         document.getElementById('search-input').addEventListener('keypress', function(event) {
             if (event.key === 'Enter') { event.preventDefault(); searchFoodDatabase(); }
         });
-
     </script>
 </body>
 </html>
