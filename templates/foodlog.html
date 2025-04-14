@@ -276,23 +276,51 @@
           float: right;
         }
 
-        .entry-action-buttons button {
-          background-color: #555;
-          color: white;
-          border: none;
-          padding: 5px 10px;
-          cursor: pointer;
-          margin-left: 5px;
-          border-radius: 3px;
+        .remove-btn {
+            background-color: #b22222 !important;
         }
 
-        .entry-action-buttons button:hover {
-          background-color: #777;
+        .remove-btn:hover {
+            background-color: #ff0000 !important;
+        }
+
+
+        .entry-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: -20px 0; 
+        }
+
+        .entry-description {
+        flex: 1;
+        }
+
+        .entry-action-buttons {
+        display: flex;
+        gap: 4px;
         }
 
         .entry-action-buttons button {
-          margin-right: 5px; /* Add space between buttons */
+        padding: 4px 8px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        border-radius: 4px;
         }
+
+        .entry-action-buttons button:first-child {
+        background-color: #555;
+        }
+
+        .entry-action-buttons .remove-btn {
+        background-color: #b22222;
+        }
+
+        .entry-action-buttons .remove-btn:hover {
+        background-color: #ff0000;
+        }
+
     </style>
 </head>
 <body>
@@ -577,7 +605,17 @@
                             currentTotals.protein += entry.protein || 0;
                             currentTotals.fat += entry.fat || 0;
                             currentTotals.carbs += entry.carbs || 0;
-                            return `${entry.foodName} (${entry.calories || 0} Cal) <span class="entry-action-buttons"><button onclick="editEntry('${hour}', ${index})">Edit</button><button onclick="removeEntry('${hour}', ${index})">Remove</button></span>`;
+                            return `
+                                <div class="entry-line">
+                                    <span class="entry-text">${entry.foodName} (${entry.calories || 0} Cal) (${entry.protein || 0} P) (${entry.fat || 0} F) (${entry.carbs || 0} C)</span>
+                                    <span class="entry-action-buttons">
+                                        <button onclick="event.stopPropagation(); editEntry('${hour}', ${index})">Edit</button>
+                                        <button class="remove-btn" onclick="event.stopPropagation(); removeEntry('${hour}', ${index})">Remove</button>
+                                    </span>
+                                </div>
+                            `;
+
+
                         }).join('\n');
 
                         let timeText = '';
@@ -594,10 +632,9 @@
             updateProgress("fat-bar", currentTotals.fat, fatGoal);
             updateProgress("carbs-bar", currentTotals.carbs, carbGoal);
 
-    if (selectedDay === new Date().toDateString()) {
-        localStorage.setItem("todayNutritionTotals", JSON.stringify(currentTotals));
-    }
-
+            if (selectedDay === new Date().toDateString()) {
+                localStorage.setItem("todayNutritionTotals", JSON.stringify(currentTotals));
+            }
         }
 
         function removeEntry(hour, index) {
