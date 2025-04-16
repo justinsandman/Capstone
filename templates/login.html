@@ -82,8 +82,10 @@
 </head>
 <body>
 
+    {% load static %}
+
     <div class="login-container">
-        <img src="FTD LOGO.png" alt="FTD Logo" class="logo">
+        <img src="{% static 'images/FTD LOGO.png' %}" alt="FTD Logo" class="logo">
         <h2>Login</h2>
         
         {% if messages %}
