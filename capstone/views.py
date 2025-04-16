@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages 
 from django.contrib.auth.models import User
 from core.forms import SignupForm, FoodLogForm
+from django.views.decorators.csrf import csrf_protect
 
 from nutrition.models import FoodLog
 
@@ -40,7 +41,7 @@ def login_view(request):
             return redirect('dashboard')  # Redirect to the dashboard after login
         else:
             messages.error(request, "Invalid username or password")  # Display error message
-            return redirect('login')  # Stay on the login page
+            return redirect('login')  
 
     return render(request, 'login.html')
 
@@ -51,19 +52,11 @@ def settings(request):
     return render(request, 'Settings.html')
 
 #
-def food_log_view(request):
-    if request.method == 'POST':
-        form = FoodLogForm(request.POST)
-        if form.is_valid():
-            food_log = form.save(commit=False)
-            food_log.user = request.user
-            food_log.save()
-            return redirect('food_log')
-    else:
-        form = FoodLogForm()
 
-    logs = FoodLog.objects.filter(user=request.user).order_by('-date_logged')
-    return render(request, 'foodlog/food_log.html', {'form': form, 'logs': logs})
+@csrf_protect
+def food_log_view(request):
+    # Your view code here
+    return render(request, 'foodlog.html')
 
 #
 def weight_log(request):

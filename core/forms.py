@@ -3,6 +3,7 @@
 # 
 
 from django import forms
+from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
@@ -14,9 +15,10 @@ class SignupForm(UserCreationForm):
         model = User
         fields = ['username', 'password1', 'password2']
 
-class FoodLogForm(forms.Form):
-        model = FoodLog
-        fields = ['food_item', 'calories', 'proteins', 'carbs', 'fats']
+class FoodLogForm(forms.ModelForm):
+    class Meta:
+        model = FoodLog  # Link to the FoodLog model
+        fields = ['user', 'food_item', 'calories', 'proteins', 'carbs', 'fats']
 
 # Weight Log
 class WeightLogForm(forms.Form):

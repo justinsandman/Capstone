@@ -4,7 +4,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = '52495'  # 
 
-DEBUG = False  # Change to False in production
+DEBUG = True  # Change to False in production
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'core',
     'nutrition',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
