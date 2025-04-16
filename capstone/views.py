@@ -55,7 +55,6 @@ def settings(request):
 
 @csrf_protect
 def food_log_view(request):
-    # Your view code here
     return render(request, 'foodlog.html')
 
 #
