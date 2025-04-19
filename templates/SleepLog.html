@@ -16,124 +16,509 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sleep Log</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        /* General body styling */
-        body {
-            background-color: #121212;
-            color: white;
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        
-        /* Container for sleep log input */
-        .sleep-log-container {
-            background-color: #1e1e1e;
-            padding: 20px;
-            border-radius: 10px;
-            width: 400px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .sleep-log-container h2 {
-            margin-bottom: 20px;
-        }
-        
-        /* Styling for input groups */
-        .input-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        
-        input {
-            width: 100%;
-            padding: 8px;
-            border: none;
-            border-radius: 5px;
-            background-color: #2e2e2e;
-            color: white;
-        }
-        
-        /* Button styling */
-        button {
-            background-color: #007bff;
-            color: white;
-            padding: 10px;
-            border: none;
-            width: 100%;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
-        }
-        
-        button:hover {
-            background-color: #0056b3;
-        }
-        
-        /* Back button styling */
-        .back-button {
-            background-color: #ff4d4d;
-        }
-        
-        .back-button:hover {
-            background-color: #cc0000;
-        }
-        
-        /* Container for chart display */
-        .chart-container {
-            width: 80%;
-            max-width: 600px;
-            background-color: #1e1e1e;
-            padding: 20px;
-            border-radius: 10px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sleep Log</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #121212;
+      color: #f5f5f5;
+      padding: 2rem;
+      padding-top: 5rem; /* Add padding to prevent overlap with fixed button */
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    h2 {
+        margin-bottom: 0.5rem; /* Reduced margin for h2 in log */
+    }
+    
+    #average-sleep {
+        margin-bottom: 1rem; /* Add margin below average sleep text */
+        font-size: 0.9rem;
+        color: #ccc;
+        text-align: left; /* Align text left */
+    }
+
+    form {
+      background: #2C2C2C;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    input, select { 
+      width: 100%;
+      padding: 0.75rem; 
+      border: 1px solid #555; 
+      border-radius: 8px;
+      font-size: 1rem;
+      background-color: #333; 
+      color: #f5f5f5; 
+    }
+
+    input[type="time"]::-webkit-calendar-picker-indicator,
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(1); /* Make picker icons visible on dark background */
+    }
+
+    button {
+      background: #007bff; 
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      font-size: 1rem; 
+      margin-top: 1rem; 
+      width: 100%; 
+    }
+
+    button:hover {
+      background: #0056b3; 
+    }
+
+    .log {
+      background: #2C2C2C;
+      border-radius: 12px;
+      padding: 1.5rem; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 2rem; 
+    }
+
+    .log-entry {
+      border-bottom: 1px solid #555; 
+      padding: 1rem 0;
+      display: flex; 
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap; 
+    }
+    
+    .log-entry div:first-child { 
+        flex-grow: 1; 
+        margin-right: 1rem; 
+    }
+
+    .log-entry:last-child {
+      border-bottom: none;
+    }
+    
+    .log-entry small {
+        display: block; 
+        margin-top: 0.5rem;
+        color: #aaa; 
+    }
+
+    /* Styles for Edit and Remove Buttons in Log */
+    .edit-btn, .remove-log-btn {
+        background: transparent; 
+        color: #ffa500; 
+        padding: 0.25rem 0.75rem;
+        border: 1px solid #ffa500; 
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 10px;
+        transition: background 0.3s ease, color 0.3s ease;
+        width: auto; 
+        margin-top: 0; 
+        font-size: 0.9rem; 
+    }
+
+    .remove-log-btn {
+        color: #f44336; 
+        border-color: #f44336;
+    }
+
+    .edit-btn:hover {
+        background: #ffa500;
+        color: #fff;
+    }
+
+    .remove-log-btn:hover {
+        background: #f44336;
+        color: #fff;
+    }
+    
+    .button-group { 
+        display: flex;
+        align-items: center;
+        margin-top: 0.5rem; 
+    }
+
+    #dashboard-btn {
+      position: absolute; 
+      top: 1rem;  
+      left: 1rem;   
+      background: #555; 
+      color: #fff;
+      padding: 0.5rem 1rem; 
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      width: auto; 
+      margin-top: 0; 
+      z-index: 10; 
+    }
+
+    #dashboard-btn:hover {
+      background: #777;
+    }
+
+    /* Container for chart display */
+    .chart-container {
+        width: 100%; 
+        max-width: 800px; 
+        height: 500px;
+        background-color: #2C2C2C;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        margin: 2rem auto; /* Added top margin */
+    }
+
+    /* Ensure chart is responsive and larger */
+    #sleepChart {
+        max-height: 1000px; /* Increased max height for larger graph */
+    }
+    
+  </style>
 </head>
 <body>
-    <!-- Sleep log input form -->
-    <div class="sleep-log-container">
-        <h2>Sleep Log</h2>
-        <div class="input-group">
-            <label for="sleep-time">Sleep Time:</label>
-            <input type="time" id="sleep-time">
-        </div>
-        <div class="input-group">
-            <label for="wake-time">Wake Time:</label>
-            <input type="time" id="wake-time">
-        </div>
-        <button>Log Sleep</button>
-        <button class="back-button" onclick="window.location.href='MainDashboard.html'">Back to Dashboard</button>
+  <div class="container">
+    <button id="dashboard-btn">Return to Dashboard</button>
+    <h1>Sleep Log</h1>
+    <form id="sleep-form">
+      <div class="form-group">
+        <label for="date">Date</label>
+        <input type="date" id="date" required />
+      </div>
+      <div class="form-group">
+        <label for="sleep-time">Sleep Time</label>
+        <input type="time" id="sleep-time" required />
+      </div>
+      <div class="form-group">
+        <label for="wake-time">Wake Time</label>
+        <input type="time" id="wake-time" required />
+      </div>
+      <button type="submit">Log Sleep</button>
+    </form>
+
+    <div class="log" id="sleep-log">
+      <h2>Sleep History</h2>
+      <p id="average-sleep">Average Sleep: Calculating...</p> 
+      <div id="entries"></div>
     </div>
     
-    <!-- Chart displaying weekly sleep data -->
     <div class="chart-container">
         <canvas id="sleepChart"></canvas>
     </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('sleep-form');
+    const dateInput = document.getElementById('date');
+    const sleepTimeInput = document.getElementById('sleep-time');
+    const wakeTimeInput = document.getElementById('wake-time');
+    const entriesContainer = document.getElementById('entries');
+    const submitButton = form.querySelector('button[type="submit"]');
+    const chartCanvas = document.getElementById('sleepChart'); 
+    const averageSleepElement = document.getElementById('average-sleep'); // Get average display element
+
+    let loggedSleepData = [];
+    let editingEntryId = null;
+    let sleepChart = null; 
+
+    const STORAGE_KEY = 'fitnessTrackerSleepLogs';
+
+    // --- Date Helpers ---
+    function formatDate(date) {
+        // Returns date in YYYY-MM-DD format
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = (`0${d.getMonth() + 1}`).slice(-2);
+        const day = (`0${d.getDate()}`).slice(-2);
+        return `${year}-${month}-${day}`;
+    }
+
+    function getCurrentWeekDates(startDay = 1) { // 0=Sun, 1=Mon
+        const dates = [];
+        const today = new Date();
+        const currentDay = today.getDay(); // 0 for Sunday, 1 for Monday, etc.
+        const diff = currentDay - startDay; // Difference from the desired start day
+        const startDate = new Date(today);
+        startDate.setDate(today.getDate() - (diff < 0 ? diff + 7 : diff)); // Adjust to the start of the week
+
+        for (let i = 0; i < 7; i++) {
+            const weekDate = new Date(startDate);
+            weekDate.setDate(startDate.getDate() + i);
+            dates.push(formatDate(weekDate));
+        }
+        return dates;
+    }
+
+    // --- Data Persistence ---
+    function saveSleepLogs() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(loggedSleepData));
+    }
+
+    function loadSleepLogs() {
+      const storedData = localStorage.getItem(STORAGE_KEY);
+      loggedSleepData = []; // Reset before loading
+      if (storedData) {
+        try {
+          const parsedData = JSON.parse(storedData);
+          if (Array.isArray(parsedData)) {
+             // Ensure data integrity (optional, good practice)
+             loggedSleepData = parsedData.filter(entry => entry && entry.id && entry.date && entry.details && entry.details.sleepTime && entry.details.wakeTime);
+          }
+        } catch (error) {
+          console.error("Error parsing stored sleep logs:", error);
+        }
+      }
+      renderAllEntries();
+      updateAverageSleepDisplay(); // Update average display on load
+      updateChart(); // Update chart on load
+    }
+
+    // --- Display Logic ---
+    function renderAllEntries() {
+        entriesContainer.innerHTML = '';
+        // Sort entries by date, most recent first for the log display
+        const sortedForLog = [...loggedSleepData].sort((a, b) => new Date(b.date) - new Date(a.date)); 
+        sortedForLog.forEach(entry => displaySleepEntry(entry));
+    }
+
+    function displaySleepEntry(entryData) {
+      const entryDiv = document.createElement('div');
+      entryDiv.classList.add('log-entry');
+      entryDiv.dataset.id = entryData.id;
+
+      // Ensure duration is calculated if missing (e.g., from older data)
+      const duration = entryData.details.duration || calculateDurationString(entryData.details.sleepTime, entryData.details.wakeTime);
+      const sleepTimeFormatted = formatTime(entryData.details.sleepTime);
+      const wakeTimeFormatted = formatTime(entryData.details.wakeTime);
+
+      entryDiv.innerHTML = `
+        <div>
+            <strong>${entryData.date}</strong><br />
+            Slept: ${sleepTimeFormatted} - Woke: ${wakeTimeFormatted}<br />
+            Duration: ${duration}
+        </div>
+        <div class="button-group">
+            <button class="edit-btn">Edit</button>
+            <button class="remove-log-btn">Remove</button>
+        </div>
+      `;
+
+      // Add Edit functionality
+      entryDiv.querySelector('.edit-btn').addEventListener('click', () => {
+        editingEntryId = entryData.id;
+        populateFormForEditing(entryData);
+        form.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      // Add Remove functionality
+      entryDiv.querySelector('.remove-log-btn').addEventListener('click', () => {
+        const indexToRemove = loggedSleepData.findIndex(entry => entry.id === entryData.id);
+        if (indexToRemove > -1) {
+          loggedSleepData.splice(indexToRemove, 1);
+          saveSleepLogs();
+          entryDiv.remove(); // Remove from DOM
+          updateAverageSleepDisplay(); // Update average after removal
+          updateChart(); // Update chart after removal
+          if (editingEntryId === entryData.id) {
+            resetFormState(); 
+          }
+        } else {
+          console.warn("Could not find sleep data to remove for ID:", entryData.id);
+          entryDiv.remove(); 
+        }
+      });
+
+      entriesContainer.appendChild(entryDiv); 
+    }
+
+    // --- Average Calculation & Display ---
+     function formatDurationFromHours(totalHours) {
+        if (isNaN(totalHours) || totalHours <= 0) return 'N/A';
+        const hours = Math.floor(totalHours);
+        const minutes = Math.round((totalHours - hours) * 60);
+        return `${hours} hours ${minutes} minutes`;
+    }
     
-    <script>
-        // Initialize bar chart for sleep data
-        const ctx = document.getElementById('sleepChart').getContext('2d');
-        const sleepChart = new Chart(ctx, {
+    function updateAverageSleepDisplay() {
+        if (loggedSleepData.length === 0) {
+            averageSleepElement.textContent = 'Average Sleep: N/A';
+            return;
+        }
+
+        let totalHoursSum = 0;
+        loggedSleepData.forEach(entry => {
+            totalHoursSum += calculateDurationHours(entry.details.sleepTime, entry.details.wakeTime);
+        });
+
+        const averageHours = totalHoursSum / loggedSleepData.length;
+        averageSleepElement.textContent = `Average Sleep: ${formatDurationFromHours(averageHours)}`;
+    }
+
+
+    // --- Form Handling & Data Calculation ---
+    function populateFormForEditing(entryData) {
+      dateInput.value = entryData.date;
+      sleepTimeInput.value = entryData.details.sleepTime;
+      wakeTimeInput.value = entryData.details.wakeTime;
+      submitButton.textContent = 'Update Sleep Log';
+    }
+
+    function resetFormState() {
+      form.reset(); 
+      editingEntryId = null;
+      submitButton.textContent = 'Log Sleep';
+      // Set default date to today after reset
+      dateInput.value = formatDate(new Date()); 
+    }
+
+    function calculateDurationString(sleepTime, wakeTime) {
+        if (!sleepTime || !wakeTime) return 'N/A';
+        const durationHours = calculateDurationHours(sleepTime, wakeTime);
+        return formatDurationFromHours(durationHours);
+    }
+    
+    function calculateDurationHours(sleepTime, wakeTime) {
+        if (!sleepTime || !wakeTime) return 0;
+        
+        try {
+            const sleep = sleepTime.split(':');
+            const wake = wakeTime.split(':');
+            
+            // Use a consistent base date (like today) to handle potential DST issues slightly better
+            // We only care about the time difference, date part is just for calculation
+            const baseDateStr = formatDate(new Date()); 
+            const sleepDate = new Date(`${baseDateStr}T${sleep[0]}:${sleep[1]}:00`);
+            let wakeDate = new Date(`${baseDateStr}T${wake[0]}:${wake[1]}:00`);
+
+            // If wake time is earlier than sleep time, assume it's the next day
+            if (wakeDate <= sleepDate) {
+                wakeDate.setDate(wakeDate.getDate() + 1);
+            }
+
+            const diffMs = wakeDate - sleepDate;
+            if (isNaN(diffMs) || diffMs < 0) return 0; // Basic validation
+
+            return diffMs / 3600000; // Duration in hours (can be float)
+        } catch(e) {
+            console.error("Error calculating duration:", e);
+            return 0; // Return 0 if time parsing fails
+        }
+    }
+
+    function formatTime(timeString) {
+        if (!timeString || typeof timeString !== 'string' || !timeString.includes(':')) return 'N/A';
+        try {
+            const [hour, minute] = timeString.split(':');
+            const hourInt = parseInt(hour, 10);
+            const ampm = hourInt >= 12 ? 'PM' : 'AM';
+            const formattedHour = hourInt % 12 === 0 ? 12 : hourInt % 12;
+            return `${formattedHour}:${minute} ${ampm}`;
+        } catch(e) {
+             console.error("Error formatting time:", e);
+            return 'N/A';
+        }
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const date = dateInput.value;
+      const sleepTime = sleepTimeInput.value;
+      const wakeTime = wakeTimeInput.value;
+
+      // Basic validation
+      if (!date || !sleepTime || !wakeTime) {
+          alert("Please fill in all fields.");
+          return;
+      }
+
+      const details = {
+          sleepTime: sleepTime,
+          wakeTime: wakeTime,
+          // Duration string is calculated dynamically or can be stored if preferred
+          // duration: calculateDurationString(sleepTime, wakeTime) 
+      };
+
+      let entryData;
+
+      if (editingEntryId) {
+        // Update existing entry
+        const indexToUpdate = loggedSleepData.findIndex(entry => entry.id === editingEntryId);
+        if (indexToUpdate > -1) {
+          entryData = {
+            ...loggedSleepData[indexToUpdate], 
+            date: date,
+            details: details
+          };
+          loggedSleepData[indexToUpdate] = entryData;
+        } else {
+          console.error("Could not find entry to update with ID:", editingEntryId);
+          resetFormState();
+          return; 
+        }
+      } else {
+        // Add new entry
+        const newId = Date.now().toString();
+        entryData = { id: newId, date, details };
+        loggedSleepData.push(entryData);
+      }
+
+      saveSleepLogs();
+      renderAllEntries(); // Re-render log
+      updateAverageSleepDisplay(); // Update average display
+      updateChart(); // Update chart
+      resetFormState();
+    });
+
+    // --- Chart Logic ---
+    function initializeChart() {
+        const ctx = chartCanvas.getContext('2d');
+        const weekDates = getCurrentWeekDates(1); // Get Mon-Sun dates for the current week
+
+        sleepChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                labels: weekDates, // Set initial labels to current week days
                 datasets: [{
                     label: 'Hours Slept',
-                    data: [7, 6.5, 8, 7.5, 6, 9, 8],
+                    data: Array(7).fill(0), // Initialize data with zeros for the week
                     backgroundColor: 'rgba(0, 123, 255, 0.5)',
                     borderColor: 'rgba(0, 123, 255, 1)',
                     borderWidth: 1
@@ -141,15 +526,83 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false, 
                 scales: {
                     y: {
                         beginAtZero: true,
-                        max: 10
+                        title: { display: true, text: 'Hours', color: '#f5f5f5' },
+                        ticks: { color: '#f5f5f5' },
+                        grid: { color: '#555' }
+                    },
+                    x: {
+                         title: { display: true, text: 'Date (Current Week Mon-Sun)', color: '#f5f5f5'},
+                        ticks: { color: '#f5f5f5' },
+                         grid: { display: false } // Hide vertical grid lines for clarity
+                    }
+                },
+                plugins: {
+                    legend: { labels: { color: '#f5f5f5' } },
+                    tooltip: { // Customize tooltips if needed
+                         callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    // Format tooltip value nicely
+                                    label += formatDurationFromHours(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
                     }
                 }
             }
         });
-    </script>
+    }
+
+    function updateChart() {
+        if (!sleepChart) {
+            initializeChart(); 
+        }
+
+        const weekDates = getCurrentWeekDates(1); // Get current Mon-Sun dates
+        const weeklyData = Array(7).fill(0); // Initialize data array for the week
+
+        // Map logged data onto the current week
+        loggedSleepData.forEach(entry => {
+            const entryDateStr = entry.date; // Already in YYYY-MM-DD format
+            const weekIndex = weekDates.indexOf(entryDateStr);
+            
+            if (weekIndex !== -1) { // If the entry's date is in the current week
+                weeklyData[weekIndex] = calculateDurationHours(entry.details.sleepTime, entry.details.wakeTime);
+            }
+        });
+        
+        // Update chart labels and data
+        sleepChart.data.labels = weekDates;
+        sleepChart.data.datasets[0].data = weeklyData;
+        
+        // Update the chart
+        sleepChart.update();
+    }
+
+    // --- Initialization ---
+    document.addEventListener('DOMContentLoaded', () => {
+        dateInput.value = formatDate(new Date()); // Set default date to today
+        loadSleepLogs(); // Load data, render entries, calculate average, and update chart
+        // Initialize chart if it hasn't been already (e.g., if no data loaded)
+        if (!sleepChart) {
+             initializeChart();
+        }
+    });
+
+    // --- Navigation ---
+    document.getElementById('dashboard-btn').addEventListener('click', () => {
+        window.location.href = 'MainDashboard.html'; // Ensure this path is correct
+    });
+
+  </script>
 </body>
 </html>
-
