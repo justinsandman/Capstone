@@ -10,7 +10,7 @@
     - 
 
     References: 
-    - 
+    - https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -18,179 +18,359 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weight Log</title>
+    <!-- This link was found from gemini, when asking how I may implement a line plot for my weight log, one of the options -->
+    <!-- it gave me was this link. Which is the Chart.js library using a CDN link from jsDelivr that it reccomended. -->  
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script> <!-- Using Chart.js (v4.4.2) via jsDelivr for charting -->
     <style>
-        /* General body styling */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212; /* Dark background */
-            color: white; /* White text */
+        * {
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* Center content */
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Container for the weight input and goal */
+        body {
+            background-color: #121212;
+            color: #f5f5f5;
+            padding: 2rem;
+        }
+
         .container {
-            background: #1e1e1e;
-            width: 90%;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 20px;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        /* Container for the weight progress graph */
-        .chart-container {
-            background: #222;
-            width: 90%;
-            padding: 20px;
-            border-radius: 10px;
+        h1 {
             text-align: center;
-            margin-top: 10px;
-            height: 400px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
+            margin-bottom: 2rem;
         }
 
-        /* The graph area where bars will be shown */
-        .graph {
-            width: 80%;
-            height: 300px;
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-end;
-            border-left: 2px solid white; /* Y-axis */
-            border-bottom: 2px solid white; /* X-axis */
-            padding: 10px;
-            position: relative;
+        .input-container, .graph-container-box {
+            background: #2C2C2C;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
         }
 
-        /* Styling for individual bars in the graph */
-        .bar {
-            width: 50px;
-            background: #007bff; /* Blue bars */
-            text-align: center;
-            color: white;
-            font-weight: bold;
+        .input-area {
             display: flex;
-            align-items: flex-end;
             justify-content: center;
-            position: relative;
-            border-radius: 5px 5px 0 0; /* Rounded top */
-        }
-
-        /* Heights for each bar (mock data representation) */
-        .bar:nth-child(1) { height: 50px; }
-        .bar:nth-child(2) { height: 100px; }
-        .bar:nth-child(3) { height: 130px; }
-        .bar:nth-child(4) { height: 110px; }
-        .bar:nth-child(5) { height: 140px; }
-        .bar:nth-child(6) { height: 160px; }
-        .bar:nth-child(7) { height: 180px; }
-
-        /* Labels inside bars showing weight values */
-        .bar span {
-            position: absolute;
-            top: -20px; /* Position above the bar */
-            font-size: 14px;
-        }
-
-        /* Target weight marker (dashed red line) */
-        .target-line {
-            width: 100%;
-            height: 2px;
-            background: red;
-            position: absolute;
-            top: 120px; /* Adjust based on target weight */
-            border-top: 2px dashed white;
-        }
-
-        /* Labels for each day of the week */
-        .days {
-            display: flex;
-            justify-content: space-around;
-            width: 80%;
-            margin-top: 5px;
-            font-size: 14px;
-        }
-
-        /* Container for logging new weight input */
-        .form-container {
-            display: flex;
-            flex-direction: column;
             align-items: center;
-            width: 80%;
-            margin: 20px 0;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
-        /* Styling for input fields and button */
-        .form-container input, .form-container button {
-            margin: 10px;
-            padding: 10px;
-            width: 80%;
-            font-size: 16px;
-            border-radius: 5px;
+        label {
+            font-weight: 600;
+            margin-bottom: 0;
+            margin-right: 10px;
+        }
+
+        input[type="number"] {
+            width: 150px;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #333;
+            color: white;
+            text-align: right;
+        }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        button {
+            background: #333;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
             border: none;
-        }
-
-        /* Button styling */
-        .form-container button {
-            background: #007bff;
-            color: white;
-            font-weight: bold;
+            border-radius: 8px;
             cursor: pointer;
+            transition: background 0.3s ease;
         }
 
-        /* Back button styling */
-        .back-btn {
-            margin: 20px;
-            padding: 10px 20px;
-            background: #007bff;
-            color: white;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 5px;
+        button:hover {
+            background: #555;
+        }
+
+        #message {
+            text-align: center;
+            min-height: 1.2em;
+            font-weight: 500;
+        }
+
+        #message.success {
+            color: #28a745;
+        }
+
+        #message.error {
+            color: #dc3545;
+        }
+
+        .graph-container {
+            width: 100%;
+            height: 400px;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        #weightChart {
+            min-width: 500px;
+        }
+
+        #dashboard-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+        }
+
+        @media (max-width: 600px) {
+            .input-area {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            input[type="number"] {
+                width: 100%;
+                text-align: left;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .graph-container {
+                height: 300px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Container for title and target weight input -->
+    <button id="dashboard-btn">Return to Dashboard</button>
     <div class="container">
-        <h2>Weight Log</h2>
-        <label for="goalWeight">Set Target Weight:</label>
-        <input type="number" id="goalWeight" placeholder="Enter target weight (lbs)">
-    </div>
-    
-    <!-- Graph container with a target line -->
-    <div class="chart-container">
-        <h3>Weight Progress</h3>
-        <div class="graph">
-            <div class="target-line"></div> <!-- Target weight indicator -->
-            <div class="bar"><span>180</span></div>
-            <div class="bar"><span>178</span></div>
-            <div class="bar"><span>176</span></div>
-            <div class="bar"><span>177</span></div>
-            <div class="bar"><span>175</span></div>
-            <div class="bar"><span>173</span></div>
-            <div class="bar"><span>172</span></div>
+        <h1>Weight Log</h1>
+        <div class="input-container">
+            <div class="input-area">
+                <label for="weightInput">Enter Weight:</label>
+                <input type="number" id="weightInput" name="weightInput" step="0.01" placeholder="e.g., 171.56" required>
+                <button id="logButton">Log Weight</button>
+            </div>
+            <p id="message"></p>
         </div>
-        <!-- Days of the week below the graph -->
-        <div class="days">
-            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+        <div class="graph-container-box">
+            <h2>Progress</h2>
+            <div class="graph-container">
+                <canvas id="weightChart"></canvas>
+            </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const weightInput = document.getElementById('weightInput');
+            const logButton = document.getElementById('logButton');
+            const messageEl = document.getElementById('message');
+            const ctx = document.getElementById('weightChart').getContext('2d');
+            let weightChart;
+            let weightData = [];
+            let editIndex = -1;
 
-    <!-- Input field for logging new weight -->
-    <div class="form-container">
-        <input type="number" id="weightInput" placeholder="Enter today's weight (lbs)">
-        <button>Log Weight</button>
-    </div>
+            function loadData() {
+                const storedData = localStorage.getItem('weightLog');
+                if (storedData) {
+                    try {
+                        weightData = JSON.parse(storedData);
+                        weightData.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    } catch (e) {
+                        console.error("Error parsing stored weight data:", e);
+                        weightData = [];
+                        localStorage.removeItem('weightLog');
+                    }
+                } else {
+                    weightData = [];
+                }
+            }
 
-    <!-- Back button to return to the main dashboard -->
-    <a href="MainDashboard.html" class="back-btn">&#8592; Back</a>
+            function saveData() {
+                try {
+                    localStorage.setItem('weightLog', JSON.stringify(weightData));
+                } catch (e) {
+                    console.error("Error saving weight data:", e);
+                    displayMessage("Error saving data. Storage might be full.", "error");
+                }
+            }
+
+            function displayMessage(msg, type = 'info') {
+                messageEl.textContent = msg;
+                messageEl.className = type;
+                setTimeout(() => {
+                    messageEl.textContent = '';
+                    messageEl.className = '';
+                }, 4000);
+            }
+
+            function getCurrentDate() {
+                const today = new Date();
+                const year = today.getUTCFullYear();
+                const month = String(today.getUTCMonth() + 1).padStart(2, '0');
+                const day = String(today.getUTCDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            function updateChart() {
+                if (weightChart) {
+                    weightChart.destroy();
+                }
+                const labels = weightData.map(entry => entry.date);
+                const dataPoints = weightData.map(entry => entry.weight);
+                weightChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Weight',
+                            data: dataPoints,
+                            borderColor: 'white',
+                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                            tension: 0.1,
+                            borderWidth: 2,
+                            pointBackgroundColor: 'white',
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                title: {
+                                    display: true,
+                                    text: 'Weight',
+                                    color: 'white'
+                                },
+                                ticks: {
+                                    color: 'white'
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Date',
+                                    color: 'white'
+                                },
+                                ticks: {
+                                    color: 'white'
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                }
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    title: function (tooltipItems) {
+                                        return tooltipItems[0].label;
+                                    },
+                                    label: function (context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += parseFloat(context.parsed.y).toFixed(2);
+                                        }
+                                        return label;
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                display: false,
+                            },
+                            legend: {
+                                display: false,
+                            }
+                        },
+                        onClick: (event, elements) => {
+                            if (elements.length > 0) {
+                                editIndex = elements[0].index;
+                                weightInput.value = weightData[editIndex].weight;
+                            }
+                        }
+                    }
+                });
+            }
+
+            function handleLogWeight() {
+                const weightValueStr = weightInput.value.trim();
+                if (weightValueStr === '') {
+                    displayMessage("Please enter your weight.", "error");
+                    return;
+                }
+                const weightValue = parseFloat(weightValueStr);
+                if (isNaN(weightValue) || weightValue <= 0) {
+                    displayMessage("Please enter a valid positive weight.", "error");
+                    return;
+                }
+                const formattedWeight = parseFloat(weightValue.toFixed(2));
+                const currentDate = getCurrentDate();
+
+                if (editIndex !== -1) {
+                    weightData[editIndex].weight = formattedWeight;
+                    displayMessage(`Weight for ${weightData[editIndex].date} updated.`, 'success');
+                    editIndex = -1;
+                } else {
+                    const existingEntryIndex = weightData.findIndex(entry => entry.date === currentDate);
+                    if (existingEntryIndex !== -1) {
+                        weightData[existingEntryIndex].weight = formattedWeight;
+                        displayMessage(`Updated weight for ${currentDate} to ${formattedWeight.toFixed(2)}.`, 'success');
+                    } else {
+                        weightData.push({ date: currentDate, weight: formattedWeight });
+                        displayMessage(`Weight ${formattedWeight.toFixed(2)} logged for ${currentDate}.`, 'success');
+                    }
+                }
+
+                saveData();
+                updateChart();
+                weightInput.value = '';
+            }
+
+            logButton.addEventListener('click', handleLogWeight);
+            weightInput.addEventListener('keypress', function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    handleLogWeight();
+                }
+            });
+            loadData();
+            updateChart();
+
+            document.getElementById('dashboard-btn').addEventListener('click', () => {
+                window.location.href = 'MainDashboard.html';
+            });
+        });
+    </script>
 </body>
 </html>
