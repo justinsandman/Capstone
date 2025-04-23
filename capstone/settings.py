@@ -106,3 +106,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Logo)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']  # Path
+
+# Directory where collectstatic will collect static files to show images
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # Used to store the static files after running collectstatic

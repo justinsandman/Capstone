@@ -1,15 +1,14 @@
 <!--
     File: signup.html
-    Description: Interface for the Login page.
+    Description: Interface for the Sign Up page.
 
     Authors: Justin Sandstedt, Matthew Swandal, Gabriel Morgan
 
-    Last Updated: March 2, 2025 @ 11:00 PM
+    Last Updated: April 23, 2025
 
-    Notes: 
-    
+    Notes: Includes logo display and styling fixes.
 -->
-    
+
 {% load static %}
 
 <!DOCTYPE html>
@@ -26,14 +25,23 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
         }
+
         .signup-container {
             background: rgba(255, 255, 255, 0.1);
             padding: 20px;
             border-radius: 10px;
-            width: 350px;
+            width: 100%;
+            max-width: 450px;
             text-align: center;
+            box-sizing: border-box;
         }
+
+        .signup-container img {
+            margin-bottom: 10px;
+        }
+
         .signup-container input {
             width: 100%;
             padding: 10px;
@@ -42,7 +50,15 @@
             border: none;
             color: white;
             border-radius: 5px;
+            box-sizing: border-box;
         }
+
+        .signup-container p {
+            text-align: left;
+            font-size: 14px;
+            margin: 8px 0;
+        }
+
         .signup-btn {
             width: 100%;
             padding: 10px;
@@ -52,13 +68,15 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         .signup-btn:hover {
-            opacity: 0.7;
+            opacity: 0.8;
         }
     </style>
 </head>
 <body>
     <div class="signup-container">
+        <img src="{% static 'your_app/images/logo.png' %}" alt="FTD Logo" width="100">
         <h2>Sign Up</h2>
         <form method="post">
             {% csrf_token %}
