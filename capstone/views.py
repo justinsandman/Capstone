@@ -1,19 +1,32 @@
-# Authors: Justin Sandstedt, Matthew Swandal, Gabriel Morgan
-#
-# Python file to retrieve data from Cloud SQL DB, process user 
-# input, render HTML templates with DB content, & handle certain logic.
+"""
+Views for handling user authentication, navigation, and feature page rendering. 
 
+Authors: Justin Sandstedt, Matthew Swandal, Gabriel Morgan
+
+This module connects frontend templates with backend logic. It handles:
+- Signup & Login workflows
+- Route-based template rednering for feature pages
+- Retrieval and submission of form data
+"""
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages 
 from django.contrib.auth.models import User
-from core.forms import SignupForm, FoodLogForm
 from django.views.decorators.csrf import csrf_protect
 
+from core.forms import SignupForm, FoodLogForm
 from nutrition.models import FoodLog
 
 
+
 def signup_view(request):
+    """
+    Handle user registration.
+
+    If the request method is POST, validate and create a new user using SignupForm.
+    Automatically logs in the new user and redirects to the dashboard. 
+    If GET, renders blank SignupForm. 
+    """
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
@@ -27,10 +40,15 @@ def signup_view(request):
 
     return render(request, 'signup.html', {'form': form})
 
-#
-#
-#
+
+
 def login_view(request):
+    """
+    Handle user login. 
+
+    Authenticated user credentials submitted via POST.
+    Redirects to main dashboard on success or returns to login page with error on fail. 
+    """
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -45,43 +63,75 @@ def login_view(request):
 
     return render(request, 'login.html')
 
-#
-#
-#
+
+
 def settings(request):
+    """
+    Renders the settings page.
+    """
     return render(request, 'Settings.html')
 
-#
+
 
 @csrf_protect
 def food_log_view(request):
+    """
+    Render the FoodLog page. 
+    TODO: Implement form submission. 
+    """
     return render(request, 'foodlog.html')
 
-#
+
+
 def weight_log(request):
+    """
+    Render the WeightLog page.
+    """
     return render(request, 'weightlog.html')
 
-#
+
+
 def habit_tracker(request):
+    """
+    Render the HabitTracker page. 
+    """
     return render (request, 'HabitTracker.html')
 
-#
+
 def program(request):
+    """
+    Render the Program page. 
+    """
     return render(request, 'program.html')
 
-#
+
+
 def expenditure(request):
+    """
+    Render the Expenditure page. 
+    """
     return render(request, 'expenditure.html')
 
-#
+
+
 def sleep_log(request):
+    """
+    Render the SleepLog page. 
+    """    
     return render(request, 'sleeplog.html')
 
-#
+
 def journal(request):
+    """
+    Render the Journal page. 
+    """
     return render(request, 'journal.html')
 
-#
+
+
 def dashboard(request):
+    """
+    Render the MainDashboard page. 
+    """
     return render(request, 'MainDashboard.html')
 
