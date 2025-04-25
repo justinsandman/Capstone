@@ -18,120 +18,161 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Program</title>
     <style>
-        /* General body styling */
+        /* -----------------------------------------------------------------------------------------
+         General body styling
+         -----------------------------------------------------------------------------------------
+         Sets the base font, background color, text color, margin, padding, display, alignment,
+         height, and content centering for the entire page.
+        */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #121212; /* Dark mode theme */
-            color: white; /* White text */
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            justify-content: center; /* Center content */
+            font-family: Arial, sans-serif; /* Use Arial as the primary font. */
+            background-color: #121212; /* Dark mode theme background color. */
+            color: white; /* Default text color is white. */
+            margin: 0; /* Remove default body margins. */
+            padding: 0; /* Remove default body padding. */
+            display: flex; /* Enable Flexbox for layout control. */
+            flex-direction: column; /* Arrange items in a column. */
+            align-items: center; /* Center items horizontally. */
+            height: 100vh; /* Set the body to take up the full viewport height. */
+            justify-content: center; /* Center content vertically in the viewport. */
         }
 
-        /* Container for goal selection */
+        /* -----------------------------------------------------------------------------------------
+         Container for goal selection
+         -----------------------------------------------------------------------------------------
+         Styles the main container where users can select their nutrition goal.
+        */
         .container {
-            background: #1e1e1e;
-            width: 90%;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
+            background: #1e1e1e; /* Slightly lighter dark background for the container. */
+            width: 90%; /* Set the width of the container to 90% of its parent. */
+            padding: 20px; /* Add padding inside the container. */
+            border-radius: 10px; /* Round the corners of the container. */
+            text-align: center; /* Center text within the container. */
         }
 
-        /* Chart container for macro tracking */
+        /* -----------------------------------------------------------------------------------------
+         Chart container for macro tracking
+         -----------------------------------------------------------------------------------------
+         Styles the container that will hold the bar chart visualizing macro intake.
+        */
         .chart-container {
-            background: #222;
-            width: 90%;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 20px;
-            height: 600px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            position: relative;
+            background: #222; /* Darker background for the chart container. */
+            width: 90%; /* Set the width of the chart container. */
+            padding: 20px; /* Add padding inside the chart container. */
+            border-radius: 10px; /* Round the corners. */
+            text-align: center; /* Center text within the chart container. */
+            margin-top: 20px; /* Add top margin to separate it from the goal selection. */
+            height: 600px; /* Set a fixed height for the chart container. */
+            display: flex; /* Enable Flexbox for internal layout. */
+            flex-direction: column; /* Arrange items (title, chart) in a column. */
+            justify-content: flex-start; /* Align items to the top. */
+            position: relative; /* Enable absolute positioning of elements within. */
         }
 
-        /* Title spacing for the chart */
+        /* -----------------------------------------------------------------------------------------
+         Title spacing for the chart
+         -----------------------------------------------------------------------------------------
+         Adds bottom margin to the chart's title for spacing.
+        */
         .chart-container h3 {
-            margin-bottom: 40px;
+            margin-bottom: 40px; /* Add space below the chart title. */
         }
 
-        /* Layout for the macro bar chart */
+        /* -----------------------------------------------------------------------------------------
+         Layout for the macro bar chart
+         -----------------------------------------------------------------------------------------
+         Styles the container for the individual macro bars, arranging them horizontally.
+        */
         .bar-chart {
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-end;
-            height: 100%;
-            width: 100%;
+            display: flex; /* Arrange bars in a row. */
+            justify-content: space-around; /* Distribute space evenly around the bars. */
+            align-items: flex-end; /* Align bars to the bottom of the container. */
+            height: 100%; /* Make the chart take up the full height of its container. */
+            width: 100%; /* Make the chart take up the full width of its container. */
         }
 
-        /* Individual bar styling */
+        /* -----------------------------------------------------------------------------------------
+         Individual bar styling
+         -----------------------------------------------------------------------------------------
+         Styles each individual bar representing a day or a point in time.
+        */
         .bar {
-            width: 80px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-end;
-            position: relative;
-            height: 100%;
-            border: 2px solid white; /* Bar outline */
-            background: rgba(255, 255, 255, 0.1); /* Light transparent fill */
+            width: 80px; /* Fixed width for each bar. */
+            display: flex; /* Enable Flexbox for internal layout of the bar. */
+            flex-direction: column; /* Arrange macro sections vertically. */
+            align-items: center; /* Center macro labels horizontally. */
+            justify-content: flex-end; /* Align macro sections to the bottom of the bar. */
+            position: relative; /* Enable absolute positioning of elements within the bar. */
+            height: 100%; /* Make the bar take up the full height of the chart area. */
+            border: 2px solid white; /* White outline for the bar. */
+            background: rgba(255, 255, 255, 0.1); /* Light transparent fill for the bar. */
         }
 
-        /* Individual macro sections inside bars */
+        /* -----------------------------------------------------------------------------------------
+         Individual macro sections inside bars
+         -----------------------------------------------------------------------------------------
+         Styles the colored sections within each bar representing fat, protein, and carbs.
+        */
         .bar div {
-            width: 100%;
-            text-align: center;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 30px;
-            padding: 5px;
-            font-weight: bold;
+            width: 100%; /* Make each macro section take up the full width of the bar. */
+            text-align: center; /* Center text within the macro section. */
+            font-size: 14px; /* Set font size for macro labels. */
+            display: flex; /* Enable Flexbox for centering text. */
+            align-items: center; /* Center text vertically. */
+            justify-content: center; /* Center text horizontally. */
+            min-height: 30px; /* Minimum height for each macro section. */
+            padding: 5px; /* Padding inside the macro section. */
+            font-weight: bold; /* Make macro labels bold. */
         }
 
-        /* Color coding for different macros */
+        /* -----------------------------------------------------------------------------------------
+         Color coding for different macros
+         -----------------------------------------------------------------------------------------
+         Sets the background colors for the fat, protein, and carbs sections.
+        */
         .fat {
-            background: #33FF57; /* Green for fat */
-            color: black;
+            background: #33FF57; /* Green background for fat. */
+            color: black; /* Black text for fat. */
         }
 
         .protein {
-            background: #3357FF; /* Blue for protein */
-            color: white;
+            background: #3357FF; /* Blue background for protein. */
+            color: white; /* White text for protein. */
         }
 
         .carbs {
-            background: #FF5733; /* Red for carbs */
-            color: black;
+            background: #FF5733; /* Red background for carbs. */
+            color: black; /* Black text for carbs. */
         }
 
-        /* Label for calorie tracking */
+        /* -----------------------------------------------------------------------------------------
+         Label for calorie tracking
+         -----------------------------------------------------------------------------------------
+         Styles the label that displays the calorie count above each bar.
+        */
         .calories-label {
-            position: absolute;
-            top: -30px;
-            background: black;
-            color: white;
-            padding: 5px;
-            border-radius: 5px;
-            font-size: 14px;
+            position: absolute; /* Positioned relative to the bar. */
+            top: -30px; /* Position above the bar. */
+            background: black; /* Black background for the label. */
+            color: white; /* White text for the label. */
+            padding: 5px; /* Padding inside the label. */
+            border-radius: 5px; /* Rounded corners for the label. */
+            font-size: 14px; /* Font size for the calorie label. */
         }
 
-        /* Styling for the back button */
+        /* -----------------------------------------------------------------------------------------
+         Styling for the back button
+         -----------------------------------------------------------------------------------------
+         Styles the button that allows navigation back to the main dashboard.
+        */
         .back-btn {
-            margin: 20px;
-            padding: 10px 20px;
-            background: #007bff;
-            color: white;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 5px;
+            margin: 20px; /* Add margin around the back button. */
+            padding: 10px 20px; /* Add padding inside the button. */
+            background: #007bff; /* Blue background for the button. */
+            color: white; /* White text for the button. */
+            font-weight: bold; /* Make the text bold. */
+            text-decoration: none; /* Remove underline from the link. */
+            border-radius: 5px; /* Round the corners of the button. */
         }
     </style>
 </head>

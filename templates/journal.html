@@ -21,122 +21,163 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Journal</title>
     <style>
-        /* Page styling */
+        /* -----------------------------------------------------------------------------------------
+         Page Styling
+         -----------------------------------------------------------------------------------------
+         Sets the base font, background color, text color, and overall page layout using Flexbox.
+        */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
+            font-family: Arial, sans-serif; /* Use Arial as the primary font, with sans-serif as a fallback. */
+            background-color: #121212; /* Set a dark background color for the page. */
+            color: white; /* Set the default text color to white for better contrast on the dark background. */
+            margin: 0; /* Remove default browser margins around the body. */
+            padding: 0; /* Remove default browser padding within the body. */
+            display: flex; /* Enable Flexbox layout for the body's direct children. */
+            justify-content: center; /* Center body elements horizontally. */
+            align-items: center; /* Center body elements vertically. */
+            height: 100vh; /* Set the body to take up the full viewport height. */
+            flex-direction: column; /* Arrange body elements vertically. */
         }
 
-        /* Main content container */
+        /* -----------------------------------------------------------------------------------------
+         Main Content Container
+         -----------------------------------------------------------------------------------------
+         Styles the main content area for the journal.
+        */
         .container {
-            width: 80%;
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: none;
-            margin-top: 60px;
+            width: 80%; /* Set the width of the main container to 80% of the viewport. */
+            background: #1e1e1e; /* Set a slightly lighter dark background for the container. */
+            padding: 20px; /* Add padding inside the container. */
+            border-radius: 10px; /* Round the corners of the container. */
+            box-shadow: none; /* Remove any default box shadow. */
+            margin-top: 60px; /* Add some top margin to separate it from the top of the page. */
         }
 
-        /* Heading style */
+        /* -----------------------------------------------------------------------------------------
+         Heading Style
+         -----------------------------------------------------------------------------------------
+         Styles the main heading of the journal section.
+        */
         h2 {
-            text-align: center;
+            text-align: center; /* Center the text of the heading. */
         }
 
-        /* Journal textarea styling */
+        /* -----------------------------------------------------------------------------------------
+         Journal Textarea Styling
+         -----------------------------------------------------------------------------------------
+         Styles the textarea where users can write their journal entries. It is initially hidden.
+        */
         .journal-area {
-            width: 100%;
-            height: 300px;
-            background: #2a2a2a;
-            border: none;
-            border-radius: 5px;
-            padding: 10px;
-            color: white;
-            font-size: 16px;
-            resize: none;
-            box-sizing: border-box;
-            display: none; /* Hidden by default */
+            width: 100%; /* Make the textarea take up the full width of its container. */
+            height: 300px; /* Set a fixed height for the textarea. */
+            background: #2a2a2a; /* Set a darker background color for the textarea. */
+            border: none; /* Remove the default border of the textarea. */
+            border-radius: 5px; /* Round the corners of the textarea. */
+            padding: 10px; /* Add padding inside the textarea. */
+            color: white; /* Set the text color inside the textarea to white. */
+            font-size: 16px; /* Set the font size for the text in the textarea. */
+            resize: none; /* Prevent users from resizing the textarea. */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height. */
+            display: none; /* Initially hide the textarea. */
         }
 
-        /* Button styling */
+        /* -----------------------------------------------------------------------------------------
+         Button Styling
+         -----------------------------------------------------------------------------------------
+         Styles for the "Save Entry", "Back", "Navigation", and "Add New Entry" buttons.
+        */
         .save-btn, .back-btn, .nav-btn, .add-btn {
-            width: 100%;
-            padding: 10px;
-            margin-top: 20px;
-            background: #007bff;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            text-align: center;
-            display: inline-block;
-            box-sizing: border-box;
-            text-decoration: none; /* Remove underline from links */
+            width: 100%; /* Make the buttons take up the full width of their container. */
+            padding: 10px; /* Add padding inside the buttons. */
+            margin-top: 20px; /* Add top margin to separate the buttons. */
+            background: #007bff; /* Set a blue background color for the buttons. */
+            border: none; /* Remove the default button border. */
+            border-radius: 5px; /* Round the corners of the buttons. */
+            color: white; /* Set the button text color to white. */
+            font-size: 16px; /* Set the font size for the button text. */
+            cursor: pointer; /* Change the cursor to a pointer on hover. */
+            text-align: center; /* Center the text within the buttons. */
+            display: inline-block; /* Allows setting width and height while being in the flow. */
+            box-sizing: border-box; /* Ensure consistent sizing. */
+            text-decoration: none; /* Remove underline from links (for back button). */
         }
 
-        /* Button hover effect */
+        /* -----------------------------------------------------------------------------------------
+         Button Hover Effect
+         -----------------------------------------------------------------------------------------
+         Slightly darker background color on hover for better user feedback.
+        */
         .save-btn:hover, .back-btn:hover, .nav-btn:hover, .add-btn:hover {
-            background: #0056b3;
+            background: #0056b3; /* Darker shade of blue on hover. */
         }
 
-        /* Navigation buttons container */
+        /* -----------------------------------------------------------------------------------------
+         Navigation Buttons Container
+         -----------------------------------------------------------------------------------------
+         Styles the container for any potential navigation buttons (not currently used but might be).
+        */
         .nav-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
+            display: flex; /* Enable Flexbox for navigation buttons. */
+            justify-content: space-between; /* Distribute space between navigation buttons. */
+            margin-top: 20px; /* Add top margin. */
         }
 
-        /* Journal entries table */
+        /* -----------------------------------------------------------------------------------------
+         Journal Entries Table
+         -----------------------------------------------------------------------------------------
+         Styles the table that will display the list of journal entries.
+        */
         .entry-list {
-            margin-top: 20px;
-            display: table;
-            width: 100%;
-            border-collapse: collapse;
+            margin-top: 20px; /* Add top margin to separate it from other elements. */
+            display: table; /* Use table layout for consistent structure. */
+            width: 100%; /* Make the table take up the full width of its container. */
+            border-collapse: collapse; /* Collapse borders between table cells. */
         }
 
         .entry-header, .entry-item {
-            display: table-row;
+            display: table-row; /* Define header and item rows as table rows. */
         }
 
         .entry-header div, .entry-item div {
-            display: table-cell;
-            padding: 10px;
-            background: #2a2a2a;
-            border: 1px solid #444;
+            display: table-cell; /* Define cells within rows as table cells. */
+            padding: 10px; /* Add padding inside table cells. */
+            background: #2a2a2a; /* Set a background color for table cells. */
+            border: 1px solid #444; /* Add a border to table cells for separation. */
         }
 
         .entry-header div {
-            font-weight: bold;
-            background: #333;
+            font-weight: bold; /* Make the text in the header cells bold. */
+            background: #333; /* Set a slightly darker background for header cells. */
         }
 
-        /* Red minus button */
+        /* -----------------------------------------------------------------------------------------
+         Red Minus Button (for deleting entries)
+         -----------------------------------------------------------------------------------------
+         Styles the visual cue for deleting journal entries.
+        */
         .delete-btn {
-            color: red;
-            cursor: pointer;
-            font-weight: bold;
-            margin-left: 10px;
+            color: red; /* Set the color to red. */
+            cursor: pointer; /* Change cursor to pointer on hover. */
+            font-weight: bold; /* Make the text bold. */
+            margin-left: 10px; /* Add some left margin for spacing. */
         }
 
-        /* Edit button */
+        /* -----------------------------------------------------------------------------------------
+         Edit Button
+         -----------------------------------------------------------------------------------------
+         Styles the visual cue for editing journal entries.
+        */
         .edit-btn {
-            color: #007bff;
-            cursor: pointer;
-            font-weight: bold;
-            margin-left: 10px;
+            color: #007bff; /* Set the color to blue. */
+            cursor: pointer; /* Change cursor to pointer on hover. */
+            font-weight: bold; /* Make the text bold. */
+            margin-left: 10px; /* Add some left margin for spacing. */
         }
 
     </style>
 </head>
 <body>
+
 
     <!-- Main content -->
     <div class="container">

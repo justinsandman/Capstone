@@ -18,98 +18,147 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Account</title>
     <style>
-        /* Set up the background*/
+        /* -----------------------------------------------------------------------------------------
+         Set up the background
+         -----------------------------------------------------------------------------------------
+         Styles the body for overall page appearance, including font, background color, text color,
+         centering content, and setting the viewport height.
+        */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
+            font-family: Arial, sans-serif; /* Use Arial as the primary font. */
+            background-color: #121212; /* Set a dark background color. */
+            color: white; /* Set default text color to white. */
+            margin: 0; /* Remove default body margins. */
+            padding: 0; /* Remove default body padding. */
+            display: flex; /* Enable Flexbox for layout control. */
+            justify-content: center; /* Center content horizontally. */
+            align-items: center; /* Center content vertically. */
+            height: 100vh; /* Set the body to take up the full viewport height. */
+            flex-direction: column; /* Arrange body elements in a column. */
         }
 
-        /* Style for the main */
+        /* -----------------------------------------------------------------------------------------
+         Style for the main container
+         -----------------------------------------------------------------------------------------
+         Styles the main content area for the account information form.
+        */
         .container {
-            width: 50%;
-            background: #1e1e1e;
-            padding: 40px;
-            border-radius: 10px;
+            width: 50%; /* Set the width of the container to 50% of its parent. */
+            background: #1e1e1e; /* Set a slightly lighter dark background for the container. */
+            padding: 40px; /* Add padding inside the container. */
+            border-radius: 10px; /* Round the corners of the container. */
         }
 
-        /* page title */
+        /* -----------------------------------------------------------------------------------------
+         Page title
+         -----------------------------------------------------------------------------------------
+         Styles the main heading of the My Account page.
+        */
         h2 {
-            text-align: center;
-            font-size: 32px;
+            text-align: center; /* Center the text of the heading. */
+            font-size: 32px; /* Set a large font size for the heading. */
         }
 
-        /* labels */
+        /* -----------------------------------------------------------------------------------------
+         Labels
+         -----------------------------------------------------------------------------------------
+         Styles the labels for the input fields and dropdowns.
+        */
         label {
-            display: block;
-            margin-top: 15px;
-            font-size: 18px;
+            display: block; /* Make labels block-level elements to take up full width. */
+            margin-top: 15px; /* Add top margin to separate labels from previous elements. */
+            font-size: 18px; /* Set a readable font size for the labels. */
         }
 
-        /*input fields and dropdowns */
+        /* -----------------------------------------------------------------------------------------
+         Input fields and dropdowns
+         -----------------------------------------------------------------------------------------
+         Styles the text input fields and the select dropdown.
+        */
         input, select {
-            width: 100%;
-            padding: 15px;
-            margin-top: 5px;
-            background: #2a2a2a;
-            border: 1px solid #333;
-            border-radius: 5px;
-            color: white;
-            font-size: 18px;
+            width: 100%; /* Make input fields and dropdowns take up the full width of their container. */
+            padding: 15px; /* Add padding inside the input fields and dropdown. */
+            margin-top: 5px; /* Add top margin to separate them from the labels. */
+            background: #2a2a2a; /* Set a dark background color for the input fields and dropdown. */
+            border: 1px solid #333; /* Add a subtle border. */
+            border-radius: 5px; /* Round the corners. */
+            color: white; /* Set the text color inside the input fields and dropdown to white. */
+            font-size: 18px; /* Set a readable font size for the text. */
         }
 
 
-        /* height input fields  */
+        /* -----------------------------------------------------------------------------------------
+         Height input fields
+         -----------------------------------------------------------------------------------------
+         Styles the container for the height input fields (feet and inches) to display them inline.
+        */
         .height-input {
-            display: flex;
-            gap: 10px;
+            display: flex; /* Enable Flexbox to arrange items in a row. */
+            gap: 10px; /* Add a gap between the feet and inches input fields. */
         }
 
-        /*height fields width */
+        /* -----------------------------------------------------------------------------------------
+         Height fields width
+         -----------------------------------------------------------------------------------------
+         Sets the width for the individual height input fields (feet and inches).
+        */
         .height-input input {
-            width: 48%;
+            width: 48%; /* Make each input field take up approximately half of the container width. */
         }
 
-        /* Style buttons */
+        /* -----------------------------------------------------------------------------------------
+         Style buttons
+         -----------------------------------------------------------------------------------------
+         Base styles for all buttons on the page.
+        */
         .btn {
-            width: 100%;
-            padding: 15px;
-            margin-top: 20px;
-            font-size: 18px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: center;
+            width: 100%; /* Make buttons take up the full width of their container. */
+            padding: 15px; /* Add padding inside the buttons. */
+            margin-top: 20px; /* Add top margin to separate buttons from previous elements. */
+            font-size: 18px; /* Set a readable font size for the button text. */
+            border: none; /* Remove default button borders. */
+            border-radius: 5px; /* Round the corners of the buttons. */
+            cursor: pointer; /* Change the cursor to a pointer on hover. */
+            text-align: center; /* Center the text within the buttons. */
         }
 
-        /* save button */
+        /* -----------------------------------------------------------------------------------------
+         Save button
+         -----------------------------------------------------------------------------------------
+         Specific styles for the "Save Changes" button.
+        */
         .save-btn {
-            background: #007bff;
-            color: white;
+            background: #007bff; /* Set a blue background color for the save button. */
+            color: white; /* Set the text color to white. */
         }
 
-        /* hover */
+        /* -----------------------------------------------------------------------------------------
+         Save button hover
+         -----------------------------------------------------------------------------------------
+         Hover effect for the "Save Changes" button.
+        */
         .save-btn:hover {
-            background: #0056b3;
+            background: #0056b3; /* Darker shade of blue on hover. */
         }
 
-        /* back-to-settings button */
+        /* -----------------------------------------------------------------------------------------
+         Back-to-settings button
+         -----------------------------------------------------------------------------------------
+         Specific styles for the "Back to Settings" button.
+        */
         .settings-btn {
-            background: #555;
-            color: white;
-            margin-top: 10px;
+            background: #555; /* Set a gray background color for the settings button. */
+            color: white; /* Set the text color to white. */
+            margin-top: 10px; /* Add some top margin to separate it from the save button. */
         }
 
-        /* hover */
+        /* -----------------------------------------------------------------------------------------
+         Back-to-settings button hover
+         -----------------------------------------------------------------------------------------
+         Hover effect for the "Back to Settings" button.
+        */
         .settings-btn:hover {
-            background: #777;
+            background: #777; /* Lighter shade of gray on hover. */
         }
     </style>
 </head>
