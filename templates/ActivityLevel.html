@@ -9,6 +9,9 @@
     - This file serves as the page for the user to be able to change their activity level as it increases or decreases
 
     References: 
+    - https://en.wikipedia.org/wiki/CSS_Flexible_Box_Layout
+    - https://www.w3schools.com/tags/att_input_type_radio.asp
+    - https://mimo.org/glossary/html/inline-elements 
     
 -->
 
@@ -19,79 +22,119 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Activity Level</title>
     <style>
-        /* Page styling */
+        /*  
+         -----------------------------------------------------------------------------------------
+         Body Style
+         -----------------------------------------------------------------------------------------
+         Defines the base appearance of the page interface (i.e font, text, coloring, and layout)
+        */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
+            font-family: Arial, sans-serif; /* Set default font to arial with sans-serif as a secondary */
+            background-color: #121212; /* Set background color */
+            color: white; /* Set text color */
+            margin: 0; /* Get rid of margins around the body (outside space) */
+            padding: 0; /* Get rid of website padding (Space surrounding element) */ 
+            display: flex; /* enable a flexible Box Layout */
+            justify-content: center; /* center bodys items horizontally */
+            align-items: center; /* center bodys items vertically */
+            height: 100vh; /* Set body height to 100% for fullscreen */
+            flex-direction: column; /* align other flex items vertically */
         }
 
-        /* Main content container */
+        /*  
+         -----------------------------------------------------------------------------------------
+         Main Container Style
+         -----------------------------------------------------------------------------------------
+         Styling for the main container
+        */
         .container {
-            width: 40%;
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: none;
-            margin-top: 60px;
+            width: 40%; /* set page width */
+            background: #1e1e1e; /* set background color */
+            padding: 20px; /* set browser padding */
+            border-radius: 10px; /* set boarder radius (round corners) */
+            box-shadow: none; /* remove shadow */
+            margin-top: 60px; /* set top margins */
         }
 
-        /* Heading style */
+        /*  
+         -----------------------------------------------------------------------------------------
+         Second Heading Style
+         -----------------------------------------------------------------------------------------
+         Styling for the heading
+        */
         h2 {
-            text-align: center;
+            text-align: center; /* align text center */
         }
 
-        /* Activity options layout */
+        /*
+         ------------------------------------------------------------------------------
+         Activity Options Style
+         ------------------------------------------------------------------------------
+         Styles for the container holding the activity selection options.
+        */
         .activity-options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 10px;
+            display: flex; /* Enable flex box */
+            flex-direction: column; /* puts activity levels in vertical column */
+            gap: 10px; /* 10 pxl gap */
+            margin-top: 10px; /* 10 pxl gap from header */
         }
 
-        /* Style for each activity option */
+        /*
+         ------------------------------------------------------------------------------
+         Activity Options Label Style
+         ------------------------------------------------------------------------------
+         Styles for each individual activity option label.
+        */
         .activity-options label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #2a2a2a;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
+            display: flex; /* enable flex box layout for labels */
+            align-items: center; /* vertical align items */
+            gap: 10px; /* 10pxl gap between radio button and the label */
+            background: #2a2a2a; /* set background color */
+            padding: 10px; /* 10 pxl padding around content */
+            border-radius: 5px; /* round corners */
+            cursor: pointer; /* change the cursor when hovering over button */
         }
 
-        /* Radio button styling */
+        /*
+         ------------------------------------------------------------------------------
+         Radio Button Style
+         ------------------------------------------------------------------------------
+         Set accent of radio button
+        */
         input[type="radio"] {
-            accent-color: #007bff;
+            accent-color: #007bff; /* set accent color */
         }
 
-        /* Button styling */
+        /*
+         ------------------------------------------------------------------------------
+         Save & Back Button Style
+         ------------------------------------------------------------------------------
+         Styles for both buttons.
+        */
         .save-btn, .back-btn {
-            width: 100%;
-            padding: 10px;
-            margin-top: 20px;
-            background: #007bff;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            text-align: center;
-            display: inline-block;
+            width: 100%; /* Button width is the length of container */
+            padding: 10px; /* Set padding insidet the buttons */
+            margin-top: 20px; /* set margins to be separate from options */
+            background: #007bff; /* set background color */
+            border: none; /* remove border */
+            border-radius: 5px; /* round corners */
+            color: white; /* set text color */
+            font-size: 16px; /* set font size in button */
+            cursor: pointer; /* switch cursor to pointer when hovering in the button */
+            text-align: center; /* center text within button */
+            display: inline-block; /* keep width and height the same (inline flow | reference at top) */
             box-sizing: border-box; /* Ensure consistent sizing */
             text-decoration: none; /* Remove underline from links */
         }
 
-        /* Button hover effect */
+        /*
+         ------------------------------------------------------------------------------
+         Save & Back Button Hover Background
+         ------------------------------------------------------------------------------
+         Set background of save and back buttons
+        */
         .save-btn:hover, .back-btn:hover {
-            background: #0056b3;
+            background: #0056b3; /* set background button */
         }
 
     </style>
