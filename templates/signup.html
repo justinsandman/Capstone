@@ -17,60 +17,95 @@
     <meta charset="UTF-8">
     <title>Sign Up</title>
     <style>
+        /* -----------------------------------------------------------------------------------------
+         Body Styling
+         -----------------------------------------------------------------------------------------
+         Sets the background color, text color, font, display, alignment, height, and margin for the entire page.
+        */
         body {
-            background-color: #1E1E1E;
-            color: white;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            background-color: #1E1E1E; /* Dark background color. */
+            color: white; /* Default text color. */
+            font-family: Arial, sans-serif; /* Use Arial as the primary font. */
+            display: flex; /* Enable Flexbox for layout control. */
+            justify-content: center; /* Center content horizontally. */
+            align-items: center; /* Center content vertically. */
+            height: 100vh; /* Set the body to take up the full viewport height. */
+            margin: 0; /* Remove default body margins. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Signup Container
+         -----------------------------------------------------------------------------------------
+         Styles the main container for the signup form and related elements.
+        */
         .signup-container {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 450px;
-            text-align: center;
-            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.1); /* Semi-transparent white background for the container. */
+            padding: 20px; /* Add padding inside the container. */
+            border-radius: 10px; /* Round the corners of the container. */
+            width: 100%; /* Make the container take up the full width of its parent. */
+            max-width: 450px; /* Set a maximum width for the container. */
+            text-align: center; /* Center text within the container. */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Logo Styling
+         -----------------------------------------------------------------------------------------
+         Styles the logo image within the signup container.
+        */
         .signup-container img {
-            margin-bottom: 10px;
+            margin-bottom: 10px; /* Add some bottom margin to separate the logo from the heading. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Input Field Styling
+         -----------------------------------------------------------------------------------------
+         Styles the input fields for the signup form.
+        */
         .signup-container input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            background: black;
-            border: none;
-            color: white;
-            border-radius: 5px;
-            box-sizing: border-box;
+            width: 100%; /* Make input fields take up the full width of the container. */
+            padding: 10px; /* Add padding inside the input fields. */
+            margin: 10px 0; /* Add top and bottom margin to separate the fields. */
+            background: black; /* Set a black background for the input fields. */
+            border: none; /* Remove the default border of the input fields. */
+            color: white; /* Set the text color inside the input fields to white. */
+            border-radius: 5px; /* Round the corners of the input fields. */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Paragraph Styling
+         -----------------------------------------------------------------------------------------
+         Styles the paragraph elements within the signup container.
+        */
         .signup-container p {
-            text-align: left;
-            font-size: 14px;
-            margin: 8px 0;
+            text-align: left; /* Align text to the left. */
+            font-size: 14px; /* Set a smaller font size for the paragraph text. */
+            margin: 8px 0; /* Add top and bottom margin to separate paragraphs. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Signup Button Styling
+         -----------------------------------------------------------------------------------------
+         Styles the button to submit the signup form.
+        */
         .signup-btn {
-            width: 100%;
-            padding: 10px;
-            background: #D3D3D3;
-            border: none;
-            color: black;
-            border-radius: 5px;
-            cursor: pointer;
+            width: 100%; /* Make the signup button take up the full width of the container. */
+            padding: 10px; /* Add padding inside the button. */
+            background: #D3D3D3; /* Set a light gray background for the button. */
+            border: none; /* Remove the default button border. */
+            color: black; /* Set the button text color to black. */
+            border-radius: 5px; /* Round the corners of the button. */
+            cursor: pointer; /* Change the cursor to a pointer on hover. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Signup Button Hover Effect
+         -----------------------------------------------------------------------------------------
+         Reduces opacity on hover for a visual feedback.
+        */
         .signup-btn:hover {
-            opacity: 0.8;
+            opacity: 0.8; /* Reduce opacity on hover. */
         }
     </style>
 </head>

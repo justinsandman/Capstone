@@ -18,6 +18,8 @@
     - Create an overal - https://stackoverflow.com/questions/9724035/how-can-one-create-an-overlay-in-css
     - Overlay effect - https://www.w3schools.com/howto/howto_css_overlay.asp
     - toDateString() - https://www.w3schools.com/jsref/jsref_todatestring.asp
+    - API - https://fdc.nal.usda.gov/api-guide
+    - API Implementation - https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Client-side_APIs/Introduction  
 
 -->
 <!DOCTYPE html>
@@ -27,298 +29,544 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Food Log</title>
     <style>
+        /*
+          -----------------------------------------------------------------------------------------
+          Body Style
+          -----------------------------------------------------------------------------------------
+          Defines the base appearance of the page interface (i.e font, text, coloring, and layout)
+        */
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            background-color: #121212;
-            color: white;
+            font-family: Arial, sans-serif; /* Set default font to Arial with sans-serif as a fallback */
+            margin: 0; /* Remove default body margins */
+            padding: 0; /* Remove default body padding */
+            display: flex; /* Enable Flexbox for layout */
+            justify-content: center; /* Center content horizontally */
+            background-color: #121212; /* Set a dark background color */
+            color: white; /* Set default text color to white */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Food Log Container Style
+          -----------------------------------------------------------------------------------------
+          Styling for the main container holding all food log elements.
+        */
         .food-log-container {
-            width: 80%;
-            max-width: 1200px;
-            margin-top: 20px;
-            text-align: center;
+            width: 80%; /* Set the width of the container to 80% of its parent */
+            max-width: 1200px; /* Set a maximum width for larger screens */
+            margin-top: 20px; /* Add some top margin to space it from the top of the viewport */
+            text-align: center; /* Center text within the container */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Title Style
+          -----------------------------------------------------------------------------------------
+          Styling for the main heading of the food log.
+        */
         .title {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            color: white;
+            font-size: 2.5em; /* Set a large font size for the title */
+            margin-bottom: 10px; /* Add some bottom margin to separate it from the navigation */
+            color: white; /* Ensure the title is white */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Week Navigation Style
+          -----------------------------------------------------------------------------------------
+          Styling for the section that allows navigation between weeks.
+        */
         .week-navigation {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
+            display: flex; /* Enable Flexbox for horizontal arrangement of elements */
+            justify-content: center; /* Center the navigation elements horizontally */
+            align-items: center; /* Center the navigation elements vertically */
+            margin-bottom: 20px; /* Add bottom margin to separate from the day buttons */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Arrow Button Style
+          -----------------------------------------------------------------------------------------
+          Styling for the previous and next week arrow buttons.
+        */
         .arrow {
-            background: none;
-            border: none;
-            font-size: 1.5em;
-            cursor: pointer;
-            color: white;
+            background: none; /* Remove default button background */
+            border: none; /* Remove default button border */
+            font-size: 1.5em; /* Set a larger font size for the arrows */
+            cursor: pointer; /* Change cursor to a pointer on hover */
+            color: white; /* Set arrow color to white */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Current Week Style
+          -----------------------------------------------------------------------------------------
+          Styling for the container holding the day buttons of the current week.
+        */
         .current-week {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5em;
-            margin: 0 15px;
+            display: flex; /* Enable Flexbox for horizontal arrangement of day buttons */
+            justify-content: center; /* Center the day buttons horizontally */
+            align-items: center; /* Center the day buttons vertically */
+            font-size: 1.5em; /* Set a slightly larger font size for the day buttons */
+            margin: 0 15px; /* Add horizontal margin to space the day buttons from the arrows */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Day Button Style
+          -----------------------------------------------------------------------------------------
+          Styling for the individual day buttons (Sun, Mon, Tue, etc.).
+        */
         .day-button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 0 5px;
-            cursor: pointer;
-            position: relative;
+            background-color: #007bff; /* Set a blue background color */
+            color: white; /* Set text color to white */
+            border: none; /* Remove button border */
+            padding: 10px 20px; /* Add padding inside the buttons */
+            margin: 0 5px; /* Add horizontal margin between day buttons */
+            cursor: pointer; /* Change cursor to a pointer on hover */
+            position: relative; /* Needed for positioning the dot indicator */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Day Button Hover Style
+          -----------------------------------------------------------------------------------------
+          Style for the day buttons when the mouse hovers over them.
+        */
         .day-button:hover {
-            background-color: #0056b3;
+            background-color: #0056b3; /* Darker blue on hover for visual feedback */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Dot Indicator Style
+          -----------------------------------------------------------------------------------------
+          Styling for the small dot that might indicate activity for a day.
+        */
         .dot {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 8px;
-            height: 8px;
-            background-color: #fff;
-            border-radius: 50%;
+            position: absolute; /* Position the dot relative to the day button */
+            bottom: 0; /* Place the dot at the bottom of the button */
+            left: 50%; /* Center the dot horizontally */
+            transform: translateX(-50%); /* Adjust for the dot's width to ensure perfect centering */
+            width: 8px; /* Set the width of the dot */
+            height: 8px; /* Set the height of the dot */
+            background-color: #fff; /* Set the dot color to white */
+            border-radius: 50%; /* Make the dot circular */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Progress Bars Container Style
+          -----------------------------------------------------------------------------------------
+          Styling for the container holding the nutrient progress bars.
+        */
         .progress-bars {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
+            display: flex; /* Enable Flexbox for horizontal arrangement of progress bars */
+            justify-content: space-between; /* Distribute space evenly between the progress bars */
+            margin-bottom: 20px; /* Add bottom margin to separate from the hourly buttons */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Progress Bar Container Style
+          -----------------------------------------------------------------------------------------
+          Styling for the individual containers of each progress bar (including label).
+        */
         .progress-bar-container {
-            position: relative;
-            width: 22%;
-            text-align: center;
-            padding: 5px 0;
+            position: relative; /* Needed for absolute positioning of the progress text */
+            width: 22%; /* Set the width of each progress bar container */
+            text-align: center; /* Center text within the container */
+            padding: 5px 0; /* Add vertical padding */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Progress Bar Style
+          -----------------------------------------------------------------------------------------
+          Styling for the actual progress bar element.
+        */
         .progress-bar {
-            width: 100%;
-            height: 20px;
-            position: relative;
+            width: 100%; /* Make the progress bar fill its container */
+            height: 20px; /* Set the height of the progress bar */
+            position: relative; /* Needed for absolute positioning of the progress text */
+            background-color: #333; /* Default background color for the bar */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Progress Text Style
+          -----------------------------------------------------------------------------------------
+          Styling for the text displayed inside the progress bars (e.g., "0 / 2000").
+        */
         .progress-text {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-weight: bold;
+            position: absolute; /* Position the text over the progress bar */
+            left: 50%; /* Center the text horizontally */
+            top: 50%; /* Center the text vertically */
+            transform: translate(-50%, -50%); /* Adjust for the text's dimensions */
+            color: white; /* Set text color to white */
+            font-weight: bold; /* Make the text bold */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Hourly Buttons Style
+          -----------------------------------------------------------------------------------------
+          Styling for the grid of buttons representing each hour of the day.
+        */
         .hourly-buttons {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            justify-items: center;
-            margin-bottom: 20px;
+            display: grid; /* Enable CSS Grid layout */
+            grid-template-columns: 1fr; /* Create a single column layout for smaller screens */
+            gap: 10px; /* Add spacing between the grid items (buttons) */
+            justify-items: center; /* Center the buttons horizontally within their grid cells */
+            margin-bottom: 20px; /* Add bottom margin to separate from the overlay trigger */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Hour Button Style
+          -----------------------------------------------------------------------------------------
+          Styling for the individual buttons representing each hour.
+        */
         .hour-button {
-            background-color: #535252;
-            color: white;
-            border: none;
-            padding: 15px;
-            cursor: pointer;
-            width: 100%;
-            white-space: pre-line;
-            text-align: left;
+            background-color: #535252; /* Set a dark gray background color */
+            color: white; /* Set text color to white */
+            border: none; /* Remove button border */
+            padding: 15px; /* Add padding inside the buttons */
+            cursor: pointer; /* Change cursor to a pointer on hover */
+            width: 100%; /* Make the buttons take up the full width of their container */
+            white-space: pre-line; /* Preserve line breaks in the button text */
+            text-align: left; /* Align text to the left within the button */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Hour Button Hover Style
+          -----------------------------------------------------------------------------------------
+          Style for the hour buttons when the mouse hovers over them.
+        */
         .hour-button:hover {
-            background-color: #7b7e7b;
+            background-color: #7b7e7b; /* Lighter gray on hover for visual feedback */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Overlay Style
+          -----------------------------------------------------------------------------------------
+          Styling for the semi-transparent overlay that appears for adding food entries.
+        */
         .overlay {
-            display: none;
-            position: fixed;
-            z-index: 100;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(75, 74, 74, 0.7);
-            justify-content: center;
-            align-items: center;
+            display: none; /* Initially hidden */
+            position: fixed; /* Stay in place even when scrolling */
+            z-index: 100; /* Ensure it's on top of other content */
+            top: 0; /* Start from the top of the viewport */
+            left: 0; /* Start from the left of the viewport */
+            width: 100%; /* Cover the entire width of the viewport */
+            height: 100%; /* Cover the entire height of the viewport */
+            background-color: rgba(75, 74, 74, 0.7); /* Semi-transparent dark background */
+            justify-content: center; /* Center content horizontally */
+            align-items: center; /* Center content vertically */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Overlay Content Style
+          -----------------------------------------------------------------------------------------
+          Styling for the container holding the content of the overlay (tabs and forms).
+        */
         .overlay-content {
-            background-color: rgb(49, 49, 49);
-            padding: 20px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
+            background-color: rgb(49, 49, 49); /* Dark background for the overlay content */
+            padding: 20px; /* Add padding inside the overlay content */
+            border-radius: 10px; /* Round the corners of the overlay content */
+            width: 80%; /* Set the width of the overlay content */
+            max-width: 600px; /* Set a maximum width for larger screens */
+            max-height: 80vh; /* Set a maximum height relative to the viewport height */
+            overflow-y: auto; /* Enable vertical scrolling if content overflows */
+            display: flex; /* Enable Flexbox for layout */
+            flex-direction: column; /* Arrange items vertically */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Tabs Style
+          -----------------------------------------------------------------------------------------
+          Styling for the container holding the "Manual Entry" and "Search" tabs.
+        */
         .tabs {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-            flex-shrink: 0;
+            display: flex; /* Arrange tabs horizontally */
+            justify-content: space-around; /* Distribute space evenly between tabs */
+            margin-bottom: 20px; /* Add bottom margin to separate from the tab content */
+            flex-shrink: 0; /* Prevent tabs from shrinking */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Tab Button Style
+          -----------------------------------------------------------------------------------------
+          Styling for the individual tab buttons.
+        */
         .tab {
-            padding: 10px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            flex: 1;
-            text-align: center;
+            padding: 10px; /* Add padding inside the tabs */
+            cursor: pointer; /* Change cursor to a pointer on hover */
+            background-color: #007bff; /* Blue background color for the tabs */
+            color: white; /* White text color */
+            border: none; /* Remove tab borders */
+            flex: 1; /* Allow tabs to grow and fill available space equally */
+            text-align: center; /* Center text within the tabs */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Active Tab Style
+          -----------------------------------------------------------------------------------------
+          Style for the currently active tab.
+        */
         .tab.active {
-            background-color: #0056b3;
+            background-color: #0056b3; /* Darker blue for the active tab */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Tab Content Style
+          -----------------------------------------------------------------------------------------
+          Styling for the containers holding the content of each tab (manual entry form, search form).
+        */
         .tab-content {
-            display: none;
-            flex-direction: column;
-            flex-grow: 1;
+            display: none; /* Initially hide the tab content */
+            flex-direction: column; /* Arrange form elements vertically */
+            flex-grow: 1; /* Allow content to grow and take up available space */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Active Tab Content Style
+          -----------------------------------------------------------------------------------------
+          Style to display the content of the active tab.
+        */
         .tab-content.active {
-            display: flex;
+            display: flex; /* Show the active tab content */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Manual and Search Entry Input Style
+          -----------------------------------------------------------------------------------------
+          Styling for the input fields in both the manual entry and search sections.
+        */
         .manual-entry input,
         .search-entry input {
-            margin: 5px;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #fff;
-            color: #333;
+            margin: 5px; /* Add some margin around the input fields */
+            padding: 8px; /* Add padding inside the input fields */
+            border: 1px solid #ccc; /* Add a light gray border */
+            border-radius: 5px; /* Round the corners of the input fields */
+            background-color: #fff; /* White background for input fields */
+            color: #333; /* Dark text color for input fields */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Save Entry and Search Food Button Style
+          -----------------------------------------------------------------------------------------
+          Styling for the "Save" button in manual entry and the "Search" button.
+        */
         .save-entry, .search-food {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            margin: 10px 5px 5px 5px;
-            border-radius: 5px;
+            background-color: #007bff; /* Blue background color */
+            color: white; /* White text color */
+            border: none; /* Remove button borders */
+            padding: 10px; /* Add padding inside the buttons */
+            cursor: pointer; /* Change cursor to a pointer on hover */
+            margin: 10px 5px 5px 5px; /* Add margin around the buttons */
+            border-radius: 5px; /* Round the corners */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Save Entry and Search Food Button Hover Style
+          -----------------------------------------------------------------------------------------
+          Style for the "Save" and "Search" buttons on hover.
+        */
         .save-entry:hover, .search-food:hover {
-            background-color: #0056b3;
+            background-color: #0056b3; /* Darker blue on hover */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Back Button Style
+          -----------------------------------------------------------------------------------------
+          Styling for the "Back to Dashboard" button.
+        */
         .back-button {
-            background-color: #555;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin-bottom: 20px;
-            cursor: pointer;
-            float: left;
+            background-color: #555; /* Dark gray background */
+            color: white; /* White text color */
+            border: none; /* Remove border */
+            padding: 10px 20px; /* Add padding */
+            margin-bottom: 20px; /* Add bottom margin */
+            cursor: pointer; /* Pointer cursor on hover */
+            float: left; /* Float to the left */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Back Button Hover Style
+          -----------------------------------------------------------------------------------------
+          Style for the "Back to Dashboard" button on hover.
+        */
         .back-button:hover {
-            background-color: #777;
+            background-color: #777; /* Lighter gray on hover */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Search Results Style
+          -----------------------------------------------------------------------------------------
+          Styling for the container displaying food search results.
+        */
         #search-results {
-            margin-top: 15px;
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid #555;
-            padding: 5px;
-            background-color: #333;
-            border-radius: 5px;
+            margin-top: 15px; /* Add top margin */
+            max-height: 200px; /* Set a maximum height for scrolling */
+            overflow-y: auto; /* Enable vertical scrolling if there are many results */
+            border: 1px solid #555; /* Add a dark gray border */
+            padding: 5px; /* Add some padding inside the results container */
+            background-color: #333; /* Dark background color */
+            border-radius: 5px; /* Round the corners */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Search Result Item Style
+          -----------------------------------------------------------------------------------------
+          Styling for each individual food item in the search results.
+        */
         .search-result-item {
-            background-color: #555;
-            color: white;
-            border: none;
-            padding: 8px 10px;
-            margin-bottom: 5px;
-            cursor: pointer;
-            width: 100%;
-            text-align: left;
-            border-radius: 4px;
-            display: block;
-            box-sizing: border-box;
+            background-color: #555; /* Dark gray background for each item */
+            color: white; /* White text color */
+            border: none; /* Remove borders */
+            padding: 8px 10px; /* Add padding */
+            margin-bottom: 5px; /* Add bottom margin between items */
+            cursor: pointer; /* Pointer cursor on hover */
+            width: 100%; /* Full width of the results container */
+            text-align: left; /* Align text to the left */
+            border-radius: 4px; /* Slightly round the corners */
+            display: block; /* Make it a block-level element */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Search Result Item Hover Style
+          -----------------------------------------------------------------------------------------
+          Style for the search result items on hover.
+        */
         .search-result-item:hover {
-            background-color: #007bff;
+            background-color: #007bff; /* Blue background on hover to indicate it's selectable */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Entry Action Buttons Style
+          -----------------------------------------------------------------------------------------
+          Styling for the container of action buttons (like edit and remove) for each food entry.
+        */
         .entry-action-buttons {
-          display: inline;
-          float: right;
+            display: inline; /* Arrange buttons inline */
+            float: right; /* Float buttons to the right of the entry */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Remove Button Style (Specific override)
+          -----------------------------------------------------------------------------------------
+          Specific styling for the remove button, overriding general button styles.
+        */
         .remove-btn {
-            background-color: #b22222 !important;
+            background-color: #b22222 !important; /* Dark red background */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Remove Button Hover Style (Specific override)
+          -----------------------------------------------------------------------------------------
+          Hover style for the remove button.
+        */
         .remove-btn:hover {
-            background-color: #ff0000 !important;
+            background-color: #ff0000 !important; /* Bright red on hover */
         }
 
-
+        /*
+          -----------------------------------------------------------------------------------------
+          Entry Line Style
+          -----------------------------------------------------------------------------------------
+          Styling for a line representing a single food entry in the log.
+        */
         .entry-line {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: -20px 0; 
+            display: flex; /* Enable Flexbox for horizontal arrangement */
+            justify-content: space-between; /* Space out the description and action buttons */
+            align-items: center; /* Vertically align items */
+            margin: -20px 0; /* Adjust margin to visually group with the hour button */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Entry Description Style
+          -----------------------------------------------------------------------------------------
+          Styling for the text description of a food entry.
+        */
         .entry-description {
-        flex: 1;
+            flex: 1; /* Allow the description to take up available space */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Entry Action Buttons Container Style (Flex layout)
+          -----------------------------------------------------------------------------------------
+          Using Flexbox for the action buttons container for better spacing.
+        */
         .entry-action-buttons {
-        display: flex;
-        gap: 4px;
+            display: flex; /* Enable Flexbox for horizontal arrangement of buttons */
+            gap: 4px; /* Add a small gap between the buttons */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Entry Action Button Style
+          -----------------------------------------------------------------------------------------
+          Styling for the individual action buttons (edit, remove) for each entry.
+        */
         .entry-action-buttons button {
-        padding: 4px 8px;
-        border: none;
-        color: white;
-        cursor: pointer;
-        border-radius: 4px;
+            padding: 4px 8px; /* Add padding inside the buttons */
+            border: none; /* Remove button borders */
+            color: white; /* White text color */
+            cursor: pointer; /* Pointer cursor on hover */
+            border-radius: 4px; /* Slightly round the corners */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          First Entry Action Button Style (e.g., Edit)
+          -----------------------------------------------------------------------------------------
+          Styling for the first action button (assumed to be 'edit').
+        */
         .entry-action-buttons button:first-child {
-        background-color: #555;
+            background-color: #555; /* Dark gray background for the edit button */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Remove Button Style (within entry actions)
+          -----------------------------------------------------------------------------------------
+          Styling for the remove button within the entry action buttons.
+        */
         .entry-action-buttons .remove-btn {
-        background-color: #b22222;
+            background-color: #b22222; /* Dark red background for the remove button */
         }
 
+        /*
+          -----------------------------------------------------------------------------------------
+          Remove Button Hover Style (within entry actions)
+          -----------------------------------------------------------------------------------------
+          Hover style for the remove button within the entry action buttons.
+        */
         .entry-action-buttons .remove-btn:hover {
-        background-color: #ff0000;
+            background-color: #ff0000; /* Bright red on hover */
         }
 
     </style>
@@ -413,338 +661,477 @@
             </div>
         </div>
 
-    <script>
-        // --- USDA API Configuration ---
-        const USDA_API_KEY = 'N6E6LaUcOvYctm2FqZleH5Ap4hz7jX9wrgCwwvig';
-        const nutrientIds = { calories: 1008, protein: 1003, fat: 1004, carbs: 1005 };
-
-        function switchTab(tabName) {
-            const manualTab = document.getElementById("manual-tab");
-            const searchTab = document.getElementById("search-tab");
-            const manualContent = document.getElementById("manual-entry");
-            const searchContent = document.getElementById("search-entry");
-
-            if (tabName === "manual") {
-                manualContent.classList.add("active");
-                searchContent.classList.remove("active");
-                manualTab.classList.add("active");
-                searchTab.classList.remove("active");
-            } else {
-                manualContent.classList.remove("active");
-                searchContent.classList.add("active");
-                manualTab.classList.remove("active");
-                searchTab.classList.add("active");
+        <script>
+            // --- USDA API Configuration ---
+            const USDA_API_KEY = 'N6E6LaUcOvYctm2FqZleH5Ap4hz7jX9wrgCwwvig'; // Replace with your actual API key
+            // Nutrient IDs used by USDA API (can vary slightly based on source DB - SR Legacy, Foundation, etc.)
+            const nutrientIds = { calories: 1008, protein: 1003, fat: 1004, carbs: 1005 }; // Common IDs for Energy, Protein, Fat, Carbs (by difference)
+    
+            /**
+             * Switches the active tab in the food entry overlay between 'Manual Entry' and 'Search'.
+             * @param {string} tabName - The name of the tab to activate ('manual' or 'search').
+             */
+            function switchTab(tabName) {
+                const manualTab = document.getElementById("manual-tab");
+                const searchTab = document.getElementById("search-tab");
+                const manualContent = document.getElementById("manual-entry");
+                const searchContent = document.getElementById("search-entry");
+    
+                if (tabName === "manual") {
+                    manualContent.classList.add("active");
+                    searchContent.classList.remove("active");
+                    manualTab.classList.add("active");
+                    searchTab.classList.remove("active");
+                } else { // Assumes 'search'
+                    manualContent.classList.remove("active");
+                    searchContent.classList.add("active");
+                    manualTab.classList.remove("active");
+                    searchTab.classList.add("active");
+                }
             }
-        }
-
-        let currentWeekStartDate = getCurrentWeekStartDate();
-        let selectedDay = new Date().toDateString();
-        let dayData = {};
-        let editingEntry = null;
-
-        function getCurrentWeekStartDate() {
-            const today = new Date();
-            const dayOfWeek = today.getDay();
-            const startDate = new Date(today);
-            startDate.setDate(today.getDate() - dayOfWeek);
-            startDate.setHours(0, 0, 0, 0);
-            return startDate;
-        }
-
-        function updateWeekDates() {
-            const weekDates = [];
-            for (let i = 0; i < 7; i++) {
-                const currentDate = new Date(currentWeekStartDate);
-                currentDate.setDate(currentWeekStartDate.getDate() + i);
-                weekDates.push(currentDate);
+    
+            // --- Global Variables for State Management ---
+            let currentWeekStartDate = getCurrentWeekStartDate(); // The Date object for the Sunday of the currently displayed week.
+            let selectedDay = new Date().toDateString(); // The string representation of the currently selected day (e.g., "Sun Apr 27 2025").
+            let dayData = {}; // Object storing food log data, keyed by date string, then by hour ID. Structure: { "Sun Apr 27 2025": { "9am": [{foodName: 'Apple', ...}, ...], "1pm": [...] } }
+            let editingEntry = null; // Stores info about an entry being edited: { hour: '9am', index: 0 } or null if not editing.
+    
+            /**
+             * Calculates the date of the Sunday for the current week.
+             * @returns {Date} The Date object representing the start of the current week (Sunday).
+             */
+            function getCurrentWeekStartDate() {
+                const today = new Date();
+                const dayOfWeek = today.getDay(); // 0 for Sunday, 1 for Monday, etc.
+                const startDate = new Date(today);
+                startDate.setDate(today.getDate() - dayOfWeek); // Subtract days to get back to Sunday
+                startDate.setHours(0, 0, 0, 0); // Set time to midnight for consistency
+                return startDate;
             }
-
+    
+            /**
+             * Updates the text and appearance of the week navigation day buttons based on the currentWeekStartDate.
+             * Marks the selectedDay with a dot.
+             */
+            function updateWeekDates() {
+                const weekDates = [];
+                // Generate Date objects for each day of the current week
+                for (let i = 0; i < 7; i++) {
+                    const currentDate = new Date(currentWeekStartDate);
+                    currentDate.setDate(currentWeekStartDate.getDate() + i);
+                    weekDates.push(currentDate);
+                }
+    
+                const dayButtons = document.querySelectorAll('.day-button');
+                // Reset all buttons first
+                dayButtons.forEach(b => {
+                    b.classList.remove('selected'); // Remove selected class
+                    const dot = b.querySelector('.dot'); // Find existing dot
+                    if (dot) dot.remove(); // Remove dot if present
+                });
+    
+                // Update each button with the correct date and add dot if selected
+                weekDates.forEach((date, index) => {
+                    const dayButton = dayButtons[index];
+                    // Format date string (e.g., "Sun 27 Apr") - locale dependent formatting
+                    const dateString = date.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
+                    dayButton.textContent = dateString;
+    
+                    // Check if this button corresponds to the selected day
+                    if (date.toDateString() === selectedDay) {
+                        dayButton.classList.add('selected'); // Mark as selected
+                        const dot = document.createElement('div'); // Create a new dot
+                        dot.classList.add('dot');
+                        dayButton.appendChild(dot); // Add the dot
+                    }
+                });
+            }
+    
+            // --- Event Listeners Setup ---
+    
+            // Add click listeners to day buttons for selecting a day
             const dayButtons = document.querySelectorAll('.day-button');
-            dayButtons.forEach(b => {
-                b.classList.remove('selected');
-                const dot = b.querySelector('.dot');
-                if (dot) dot.remove();
-            });
-
-            weekDates.forEach((date, index) => {
-                const dayButton = dayButtons[index];
-                const existingDot = dayButton.querySelector('.dot');
-                if (existingDot) existingDot.remove();
-                const dateString = date.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
-                dayButton.textContent = dateString;
-
-                if (date.toDateString() === selectedDay) {
-                    dayButton.classList.add('selected');
+            dayButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const clickedDate = new Date(currentWeekStartDate);
+                    const buttonIndex = Array.from(dayButtons).indexOf(button); // Find index of clicked button
+                    clickedDate.setDate(currentWeekStartDate.getDate() + buttonIndex); // Calculate date based on index
+                    selectedDay = clickedDate.toDateString(); // Update the global selectedDay
+    
+                    // Update button appearance visually
+                    dayButtons.forEach(b => { // Reset all buttons
+                        b.classList.remove('selected');
+                        const dot = b.querySelector('.dot');
+                        if (dot) dot.remove();
+                    });
+                    button.classList.add('selected'); // Mark clicked button
                     const dot = document.createElement('div');
                     dot.classList.add('dot');
-                    dayButton.appendChild(dot);
+                    button.appendChild(dot); // Add dot
+    
+                    loadDayData(); // Reload data for the newly selected day
+                });
+            });
+    
+            // Add click listeners for week navigation arrows
+            const prevWeekButton = document.getElementById('prev-week');
+            const nextWeekButton = document.getElementById('next-week');
+    
+            prevWeekButton.addEventListener('click', () => {
+                currentWeekStartDate.setDate(currentWeekStartDate.getDate() - 7); // Move start date back 7 days
+                updateWeekDates(); // Refresh week display
+                // Potentially load data for the new selected day if it changes week context
+                // selectedDay logic might need adjustment if it should default to today when week changes
+                loadDayData(); // Ensure data for the selected day in the new week is shown
+            });
+    
+            nextWeekButton.addEventListener('click', () => {
+                currentWeekStartDate.setDate(currentWeekStartDate.getDate() + 7); // Move start date forward 7 days
+                updateWeekDates(); // Refresh week display
+                loadDayData(); // Ensure data for the selected day in the new week is shown
+            });
+    
+            // Add click listeners to hour buttons to open the food entry overlay
+            const hourButtons = document.querySelectorAll('.hour-button');
+            hourButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const overlay = document.getElementById('food-log-overlay');
+                    overlay.style.display = 'flex'; // Show the overlay
+                    overlay.setAttribute('data-hour', button.id); // Store which hour button was clicked
+                     // Reset search state when opening
+                    document.getElementById('search-results').innerHTML = '';
+                    document.getElementById('search-input').value = '';
+                    switchTab('manual'); // Default to manual entry tab
+                    editingEntry = null; // Ensure not in edit mode when opening for new entry
+                });
+            });
+    
+            // Add listener to overlay background to close it when clicked
+            document.getElementById('food-log-overlay').addEventListener('click', (event) => {
+                // Close only if the click is on the overlay background itself, not the content
+                if (event.target === event.currentTarget) {
+                    document.getElementById('food-log-overlay').style.display = 'none';
+                    editingEntry = null; // Clear editing state when closing overlay
                 }
             });
-        }
-
-        const dayButtons = document.querySelectorAll('.day-button');
-        dayButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const clickedDate = new Date(currentWeekStartDate);
-                const buttonIndex = Array.from(dayButtons).indexOf(button);
-                clickedDate.setDate(currentWeekStartDate.getDate() + buttonIndex);
-                selectedDay = clickedDate.toDateString();
-
-                dayButtons.forEach(b => {
-                    b.classList.remove('selected');
-                    const dot = b.querySelector('.dot');
-                    if (dot) dot.remove();
+    
+            // Prevent clicks inside the overlay content from closing the overlay
+            document.querySelector('.overlay-content').addEventListener('click', (event) => {
+                event.stopPropagation(); // Stop click event from bubbling up to the overlay background
+            });
+    
+            // --- Constants for Nutritional Goals ---
+            const calorieGoal = 2000;
+            const proteinGoal = 150;
+            const fatGoal = 70;
+            const carbGoal = 250;
+    
+            // Add click listener for the 'Save' button in the manual entry tab
+            document.getElementById("save-entry").addEventListener("click", function () {
+                const hour = document.getElementById('food-log-overlay').getAttribute('data-hour');
+                if (!hour) return; // Exit if no hour context is set
+    
+                const manualEntryForm = document.getElementById('manual-entry');
+                const foodName = manualEntryForm.querySelector('#manual-food-name').value.trim();
+                // Parse nutrient values, defaulting to 0 if input is empty or invalid
+                const calories = parseInt(manualEntryForm.querySelector('#manual-calories').value, 10) || 0;
+                const protein = parseInt(manualEntryForm.querySelector('#manual-protein').value, 10) || 0;
+                const fat = parseInt(manualEntryForm.querySelector('#manual-fat').value, 10) || 0;
+                const carbs = parseInt(manualEntryForm.querySelector('#manual-carbs').value, 10) || 0;
+    
+                // Basic validation
+                if (!foodName) { alert("Please enter a food name."); return; }
+                if (calories < 0 || protein < 0 || fat < 0 || carbs < 0) { alert("Nutrient values cannot be negative."); return; }
+    
+                // Ensure data structure exists for the selected day and hour
+                if (!dayData[selectedDay]) dayData[selectedDay] = {};
+                if (!dayData[selectedDay][hour]) dayData[selectedDay][hour] = [];
+    
+                const entryData = { foodName, calories, protein, fat, carbs };
+    
+                if (editingEntry) {
+                    // Update the existing entry if in edit mode
+                    dayData[selectedDay][editingEntry.hour][editingEntry.index] = entryData;
+                    editingEntry = null; // Exit edit mode
+                } else {
+                    // Add a new entry
+                    dayData[selectedDay][hour].push(entryData);
+                }
+    
+                // Save updated data to localStorage
+                localStorage.setItem("foodLog", JSON.stringify(dayData));
+                loadDayData(); // Refresh the display
+                document.getElementById('food-log-overlay').style.display = 'none'; // Close the overlay
+    
+                // Clear the manual entry form
+                manualEntryForm.querySelector('#manual-food-name').value = '';
+                manualEntryForm.querySelector('#manual-calories').value = '';
+                manualEntryForm.querySelector('#manual-protein').value = '';
+                manualEntryForm.querySelector('#manual-fat').value = '';
+                manualEntryForm.querySelector('#manual-carbs').value = '';
+            });
+    
+            /**
+             * Loads food log data for the currently selected day from localStorage,
+             * updates the display of hourly buttons with logged entries,
+             * and recalculates/updates the progress bars.
+             */
+            function loadDayData() {
+                let currentTotals = { calories: 0, protein: 0, fat: 0, carbs: 0 }; // Reset totals for recalculation
+                // Load data from localStorage, defaulting to an empty object if none exists
+                const storedData = localStorage.getItem('foodLog');
+                dayData = storedData ? JSON.parse(storedData) : {};
+    
+                // Reset all hour buttons to their default state
+                const allHourButtons = document.querySelectorAll('.hour-button');
+                allHourButtons.forEach(button => {
+                    // Restore original time text (e.g., '6 AM')
+                    let timeText = '';
+                    if (button.id.endsWith('am')) timeText = button.id.replace('am', ' AM');
+                    else if (button.id.endsWith('pm')) timeText = button.id.replace('pm', ' PM');
+                    button.innerHTML = timeText || button.id.toUpperCase(); // Use innerHTML to clear previous entries
+                    button.style.backgroundColor = '#535252'; // Default background color
                 });
-                button.classList.add('selected');
-                const dot = document.createElement('div');
-                dot.classList.add('dot');
-                button.appendChild(dot);
-
-                loadDayData();
-            });
-        });
-
-        const prevWeekButton = document.getElementById('prev-week');
-        const nextWeekButton = document.getElementById('next-week');
-
-        prevWeekButton.addEventListener('click', () => {
-            currentWeekStartDate.setDate(currentWeekStartDate.getDate() - 7);
-            updateWeekDates();
-        });
-
-        nextWeekButton.addEventListener('click', () => {
-            currentWeekStartDate.setDate(currentWeekStartDate.getDate() + 7);
-            updateWeekDates();
-        });
-
-        const hourButtons = document.querySelectorAll('.hour-button');
-        hourButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                document.getElementById('food-log-overlay').style.display = 'flex';
-                document.getElementById('food-log-overlay').setAttribute('data-hour', button.id);
-                document.getElementById('search-results').innerHTML = '';
-                document.getElementById('search-input').value = '';
-                switchTab('manual');
-            });
-        });
-
-        document.getElementById('food-log-overlay').addEventListener('click', (event) => {
-            if (event.target === event.currentTarget) {
-                document.getElementById('food-log-overlay').style.display = 'none';
-            }
-        });
-
-        document.querySelector('.overlay-content').addEventListener('click', (event) => {
-            event.stopPropagation();
-        });
-
-        updateWeekDates();
-
-        const calorieGoal = 2000;
-        const proteinGoal = 150;
-        const fatGoal = 70;
-        const carbGoal = 250;
-
-        document.getElementById("save-entry").addEventListener("click", function () {
-            const hour = document.getElementById('food-log-overlay').getAttribute('data-hour');
-            if (!hour) return;
-
-            const manualEntryForm = document.getElementById('manual-entry');
-            const foodName = manualEntryForm.querySelector('#manual-food-name').value.trim();
-            const calories = parseInt(manualEntryForm.querySelector('#manual-calories').value, 10) || 0;
-            const protein = parseInt(manualEntryForm.querySelector('#manual-protein').value, 10) || 0;
-            const fat = parseInt(manualEntryForm.querySelector('#manual-fat').value, 10) || 0;
-            const carbs = parseInt(manualEntryForm.querySelector('#manual-carbs').value, 10) || 0;
-
-            if (!foodName) { alert("Please enter a food name."); return; }
-            if (calories < 0 || protein < 0 || fat < 0 || carbs < 0) { alert("Nutrient values cannot be negative."); return; }
-
-            if (!dayData[selectedDay]) dayData[selectedDay] = {};
-            if (!dayData[selectedDay][hour]) dayData[selectedDay][hour] = [];
-
-            if (editingEntry) {
-                // Replace the edited entry
-                dayData[selectedDay][hour][editingEntry.index] = { foodName, calories, protein, fat, carbs };
-                editingEntry = null;
-            } else {
-                // Add new entry
-                dayData[selectedDay][hour].push({ foodName, calories, protein, fat, carbs });
-            }
-
-            localStorage.setItem("foodLog", JSON.stringify(dayData));
-            loadDayData();
-            document.getElementById('food-log-overlay').style.display = 'none';
-
-            manualEntryForm.querySelector('#manual-food-name').value = '';
-            manualEntryForm.querySelector('#manual-calories').value = '';
-            manualEntryForm.querySelector('#manual-protein').value = '';
-            manualEntryForm.querySelector('#manual-fat').value = '';
-            manualEntryForm.querySelector('#manual-carbs').value = '';
-        });
-
-        function loadDayData() {
-            let currentTotals = { calories: 0, protein: 0, fat: 0, carbs: 0 };
-            const storedData = localStorage.getItem('foodLog');
-            dayData = storedData ? JSON.parse(storedData) : {};
-
-            const allHourButtons = document.querySelectorAll('.hour-button');
-            allHourButtons.forEach(button => {
-                let timeText = '';
-                if (button.id.endsWith('am')) timeText = button.id.replace('am', ' AM');
-                else if (button.id.endsWith('pm')) timeText = button.id.replace('pm', ' PM');
-                button.textContent = timeText || button.id.toUpperCase();
-                button.style.backgroundColor = '#535252';
-            });
-
-            if (dayData[selectedDay]) {
-                for (const hour in dayData[selectedDay]) {
-                    const hourButton = document.getElementById(hour);
-                    if (hourButton && dayData[selectedDay][hour]?.length > 0) {
-                        let displayText = dayData[selectedDay][hour].map((entry, index) => {
-                            currentTotals.calories += entry.calories || 0;
-                            currentTotals.protein += entry.protein || 0;
-                            currentTotals.fat += entry.fat || 0;
-                            currentTotals.carbs += entry.carbs || 0;
-                            return `
-                                <div class="entry-line">
-                                    <span class="entry-text">${entry.foodName} (${entry.calories || 0} Cal) (${entry.protein || 0} P) (${entry.fat || 0} F) (${entry.carbs || 0} C)</span>
-                                    <span class="entry-action-buttons">
-                                        <button onclick="event.stopPropagation(); editEntry('${hour}', ${index})">Edit</button>
-                                        <button class="remove-btn" onclick="event.stopPropagation(); removeEntry('${hour}', ${index})">Remove</button>
-                                    </span>
-                                </div>
-                            `;
-
-
-                        }).join('\n');
-
-                        let timeText = '';
-                        if (hour.endsWith('am')) timeText = hour.replace('am', ' AM');
-                        else if (hour.endsWith('pm')) timeText = hour.replace('pm', ' PM');
-                        hourButton.innerHTML = `${timeText || hour.toUpperCase()}<br>${displayText}`;
-                        hourButton.style.backgroundColor = '#7b7e7b';
+    
+                // Check if there's data for the selected day
+                if (dayData[selectedDay]) {
+                    // Iterate through logged hours for the selected day
+                    for (const hour in dayData[selectedDay]) {
+                        const hourButton = document.getElementById(hour);
+                        // Check if the button exists and has entries
+                        if (hourButton && dayData[selectedDay][hour]?.length > 0) {
+                            // Generate HTML string for all entries in this hour
+                            let displayText = dayData[selectedDay][hour].map((entry, index) => {
+                                // Accumulate totals
+                                currentTotals.calories += entry.calories || 0;
+                                currentTotals.protein += entry.protein || 0;
+                                currentTotals.fat += entry.fat || 0;
+                                currentTotals.carbs += entry.carbs || 0;
+                                // Create HTML for the entry line including edit/remove buttons
+                                return `
+                                    <div class="entry-line">
+                                        <span class="entry-text">${entry.foodName} (${entry.calories || 0} Cal) (${entry.protein || 0} P) (${entry.fat || 0} F) (${entry.carbs || 0} C)</span>
+                                        <span class="entry-action-buttons">
+                                            <button onclick="event.stopPropagation(); editEntry('${hour}', ${index})">Edit</button>
+                                            <button class="remove-btn" onclick="event.stopPropagation(); removeEntry('${hour}', ${index})">Remove</button>
+                                        </span>
+                                    </div>
+                                `;
+                            }).join(''); // Join entry lines without newline character
+    
+                            // Get the base time text (e.g., '6 AM')
+                            let timeText = '';
+                            if (hour.endsWith('am')) timeText = hour.replace('am', ' AM');
+                            else if (hour.endsWith('pm')) timeText = hour.replace('pm', ' PM');
+                            // Update button content with time and entries
+                            hourButton.innerHTML = `${timeText || hour.toUpperCase()}<br>${displayText}`;
+                            hourButton.style.backgroundColor = '#7b7e7b'; // Change color to indicate entries exist
+                        }
                     }
                 }
+    
+                // Update progress bars with calculated totals
+                updateProgress("calories-bar", currentTotals.calories, calorieGoal);
+                updateProgress("protein-bar", currentTotals.protein, proteinGoal);
+                updateProgress("fat-bar", currentTotals.fat, fatGoal);
+                updateProgress("carbs-bar", currentTotals.carbs, carbGoal);
+    
+                // If the currently loaded day is today, update the totals used by the dashboard
+                if (selectedDay === new Date().toDateString()) {
+                    localStorage.setItem("todayNutritionTotals", JSON.stringify(currentTotals));
+                }
             }
-
-            updateProgress("calories-bar", currentTotals.calories, calorieGoal);
-            updateProgress("protein-bar", currentTotals.protein, proteinGoal);
-            updateProgress("fat-bar", currentTotals.fat, fatGoal);
-            updateProgress("carbs-bar", currentTotals.carbs, carbGoal);
-
-            if (selectedDay === new Date().toDateString()) {
-                localStorage.setItem("todayNutritionTotals", JSON.stringify(currentTotals));
+    
+            /**
+             * Removes a food entry from the log for a specific hour and index.
+             * Updates localStorage and refreshes the display.
+             * @param {string} hour - The ID of the hour button (e.g., '9am').
+             * @param {number} index - The index of the entry to remove within that hour's array.
+             */
+            function removeEntry(hour, index) {
+                if (dayData[selectedDay] && dayData[selectedDay][hour]) {
+                    dayData[selectedDay][hour].splice(index, 1); // Remove the entry from the array
+                    // If the hour array becomes empty, consider removing the hour key (optional cleanup)
+                    // if (dayData[selectedDay][hour].length === 0) {
+                    //     delete dayData[selectedDay][hour];
+                    // }
+                    localStorage.setItem("foodLog", JSON.stringify(dayData)); // Save changes
+                    loadDayData(); // Refresh display
+                }
             }
-        }
-
-        function removeEntry(hour, index) {
-            if (dayData[selectedDay] && dayData[selectedDay][hour]) {
-                dayData[selectedDay][hour].splice(index, 1);
-                localStorage.setItem("foodLog", JSON.stringify(dayData));
-                loadDayData();
+    
+             /**
+             * Puts the application into 'edit mode' for a specific food entry.
+             * Opens the overlay, populates the manual entry form with the entry's data,
+             * and sets the global editingEntry state.
+             * @param {string} hour - The ID of the hour button containing the entry.
+             * @param {number} index - The index of the entry to edit.
+             */
+            function editEntry(hour, index) {
+                editingEntry = { hour, index }; // Set global edit state
+                const entry = dayData[selectedDay][hour][index]; // Get the entry data
+    
+                // Open the overlay
+                const overlay = document.getElementById('food-log-overlay');
+                overlay.style.display = 'flex';
+                overlay.setAttribute('data-hour', hour); // Ensure hour context is correct
+    
+                // Populate the manual form
+                document.getElementById('manual-food-name').value = entry.foodName;
+                document.getElementById('manual-calories').value = entry.calories || '';
+                document.getElementById('manual-protein').value = entry.protein || '';
+                document.getElementById('manual-fat').value = entry.fat || '';
+                document.getElementById('manual-carbs').value = entry.carbs || '';
+    
+                switchTab('manual'); // Ensure the manual tab is active
             }
-        }
-
-        function editEntry(hour, index) {
-            editingEntry = { hour, index };
-            const entry = dayData[selectedDay][hour][index];
-            document.getElementById('food-log-overlay').style.display = 'flex';
-            document.getElementById('food-log-overlay').setAttribute('data-hour', hour);
-            document.getElementById('manual-food-name').value = entry.foodName;
-            document.getElementById('manual-calories').value = entry.calories;
-            document.getElementById('manual-protein').value = entry.protein;
-            document.getElementById('manual-fat').value = entry.fat;
-            document.getElementById('manual-carbs').value = entry.carbs;
-            switchTab('manual');
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            loadDayData();
-            updateWeekDates();
-        });
-
-        // --- Reverted Update Progress Bar Function ---
-        function updateProgress(barId, currentValue, goal) {
-            const progressBar = document.getElementById(barId);
-            if (!progressBar) { console.error(`Progress bar element not found: ${barId}`); return; }
-            const progressText = progressBar.querySelector(".progress-text");
-            if (!progressText) { console.error(`Progress text element not found within: ${barId}`); return; }
-
-            let percentage = goal > 0 ? (currentValue / goal) * 100 : 0;
-            const displayPercentage = Math.min(percentage, 100);
-
-            let color;
-            switch (barId) {
-                case "calories-bar": color = "#007bff"; break;
-                case "protein-bar": color = "#f5c299"; break;
-                case "fat-bar": color = "#ff6347"; break;
-                case "carbs-bar": color = "green"; break;
-                default: color = "#4caf50";
-            }
-
-            progressBar.style.background = `linear-gradient(to right, ${color} ${displayPercentage}%, #ddd ${displayPercentage}%)`;
-
-            progressText.textContent = `${Math.round(currentValue)} / ${goal}`;
-        }
-
-        // --- USDA API Search Functions ---
-        async function searchFoodDatabase() {
-            const query = document.getElementById('search-input').value.trim();
-            const resultsContainer = document.getElementById('search-results');
-            resultsContainer.innerHTML = '';
-
-            if (!query) { resultsContainer.innerHTML = '<p style="color: yellow;">Please enter a food name to search.</p>'; return; }
-            if (!USDA_API_KEY || USDA_API_KEY === 'API Key') { resultsContainer.innerHTML = '<p style="color: red;">API Key is not configured.</p>'; console.error("USDA API Key is missing."); return; }
-
-            resultsContainer.innerHTML = '<p>Searching...</p>';
-            const url = `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${USDA_API_KEY}&query=${encodeURIComponent(query)}&dataType=Foundation,SR Legacy,Branded&pageSize=15`;
-
-            try {
-                const response = await fetch(url);
-                if (!response.ok) throw new Error(`API Error: ${response.status} ${response.statusText}`);
-                const data = await response.json();
-                displaySearchResults(data.foods || []);
-            } catch (error) {
-                console.error("Error fetching from USDA API:", error);
-                resultsContainer.innerHTML = `<p style="color: red;">Error searching for food: ${error.message}.</p>`;
-            }
-        }
-
-        function displaySearchResults(foods) {
-            const resultsContainer = document.getElementById('search-results');
-            resultsContainer.innerHTML = '';
-
-            if (!foods || foods.length === 0) { resultsContainer.innerHTML = '<p>No results found.</p>'; return; }
-
-            foods.forEach(food => {
-                const itemButton = document.createElement('button');
-                itemButton.classList.add('search-result-item');
-                itemButton.textContent = `${food.description}${food.brandOwner ? ` (${food.brandOwner})` : ''}`;
-                itemButton.type = 'button';
-                itemButton.addEventListener('click', () => populateManualFormWithFood(food));
-                resultsContainer.appendChild(itemButton);
+    
+            // --- Initial Load ---
+            // Add listener to run initial setup when the DOM is fully loaded
+            document.addEventListener("DOMContentLoaded", function () {
+                loadDayData(); // Load data for the default selected day (today)
+                updateWeekDates(); // Set up the week navigation display
             });
-        }
-
-        function populateManualFormWithFood(food) {
-            const getNutrientValue = (id) => {
-                const nutrient = food.foodNutrients?.find(n => n.nutrientId === id || n.nutrientNumber === String(id));
-                return nutrient ? Math.round(nutrient.value ?? 0) : 0;
-            };
-
-            document.getElementById('manual-food-name').value = food.description ?? '';
-            document.getElementById('manual-calories').value = getNutrientValue(nutrientIds.calories);
-            document.getElementById('manual-protein').value = getNutrientValue(nutrientIds.protein);
-            document.getElementById('manual-fat').value = getNutrientValue(nutrientIds.fat);
-            document.getElementById('manual-carbs').value = getNutrientValue(nutrientIds.carbs);
-
-            switchTab('manual');
-        }
-
-        document.getElementById('search-button').addEventListener('click', searchFoodDatabase);
-        document.getElementById('search-input').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') { event.preventDefault(); searchFoodDatabase(); }
-        });
-    </script>
+    
+            /**
+             * Updates the visual appearance and text of a specific progress bar.
+             * @param {string} barId - The ID of the progress bar container element (e.g., 'calories-bar').
+             * @param {number} currentValue - The current value (e.g., consumed calories).
+             * @param {number} goal - The target value (e.g., calorie goal).
+             */
+            function updateProgress(barId, currentValue, goal) {
+                const progressBarElement = document.getElementById(barId); // Get the container div
+                if (!progressBarElement) { console.error(`Progress bar element not found: ${barId}`); return; }
+                const progressText = progressBarElement.querySelector(".progress-text"); // Find the text span inside
+                if (!progressText) { console.error(`Progress text element not found within: ${barId}`); return; }
+    
+                // Calculate percentage, ensuring goal is not zero to avoid division by zero
+                let percentage = goal > 0 ? (currentValue / goal) * 100 : 0;
+                // Cap percentage at 100 for visual display
+                const displayPercentage = Math.min(percentage, 100);
+    
+                // Determine color based on bar ID
+                let color;
+                switch (barId) {
+                    case "calories-bar": color = "#007bff"; break; // Blue
+                    case "protein-bar": color = "#f5c299"; break; // Light Orange/Peach
+                    case "fat-bar": color = "#ff6347"; break; // Tomato Red
+                    case "carbs-bar": color = "green"; break; // Green
+                    default: color = "#4caf50"; // Default green
+                }
+    
+                // Apply gradient background for the progress effect
+                progressBarElement.style.background = `linear-gradient(to right, ${color} ${displayPercentage}%, #ddd ${displayPercentage}%)`;
+    
+                // Update the text display (e.g., "1500 / 2000")
+                progressText.textContent = `${Math.round(currentValue)} / ${goal}`;
+            }
+    
+            // --- USDA API Search Functions ---
+    
+            /**
+             * Performs an asynchronous search against the USDA FoodData Central API.
+             * Uses the value from the search input field.
+             * Displays results or error messages in the search results container.
+             */
+            async function searchFoodDatabase() {
+                const query = document.getElementById('search-input').value.trim();
+                const resultsContainer = document.getElementById('search-results');
+                resultsContainer.innerHTML = ''; // Clear previous results
+    
+                // Basic validation
+                if (!query) { resultsContainer.innerHTML = '<p style="color: yellow;">Please enter a food name to search.</p>'; return; }
+                if (!USDA_API_KEY || USDA_API_KEY === 'N6E6LaUcOvYctm2FqZleH5Ap4hz7jX9wrgCwwvig') { // Check if API key is placeholder or missing
+                     resultsContainer.innerHTML = '<p style="color: orange;">Note: Using Demo API Key. Register for your own key at api.nal.usda.gov for full access.</p>';
+                     // console.warn("Using USDA Demo API Key."); // Log warning instead of error for demo key
+                } else if (USDA_API_KEY === 'YOUR_API_KEY_HERE') { // More explicit check for placeholder
+                     resultsContainer.innerHTML = '<p style="color: red;">API Key is not configured. Please replace YOUR_API_KEY_HERE in the script.</p>';
+                     console.error("USDA API Key is not configured.");
+                     return;
+                }
+    
+    
+                resultsContainer.innerHTML = '<p>Searching...</p>'; // Indicate searching
+                // Construct API URL
+                const url = `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${USDA_API_KEY}&query=${encodeURIComponent(query)}&dataType=Foundation,SR Legacy,Branded&pageSize=15`; // Limit results
+    
+                try {
+                    const response = await fetch(url); // Make the API call
+                    if (!response.ok) { // Check for HTTP errors
+                        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                    }
+                    const data = await response.json(); // Parse JSON response
+                    displaySearchResults(data.foods || []); // Display results or empty array
+                } catch (error) {
+                    console.error("Error fetching from USDA API:", error);
+                    resultsContainer.innerHTML = `<p style="color: red;">Error searching for food: ${error.message}. Check console for details.</p>`; // Show error message
+                }
+            }
+    
+            /**
+             * Displays the food search results as clickable buttons in the results container.
+             * @param {Array} foods - An array of food objects returned by the USDA API.
+             */
+            function displaySearchResults(foods) {
+                const resultsContainer = document.getElementById('search-results');
+                resultsContainer.innerHTML = ''; // Clear previous results/messages
+    
+                if (!foods || foods.length === 0) {
+                    resultsContainer.innerHTML = '<p>No results found.</p>'; // Message if no foods found
+                    return;
+                }
+    
+                // Create a button for each food item
+                foods.forEach(food => {
+                    const itemButton = document.createElement('button');
+                    itemButton.classList.add('search-result-item');
+                    // Display description and brand owner if available
+                    itemButton.textContent = `${food.description}${food.brandOwner ? ` (${food.brandOwner})` : ''}`;
+                    itemButton.type = 'button'; // Set type for accessibility
+                    // Add click listener to populate the form with this food's data
+                    itemButton.addEventListener('click', () => populateManualFormWithFood(food));
+                    resultsContainer.appendChild(itemButton); // Add button to the container
+                });
+            }
+    
+            /**
+             * Populates the manual entry form with data from a selected food item from the search results.
+             * Switches the overlay tab to 'Manual Entry'.
+             * @param {object} food - The food object selected from the search results (USDA API format).
+             */
+            function populateManualFormWithFood(food) {
+                 /**
+                 * Helper function to find and return the value of a specific nutrient from the food's nutrient list.
+                 * Handles cases where nutrient might be missing or value is null.
+                 * @param {number} id - The nutrient ID (e.g., 1008 for Calories).
+                 * @returns {number} The rounded nutrient value, or 0 if not found.
+                 */
+                const getNutrientValue = (id) => {
+                    // Find nutrient by ID (some sources use nutrientId, others nutrientNumber)
+                    const nutrient = food.foodNutrients?.find(n => n.nutrientId === id || n.nutrientNumber === String(id));
+                    // Return rounded value or 0 if not found/nullish value
+                    return nutrient ? Math.round(nutrient.value ?? 0) : 0;
+                };
+    
+                // Populate form fields using the helper function
+                document.getElementById('manual-food-name').value = food.description ?? ''; // Food name/description
+                document.getElementById('manual-calories').value = getNutrientValue(nutrientIds.calories);
+                document.getElementById('manual-protein').value = getNutrientValue(nutrientIds.protein);
+                document.getElementById('manual-fat').value = getNutrientValue(nutrientIds.fat);
+                document.getElementById('manual-carbs').value = getNutrientValue(nutrientIds.carbs);
+    
+                switchTab('manual'); // Switch to the manual entry tab to show the populated data
+            }
+    
+            // Add listener to the search button
+            document.getElementById('search-button').addEventListener('click', searchFoodDatabase);
+            // Add listener to the search input field to allow searching on Enter key press
+            document.getElementById('search-input').addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') { // Check if Enter key was pressed
+                    event.preventDefault(); // Prevent default form submission behavior (if any)
+                    searchFoodDatabase(); // Trigger the search
+                }
+            });
+        </script>
 </body>
 </html>

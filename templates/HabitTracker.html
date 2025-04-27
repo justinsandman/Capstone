@@ -13,135 +13,161 @@
     - 
 -->
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Habit Tracker</title>
-    <style>
-        /* General styling for dark theme */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            justify-content: flex-start;
-        }
+<style>
+    /* -----------------------------------------------------------------------------------------
+     General Styling for Dark Theme
+     -----------------------------------------------------------------------------------------
+     Sets the base font, background color, text color, and overall page layout using Flexbox.
+    */
+    body {
+        font-family: Arial, sans-serif; /* Use Arial as the primary font, with sans-serif as a fallback. */
+        background-color: #121212; /* Set a dark background color for the page. */
+        color: white; /* Set the default text color to white for better contrast on the dark background. */
+        margin: 0; /* Remove default browser margins around the body. */
+        padding: 0; /* Remove default browser padding within the body. */
+        display: flex; /* Enable Flexbox layout for the body's direct children. */
+        flex-direction: column; /* Arrange body elements vertically. */
+        align-items: center; /* Center body elements horizontally. */
+        height: 100vh; /* Set the body to take up the full viewport height. */
+        justify-content: flex-start; /* Align body elements to the top of the viewport. */
+    }
 
-        /* Main container */
-        .container {
-            background: #1e1e1e;
-            width: 90%;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 20px;
-        }
+    /* -----------------------------------------------------------------------------------------
+     Main Container
+     -----------------------------------------------------------------------------------------
+     Styles the main content area of the habit tracker.
+    */
+    .container {
+        background: #1e1e1e; /* Set a slightly lighter dark background for the container. */
+        width: 90%; /* Make the container take up 90% of the viewport width. */
+        padding: 20px; /* Add padding inside the container. */
+        border-radius: 10px; /* Round the corners of the container. */
+        text-align: center; /* Center the text content within the container. */
+        margin-top: 20px; /* Add some top margin to separate it from the top of the page. */
+    }
 
-        /* Habit input field and button */
-        .habit-form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 15px;
-        }
+    /* -----------------------------------------------------------------------------------------
+     Habit Input Field and Button
+     -----------------------------------------------------------------------------------------
+     Styles the form elements used to add new habits.
+    */
+    .habit-form {
+        display: flex; /* Enable Flexbox for the form elements. */
+        flex-direction: column; /* Arrange form elements vertically. */
+        align-items: center; /* Center form elements horizontally within the form. */
+        margin-top: 15px; /* Add some top margin to separate it from the container heading. */
+    }
 
-        .habit-form input {
-            width: 80%;
-            padding: 10px;
-            font-size: 16px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: none;
-        }
+    .habit-form input {
+        width: 80%; /* Make the input field take up 80% of the form's width. */
+        padding: 10px; /* Add padding inside the input field. */
+        font-size: 16px; /* Set the font size for the input text. */
+        margin-bottom: 10px; /* Add some bottom margin to separate it from the button. */
+        border-radius: 5px; /* Round the corners of the input field. */
+        border: none; /* Remove the default border of the input field. */
+    }
 
-        .habit-form button {
-            width: 50%;
-            padding: 10px;
-            font-size: 16px;
-            background: #007bff;
-            color: white;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    .habit-form button {
+        width: 50%; /* Make the button take up 50% of the form's width. */
+        padding: 10px; /* Add padding inside the button. */
+        font-size: 16px; /* Set the font size for the button text. */
+        background: #007bff; /* Set a blue background color for the button. */
+        color: white; /* Set the button text color to white. */
+        font-weight: bold; /* Make the button text bold. */
+        border: none; /* Remove the default button border. */
+        border-radius: 5px; /* Round the corners of the button. */
+        cursor: pointer; /* Change the cursor to a pointer on hover, indicating it's clickable. */
+    }
 
-        /* Habit list section */
-        .habit-list {
-            width: 90%;
-            background: #222;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            text-align: left;
-        }
+    /* -----------------------------------------------------------------------------------------
+     Habit List Section
+     -----------------------------------------------------------------------------------------
+     Styles the area where the list of habits is displayed.
+    */
+    .habit-list {
+        width: 90%; /* Make the habit list take up 90% of the viewport width. */
+        background: #222; /* Set a slightly darker background for the habit list. */
+        padding: 20px; /* Add padding inside the habit list. */
+        border-radius: 10px; /* Round the corners of the habit list. */
+        margin-top: 20px; /* Add top margin to separate it from the habit form. */
+        text-align: left; /* Align the text within the habit list to the left. */
+    }
 
-        .habit {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #444;
-        }
+    .habit {
+        display: flex; /* Enable Flexbox for individual habit items. */
+        justify-content: space-between; /* Distribute space between the habit text and the checkbox. */
+        align-items: center; /* Vertically align the habit text and the checkbox. */
+        padding: 10px; /* Add padding around each habit item. */
+        border-bottom: 1px solid #444; /* Add a subtle bottom border to separate habit items. */
+    }
 
-        .habit input {
-            width: 20px;
-            height: 20px;
-        }
+    .habit input {
+        width: 20px; /* Set the width of the checkbox. */
+        height: 20px; /* Set the height of the checkbox. */
+    }
 
-        /* Progress bar container */
-        .progress-container {
-            width: 90%;
-            margin-top: 20px;
-            text-align: center;
-        }
+    /* -----------------------------------------------------------------------------------------
+     Progress Bar Container
+     -----------------------------------------------------------------------------------------
+     Styles the container for the daily progress bar.
+    */
+    .progress-container {
+        width: 90%; /* Make the progress bar container take up 90% of the viewport width. */
+        margin-top: 20px; /* Add top margin to separate it from the habit list. */
+        text-align: center; /* Center the text within the progress bar container. */
+    }
 
-        /* Progress bar */
-        .progress-bar {
-            width: 100%;
-            background: #444;
-            border-radius: 5px;
-            overflow: hidden;
-            height: 20px;
-            margin-top: 10px;
-        }
+    /* -----------------------------------------------------------------------------------------
+     Progress Bar
+     -----------------------------------------------------------------------------------------
+     Styles the visual representation of the daily progress.
+    */
+    .progress-bar {
+        width: 100%; /* Make the progress bar take up the full width of its container. */
+        background: #444; /* Set a dark background color for the progress bar. */
+        border-radius: 5px; /* Round the corners of the progress bar. */
+        overflow: hidden; /* Ensure the progress indicator stays within the rounded borders. */
+        height: 20px; /* Set the height of the progress bar. */
+        margin-top: 10px; /* Add some top margin to separate it from the "Daily Progress" text. */
+    }
 
-        .progress {
-            width: 50%; /* Placeholder width */
-            height: 100%;
-            background: #33FF57;
-        }
+    .progress {
+        width: 50%; /* Placeholder width for the progress indicator (will be updated dynamically). */
+        height: 100%; /* Make the progress indicator take up the full height of the progress bar. */
+        background: #33FF57; /* Set a green background color for the progress indicator. */
+    }
 
-        /* Reset button */
-        .reset-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: red;
-            color: white;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    /* -----------------------------------------------------------------------------------------
+     Reset Button
+     -----------------------------------------------------------------------------------------
+     Styles the button used to reset the daily habits.
+    */
+    .reset-btn {
+        margin-top: 20px; /* Add top margin to separate it from the progress bar. */
+        padding: 10px 20px; /* Add padding inside the reset button. */
+        background: red; /* Set a red background color for the reset button. */
+        color: white; /* Set the reset button text color to white. */
+        font-weight: bold; /* Make the reset button text bold. */
+        border: none; /* Remove the default button border. */
+        border-radius: 5px; /* Round the corners of the reset button. */
+        cursor: pointer; /* Change the cursor to a pointer on hover. */
+    }
 
-        /* Back button */
-        .back-btn {
-            margin: 20px;
-            padding: 10px 20px;
-            background: #007bff;
-            color: white;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-    </style>
+    /* -----------------------------------------------------------------------------------------
+     Back Button
+     -----------------------------------------------------------------------------------------
+     Styles the button that allows navigation back to the main dashboard.
+    */
+    .back-btn {
+        margin: 20px; /* Add margin around the back button. */
+        padding: 10px 20px; /* Add padding inside the back button. */
+        background: #007bff; /* Set a blue background color for the back button. */
+        color: white; /* Set the back button text color to white. */
+        font-weight: bold; /* Make the back button text bold. */
+        text-decoration: none; /* Remove the default underline from the link. */
+        border-radius: 5px; /* Round the corners of the back button. */
+    }
+</style>
 </head>
 <body>
     <!-- Title section -->

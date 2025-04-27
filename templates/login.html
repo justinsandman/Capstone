@@ -20,67 +20,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <style>
+        /* -----------------------------------------------------------------------------------------
+         Body Styling
+         -----------------------------------------------------------------------------------------
+         Sets the base display, alignment, height, background color, text color, and font for the entire page.
+        */
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #1E1E1E;
-            color: white;
-            font-family: Arial, sans-serif;
+            display: flex; /* Enable Flexbox for centering content. */
+            justify-content: center; /* Center content horizontally. */
+            align-items: center; /* Center content vertically. */
+            height: 100vh; /* Set the body to take up the full viewport height. */
+            background-color: #1E1E1E; /* Set a dark background color for the page. */
+            color: white; /* Set the default text color to white. */
+            font-family: Arial, sans-serif; /* Use Arial as the primary font, with sans-serif as a fallback. */
         }
+        /* -----------------------------------------------------------------------------------------
+         Login Container
+         -----------------------------------------------------------------------------------------
+         Styles the main container for the login form and related elements.
+        */
         .login-container {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            width: 340px;
-            position: relative;
+            background: rgba(255, 255, 255, 0.05); /* Set a semi-transparent white background for the container. */
+            padding: 20px; /* Add padding inside the container. */
+            border-radius: 15px; /* Round the corners of the container. */
+            text-align: center; /* Center the text content within the container. */
+            width: 340px; /* Set a fixed width for the login container. */
+            position: relative; /* Enable positioning of child elements relative to this container. */
         }
+        /* -----------------------------------------------------------------------------------------
+         Logo
+         -----------------------------------------------------------------------------------------
+         Styles the logo image displayed on the login page.
+        */
         .logo {
-            width: 200px;
-            margin-bottom: 10px;
+            width: 200px; /* Set a fixed width for the logo. */
+            margin-bottom: 10px; /* Add some bottom margin to separate it from the heading. */
         }
+        /* -----------------------------------------------------------------------------------------
+         Input Fields
+         -----------------------------------------------------------------------------------------
+         Styles the input fields for username and password.
+        */
         .login-container input {
-            width: 95%;
-            padding: 10px;
-            margin: 10px 0;
-            background: black;
-            border: none;
-            color: white;
-            border-radius: 5px;
+            width: 95%; /* Make the input fields take up 95% of the container width. */
+            padding: 10px; /* Add padding inside the input fields. */
+            margin: 10px 0; /* Add top and bottom margin to separate the fields. */
+            background: black; /* Set a black background for the input fields. */
+            border: none; /* Remove the default border of the input fields. */
+            color: white; /* Set the text color inside the input fields to white. */
+            border-radius: 5px; /* Round the corners of the input fields. */
         }
+        /* -----------------------------------------------------------------------------------------
+         Input Placeholder Text
+         -----------------------------------------------------------------------------------------
+         Styles the placeholder text within the input fields.
+        */
         .login-container input::placeholder {
-            color: gray;
+            color: gray; /* Set the color of the placeholder text to gray. */
         }
+        /* -----------------------------------------------------------------------------------------
+         Login Button
+         -----------------------------------------------------------------------------------------
+         Styles the main login button.
+        */
         .login-btn {
-            width: 100%;
-            padding: 10px;
-            background: #D3D3D3;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            color: black;
-            font-weight: bold;
+            width: 100%; /* Make the login button take up the full width of the container. */
+            padding: 10px; /* Add padding inside the button. */
+            background: #D3D3D3; /* Set a light gray background for the button. */
+            border: none; /* Remove the default button border. */
+            border-radius: 5px; /* Round the corners of the button. */
+            cursor: pointer; /* Change the cursor to a pointer on hover. */
+            color: black; /* Set the button text color to black. */
+            font-weight: bold; /* Make the button text bold. */
         }
+        /* -----------------------------------------------------------------------------------------
+         Forgot Password Link
+         -----------------------------------------------------------------------------------------
+         Styles the link for users who have forgotten their password.
+        */
         .forgot-password {
-            display: block;
-            margin-top: 12px;
-            color: #5D95C3;
-            text-decoration: none;
+            display: block; /* Make the link a block-level element to take up the full width. */
+            margin-top: 12px; /* Add some top margin to separate it from the button. */
+            color: #5D95C3; /* Set a blue color for the link text. */
+            text-decoration: none; /* Remove the default underline from the link. */
         }
+        /* -----------------------------------------------------------------------------------------
+         Forgot Password Link Hover Effect
+         -----------------------------------------------------------------------------------------
+         Adds an underline on hover for better user feedback.
+        */
         .forgot-password:hover {
-            text-decoration: underline;
+            text-decoration: underline; /* Add an underline on hover. */
         }
+        /* -----------------------------------------------------------------------------------------
+         Error Message
+         -----------------------------------------------------------------------------------------
+         Styles the display of error messages, such as incorrect login attempts.
+        */
         .error-message {
-            color: red;
-            font-size: 14px;
-            margin-top: -5px;
-            margin-bottom: 10px;
+            color: red; /* Set the error message text color to red. */
+            font-size: 14px; /* Set a smaller font size for the error message. */
+            margin-top: -5px; /* Adjust the top margin for spacing. */
+            margin-bottom: 10px; /* Add some bottom margin to separate it from the input fields. */
         }
     </style>
 </head>
 <body>
+
 
     {% load static %}
 
