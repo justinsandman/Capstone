@@ -11,6 +11,42 @@ While many fitness trackers require subscriptions for advanced features, our pro
 
 Our goal is to support users of all experience levels by providing an easy-to-use, accessible tool for tracking health and lifestyle habits. With a clean interface and intuitive features, our tracker will make monitoring progress simple and engaging, empowering users to make informed, healthier choices.
 
+# **Feature List** 
+
+* **Food Logging**
+* **Sleep Tracking**
+* **Habit Tracking**
+* **Weight Tracking**
+* **Journal Entries**
+* **Program Custumization**
+* **Settings & Account Management**
+
+# **External API Used**
+
+**USDA FoodData Central API**
+* Official Documentation: https://fdc.nal.usda.gov
+* This API was used to retrieve detailed food and nutrition information for the foodlogging features. 
+
+# **Installation/Setup Instructions**
+
+1. **Clone the Repository**
+    * git clone https://github.com/justinsandman/Capstone/issues/26
+2. **Setup Virtual Environment**
+    * 
+3. **Install the Required Packages**
+    * 
+4. **Configure the Database**
+    * Ensure you have MySQL installed and running.
+    * Create a new MySQL database (you can use database.sql for setup).
+    * Update DATABASES settings in capstone/settings.py to match your MySQL credentials.
+5. **Apply Database Migrations**
+    * python manage.py makemigrations
+    * python manage.py migrate
+6. **Create a Superuser (for Admin Panel)**
+    * python manage.py createsuperuser
+7. **Run Development Server**
+    * python manage.py runserver
+    * Visit http://127.0.0.1:8000 in your web browser to view the app! 
 
  
 # **Files**
@@ -18,6 +54,7 @@ Our goal is to support users of all experience levels by providing an easy-to-us
 ## **HTML**
 Front-End devlopment files
 
+### **templates**
 * **Expenditure.html** 
     * Interface for the expenditure feature which allows users to track their physical activity levels. (i.e weightlifting, running, cycling)
 * **FoodLog.html**
@@ -50,20 +87,44 @@ Front-End devlopment files
     * Interface for once the user enters their email and it matches where they will be able to enter a new password
     
 ## SQL
-Database Management files
+Database Testing file
 * database.sql
-    * add description here
-    * TODO: link database to hold created accounts
-    * TODO: link database for Nutrition
-## Python
-* Django.py
-    * TODO: description
-* models.py
-    * TODO: description
-* settings.py
-    * TODO: description
-* views.py
+    * This file contains the SQL scripts used to initialize and populate the project's test database.
+    * Responible for creating main database and user credintials. 
+    * Defines database schema. 
+    * Inserts test data into each table for intial testing and demonstration. 
 
+
+## Python
+Main logic for setting up Django framework
+
+### **capstone**
+* **settings.py**
+    * Contains all project settings such as installed apps, database configurations, static files setup, and third-party API keys.
+* **urls.py**
+    * Defines the URL patterns that route web requests to the appropriate views across the project.
+* **views.py**
+    * Handles logic for processing requests, interacting with models, and rendering responses (HTML templates or JSON).
+* **wsgi.py**
+    * Entry-point for WSGI-compatible web servers to serve project; used in production deployment.
+
+### **core**
+* **admin.py**
+    * Registers models for the Django admin interface, allowing data management through the built-in admin dashboard.
+* **forms.py**
+    * Defines custom forms used for user input and data validation (such as workout entries, food logs, etc.).
+* **utils.py**
+    * Contains helper functions or modules, such as functions that communicate with the USDA API or perform data processing.
+
+### **nutrition**
+* **models.py**
+    * Defines the database schema (tables and fields) using Django's ORM; includes models like FoodLog or WeightLog. 
+
+* **manage.py**
+    * This is the command-line utility for interacting with the Django project.
+    * Runs administrative tasks such as starting the server, migrating databases, creating apps, and managing users.
+    * Sets up the correct Django settings module (capstone.settings) before executing commands.
+    * Serves as the main entry point for Django's built-in management commands (runserver, migrate, createsuperuser, etc.).
 
 ---
 ## **Authors**
