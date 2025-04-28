@@ -119,19 +119,19 @@
 <body>
     <div class="settings-container">
         <h1>Settings</h1>
-        <a href="MyAccount.html">
+        <a href="{% url 'my_account' %}">
             <button class="button">My Account</button>
         </a>
-        <a href="ActivityLevel.html">
+        <a href="{% url 'activity_level' %}">
             <button class="button">Activity Level</button>
         </a>
         <a href="support.html">
             <button class="button">Support</button>
         </a>
-        <a href="login.html">
+        <a href="{% url 'login' %}">
             <button class="button">Sign Out</button>
         </a>
-        <a href="MainDashboard.html">
+        <a href="{% url 'dashboard' %}">
             <button class="button button-back">Back</button>
         </a>
     </div>

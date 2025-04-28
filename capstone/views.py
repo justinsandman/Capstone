@@ -135,3 +135,19 @@ def dashboard(request):
     """
     return render(request, 'MainDashboard.html')
 
+def my_account_view(request):
+    """
+    """
+    context = {} 
+    return render(request, 'MyAccount.html', context) 
+
+def activity_level_view(request):
+    """
+    """
+    context = {} 
+    return render(request, 'ActivityLevel.html', context) 
+
+def forgot_password_view(request):
+    """
+    """
+    return render(request, "ForgotPassword.html")

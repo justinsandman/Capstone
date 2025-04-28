@@ -195,13 +195,28 @@
       position: absolute;
       top: 2rem;
       left: 2rem;
+      background-color: #555555; /* Light grey button */
+      color: white; /* White text */
+      padding: 10px 20px; /* Button padding */
+      border: none; /* No border */
+      border-radius: 5px; /* Rounded corners */
+      text-decoration: none; /* No underline */
+      font-size: 16px; /* Text size */
+      cursor: pointer; /* Pointer cursor */
+      display: inline-block; /* Make it behave like a button */
+      text-align: center;
     }
+
+    #dashboard-btn:hover {
+      background-color: grey; /* Slightly darker on hover */
+    }
+
 
   </style>
 </head>
 <body>
   <div class="container">
-    <button id="dashboard-btn">Return to Dashboard</button>
+    <a href="{% url 'dashboard' %}" id="dashboard-btn">Return to Dashboard</a>
     <h1>Fitness Tracker</h1>
     <form id="workout-form">
       <div class="form-group">

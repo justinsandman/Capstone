@@ -10,7 +10,6 @@ This file defines Django forms used for:
 
 Forms are based on Django's built-in forms or custom-defined ones for apps needs. 
 """
-
 from django import forms
 from django.forms import ModelForm
 from django.contrib.auth.models import User

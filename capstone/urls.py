@@ -34,5 +34,13 @@ urlpatterns = [
     path('sleeplog/', views.sleep_log, name='sleep_log'),             #
     path('journal/', views.journal, name='journal'),                  #
     path('settings/', views.settings, name='settings'),               #
+
+    # Route for My Account page (accessible from settings)
+    path('my-account/', views.my_account_view, name='my_account'),
+
+    # Route for Activity Level page (accessible from settings)
+    path('activity-level/', views.activity_level_view, name='activity_level'),
+
+    path('forgot-password/', views.forgot_password_view, name='forgot_password'),
 ]
 

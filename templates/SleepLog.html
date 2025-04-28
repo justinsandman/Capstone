@@ -279,7 +279,7 @@
       /* Note: Changed from fixed to absolute based on user testing; adjust if needed */
       top: 1rem; /* Position from the top edge. */
       left: 1rem; /* Position from the left edge. */
-      background: #555; /* Gray background. */
+      background: #555555; /* Gray background. */
       color: #fff; /* White text. */
       padding: 0.5rem 1rem; /* Padding inside the button. */
       border: none; /* No border. */
@@ -330,7 +330,7 @@
 </head>
 <body>
   <div class="container">
-    <button id="dashboard-btn">Return to Dashboard</button>
+    <a href="{% url 'dashboard' %}" id="dashboard-btn">Return to Dashboard</a>
 
     <h1>Sleep Log</h1>
 
