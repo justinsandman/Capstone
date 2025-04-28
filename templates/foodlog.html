@@ -573,7 +573,7 @@
 </head>
 <body>
     <div class="food-log-container">
-        <button class="back-button" onclick="location.href='MainDashboard.html'">Back to Dashboard</button>
+        <a href="{% url 'dashboard' %}" class="back-button">Back to Dashboard</a>
         <h1 class="title">Food Log</h1>
         <div class="week-navigation">
             <button class="arrow" id="prev-week">&#8592;</button>
