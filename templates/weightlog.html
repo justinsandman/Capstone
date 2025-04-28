@@ -11,6 +11,10 @@
 
     References: 
     - https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js
+    - https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries 
+    - https://developer.mozilla.org/en-US/docs/Web/Events 
+    - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+    - https://www.chartjs.org/docs/latest/ 
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -18,155 +22,258 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weight Log</title>
-    <!-- This link was found from gemini, when asking how I may implement a line plot for my weight log, one of the options -->
-    <!-- it gave me was this link. Which is the Chart.js library using a CDN link from jsDelivr that it reccomended. -->  
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script> <!-- Using Chart.js (v4.4.2) via jsDelivr for charting -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script> 
     <style>
+        /* -----------------------------------------------------------------------------------------
+         Global Styles & Reset
+         -----------------------------------------------------------------------------------------
+         Basic reset and default font settings for the entire page.
+        */
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0; /* Remove default margins. */
+            padding: 0; /* Remove default padding. */
+            box-sizing: border-box; /* Include padding and border in element's total size. */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Default font stack. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Body Styling
+         -----------------------------------------------------------------------------------------
+         Sets background color, text color, and base padding for the page body.
+        */
         body {
-            background-color: #121212;
-            color: #f5f5f5;
-            padding: 2rem;
+            background-color: #121212; /* Dark background. */
+            color: #f5f5f5; /* Light text color. */
+            padding: 2rem; /* Padding around content. Add more if dashboard button overlaps. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Main Container
+         -----------------------------------------------------------------------------------------
+         Constrains the maximum width of the main content area and centers it.
+        */
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 800px; /* Limit content width. */
+            margin: 0 auto; /* Center horizontally. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Heading Styling
+         -----------------------------------------------------------------------------------------
+         Styles for the main h1 title.
+        */
         h1 {
-            text-align: center;
-            margin-bottom: 2rem;
+            text-align: center; /* Center the title. */
+            margin-bottom: 2rem; /* Space below the title. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Input & Graph Container Box Styling
+         -----------------------------------------------------------------------------------------
+         Shared styles for the boxes containing the input area and the graph.
+        */
         .input-container, .graph-container-box {
-            background: #2C2C2C;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
+            background: #2C2C2C; /* Dark gray background. */
+            padding: 1.5rem; /* Padding inside the boxes. */
+            border-radius: 12px; /* Rounded corners. */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow. */
+            margin-bottom: 2rem; /* Space below each box. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Input Area Layout
+         -----------------------------------------------------------------------------------------
+         Flex container for aligning the weight input label, field, and button.
+        */
         .input-area {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            display: flex; /* Use flexbox for layout. */
+            justify-content: center; /* Center items horizontally. */
+            align-items: center; /* Align items vertically. */
+            gap: 15px; /* Space between flex items (label, input, button). */
+            flex-wrap: wrap; /* Allow items to wrap on smaller screens. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Label Styling
+         -----------------------------------------------------------------------------------------
+         Styles for the form label.
+        */
         label {
-            font-weight: 600;
-            margin-bottom: 0;
-            margin-right: 10px;
+            font-weight: 600; /* Slightly bolder text. */
+            margin-bottom: 0; /* Remove default bottom margin if any. */
+            margin-right: 10px; /* Space between label and input field. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Number Input Styling
+         -----------------------------------------------------------------------------------------
+         Styles specific to the number input field for weight.
+        */
         input[type="number"] {
-            width: 150px;
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 1rem;
-            background-color: #333;
-            color: white;
-            text-align: right;
+            width: 150px; /* Fixed width for the input field. */
+            padding: 0.5rem; /* Padding inside the input. */
+            border: 1px solid #ccc; /* Light gray border. */
+            border-radius: 8px; /* Rounded corners. */
+            font-size: 1rem; /* Standard font size. */
+            background-color: #333; /* Dark background for input. */
+            color: white; /* White text color. */
+            text-align: right; /* Align input text to the right. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Hide Number Input Spinners (Webkit/Blink)
+         -----------------------------------------------------------------------------------------
+         Removes the default up/down arrows from number inputs in Chrome, Safari, Edge, etc.
+        */
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+            -webkit-appearance: none; /* Remove default appearance. */
+            margin: 0; /* Remove any margins associated with spinners. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Hide Number Input Spinners (Firefox)
+         -----------------------------------------------------------------------------------------
+         Removes the default up/down arrows from number inputs in Firefox.
+        */
         input[type=number] {
-            -moz-appearance: textfield;
+            -moz-appearance: textfield; /* Use textfield appearance to hide spinners. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         General Button Styling
+         -----------------------------------------------------------------------------------------
+         Styles for buttons, primarily the 'Log Weight' button.
+        */
         button {
-            background: #333;
-            color: #fff;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s ease;
+            background: #333; /* Dark background for buttons. */
+            color: #fff; /* White text color. */
+            padding: 0.75rem 1.5rem; /* Padding inside buttons. */
+            border: none; /* Remove default border. */
+            border-radius: 8px; /* Rounded corners. */
+            cursor: pointer; /* Indicate interactivity. */
+            transition: background 0.3s ease; /* Smooth background transition on hover. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Button Hover Effect
+         -----------------------------------------------------------------------------------------
+         Slightly lighter background on hover for visual feedback.
+        */
         button:hover {
-            background: #555;
+            background: #555; /* Lighter gray background on hover. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Message Area Styling
+         -----------------------------------------------------------------------------------------
+         Styles for the paragraph element used to display success or error messages.
+        */
         #message {
-            text-align: center;
-            min-height: 1.2em;
-            font-weight: 500;
+            text-align: center; /* Center the message text. */
+            min-height: 1.2em; /* Ensure space is reserved even when empty, prevents layout shifts. */
+            font-weight: 500; /* Medium font weight. */
+            margin-top: 1rem; /* Add space above the message */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Success Message Styling
+         -----------------------------------------------------------------------------------------
+         Applies green color for success messages.
+        */
         #message.success {
-            color: #28a745;
+            color: #28a745; /* Green color for success. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Error Message Styling
+         -----------------------------------------------------------------------------------------
+         Applies red color for error messages.
+        */
         #message.error {
-            color: #dc3545;
+            color: #dc3545; /* Red color for errors. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Graph Container Layout
+         -----------------------------------------------------------------------------------------
+         Container holding the chart canvas, allows for horizontal scrolling if needed.
+        */
         .graph-container {
-            width: 100%;
-            height: 400px;
-            overflow-x: auto;
-            position: relative;
+            width: 100%; /* Full width of its parent (.graph-container-box). */
+            height: 400px; /* Fixed height for the chart area. */
+            overflow-x: auto; /* Enable horizontal scrolling if chart becomes too wide. */
+            position: relative; /* Needed for Chart.js responsiveness. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Chart Canvas Styling
+         -----------------------------------------------------------------------------------------
+         Ensures the canvas itself has a minimum width.
+        */
         #weightChart {
-            min-width: 500px;
+            min-width: 500px; /* Minimum width to prevent excessive squeezing on narrow screens. */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Dashboard Button Styling
+         -----------------------------------------------------------------------------------------
+         Positions the 'Return to Dashboard' button absolutely in the top-left corner.
+        */
         #dashboard-btn {
-            position: absolute;
-            top: 2rem;
-            left: 2rem;
+            position: absolute; /* Position relative to the nearest positioned ancestor (body). */
+            top: 2rem; /* Distance from the top edge. */
+            left: 2rem; /* Distance from the left edge. */
+            /* Inherits general button styles, overrides can be added here if needed */
         }
 
+        /* -----------------------------------------------------------------------------------------
+         Responsive Styles (Small Screens)
+         -----------------------------------------------------------------------------------------
+         Adjusts layout for screens narrower than 600px.
+        */
         @media (max-width: 600px) {
+            /* Stack input elements vertically on small screens */
             .input-area {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 10px;
+                flex-direction: column; /* Change flex direction to column. */
+                align-items: stretch; /* Stretch items to fill container width. */
+                gap: 10px; /* Reduce gap between items. */
             }
 
+            /* Make input field full width */
             input[type="number"] {
-                width: 100%;
-                text-align: left;
+                width: 100%; /* Input takes full available width. */
+                text-align: left; /* Align text to the left for better readability. */
             }
 
+            /* Make button full width */
             button {
-                width: 100%;
+                width: 100%; /* Button takes full available width. */
             }
 
+            /* Reduce padding on the main container */
             .container {
-                padding: 1rem;
+                padding: 1rem; /* Less padding on smaller screens. */
             }
 
+            /* Slightly smaller main title */
             h1 {
-                font-size: 1.8rem;
+                font-size: 1.8rem; /* Adjust title font size. */
             }
 
+            /* Reduce graph container height */
             .graph-container {
-                height: 300px;
+                height: 300px; /* Smaller height for the chart area. */
             }
         }
     </style>
 </head>
 <body>
     <button id="dashboard-btn">Return to Dashboard</button>
+    
     <div class="container">
         <h1>Weight Log</h1>
+        
         <div class="input-container">
             <div class="input-area">
                 <label for="weightInput">Enter Weight:</label>
@@ -175,6 +282,7 @@
             </div>
             <p id="message"></p>
         </div>
+        
         <div class="graph-container-box">
             <h2>Progress</h2>
             <div class="graph-container">
@@ -182,34 +290,59 @@
             </div>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const weightInput = document.getElementById('weightInput');
-            const logButton = document.getElementById('logButton');
-            const messageEl = document.getElementById('message');
-            const ctx = document.getElementById('weightChart').getContext('2d');
-            let weightChart;
-            let weightData = [];
-            let editIndex = -1;
 
+    <script>
+        /**
+         * Executes when the initial HTML document has been completely loaded and parsed.
+         * Sets up event listeners and initializes the weight log functionality.
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Element References ---
+            const weightInput = document.getElementById('weightInput'); // The number input field for weight.
+            const logButton = document.getElementById('logButton'); // The button to log/update weight.
+            const messageEl = document.getElementById('message'); // The paragraph element for displaying messages.
+            const ctx = document.getElementById('weightChart').getContext('2d'); // The 2D rendering context for the chart canvas.
+            
+            // --- State Variables ---
+            let weightChart; // Holds the Chart.js instance. Initialized in updateChart.
+            let weightData = []; // Array to store weight entries { date: string, weight: number }.
+            let editIndex = -1; // Index of the entry being edited (-1 means not editing). Set by chart click.
+
+            /**
+             * Loads weight data from localStorage.
+             * Parses the stored JSON string, sorts the data by date, and populates the `weightData` array.
+             * Handles potential parsing errors.
+             */
             function loadData() {
-                const storedData = localStorage.getItem('weightLog');
+                const storedData = localStorage.getItem('weightLog'); // Get data from localStorage.
                 if (storedData) {
                     try {
-                        weightData = JSON.parse(storedData);
-                        weightData.sort((a, b) => new Date(a.date) - new Date(b.date));
+                        weightData = JSON.parse(storedData); // Parse the JSON string.
+                        // Ensure data is an array and sort it chronologically by date.
+                        if (Array.isArray(weightData)) {
+                             weightData.sort((a, b) => new Date(a.date) - new Date(b.date));
+                        } else {
+                            console.error("Stored weight data is not an array:", weightData);
+                            weightData = []; // Reset if data is corrupted.
+                        }
                     } catch (e) {
                         console.error("Error parsing stored weight data:", e);
-                        weightData = [];
-                        localStorage.removeItem('weightLog');
+                        weightData = []; // Reset data on error.
+                        localStorage.removeItem('weightLog'); // Optionally clear corrupted data.
                     }
                 } else {
-                    weightData = [];
+                    weightData = []; // Initialize as empty array if nothing is stored.
                 }
             }
 
+            /**
+             * Saves the current `weightData` array to localStorage as a JSON string.
+             * Handles potential storage errors (e.g., storage full).
+             */
             function saveData() {
                 try {
+                    // Sort data before saving to maintain order (optional, but consistent).
+                    weightData.sort((a, b) => new Date(a.date) - new Date(b.date));
                     localStorage.setItem('weightLog', JSON.stringify(weightData));
                 } catch (e) {
                     console.error("Error saving weight data:", e);
@@ -217,88 +350,117 @@
                 }
             }
 
+            /**
+             * Displays a temporary message to the user in the message element.
+             * @param {string} msg - The message text to display.
+             * @param {string} [type='info'] - The type of message ('success', 'error', or 'info' for default styling). Affects CSS class.
+             */
             function displayMessage(msg, type = 'info') {
-                messageEl.textContent = msg;
-                messageEl.className = type;
+                messageEl.textContent = msg; // Set the text content.
+                messageEl.className = type; // Set the CSS class for styling (success, error).
+                
+                // Clear the message after a delay (4 seconds).
                 setTimeout(() => {
-                    messageEl.textContent = '';
-                    messageEl.className = '';
+                    messageEl.textContent = ''; // Clear text.
+                    messageEl.className = ''; // Remove styling class.
                 }, 4000);
             }
 
+            /**
+             * Gets the current date in UTC and formats it as 'YYYY-MM-DD'.
+             * Using UTC helps maintain consistency regardless of user's local timezone changes.
+             * @returns {string} The current UTC date string.
+             */
             function getCurrentDate() {
                 const today = new Date();
+                // Get UTC components.
                 const year = today.getUTCFullYear();
-                const month = String(today.getUTCMonth() + 1).padStart(2, '0');
-                const day = String(today.getUTCDate()).padStart(2, '0');
+                const month = String(today.getUTCMonth() + 1).padStart(2, '0'); // Month is 0-indexed, add leading zero.
+                const day = String(today.getUTCDate()).padStart(2, '0'); // Add leading zero.
                 return `${year}-${month}-${day}`;
             }
 
+            /**
+             * Updates or creates the weight line chart using Chart.js.
+             * Destroys the previous chart instance if it exists.
+             * Maps `weightData` to labels (dates) and data points (weights) for the chart.
+             */
             function updateChart() {
+                // Destroy the previous chart instance to prevent memory leaks and rendering issues.
                 if (weightChart) {
                     weightChart.destroy();
                 }
+                
+                // Extract labels (dates) and data points (weights) from the sorted weightData array.
                 const labels = weightData.map(entry => entry.date);
                 const dataPoints = weightData.map(entry => entry.weight);
+                
+                // Create a new Chart.js instance.
                 weightChart = new Chart(ctx, {
-                    type: 'line',
+                    type: 'line', // Line chart.
                     data: {
-                        labels: labels,
+                        labels: labels, // X-axis labels (dates).
                         datasets: [{
-                            label: 'Weight',
-                            data: dataPoints,
-                            borderColor: 'white',
-                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                            tension: 0.1,
-                            borderWidth: 2,
-                            pointBackgroundColor: 'white',
-                            pointRadius: 5,
-                            pointHoverRadius: 8
+                            label: 'Weight', // Legend label for the dataset.
+                            data: dataPoints, // Y-axis data points (weights).
+                            borderColor: 'white', // Line color.
+                            backgroundColor: 'rgba(255, 255, 255, 0.1)', // Optional: Area fill under the line.
+                            tension: 0.1, // Line curvature (0 = straight lines).
+                            borderWidth: 2, // Line thickness.
+                            pointBackgroundColor: 'white', // Color of the data points.
+                            pointRadius: 5, // Size of the data points.
+                            pointHoverRadius: 8 // Size of data points on hover.
                         }]
                     },
                     options: {
                         scales: {
-                            y: {
-                                beginAtZero: false,
-                                title: {
+                            // Y-axis configuration (Weight).
+                            y: { 
+                                beginAtZero: false, // Don't force y-axis to start at 0.
+                                title: { // Axis title configuration.
                                     display: true,
                                     text: 'Weight',
-                                    color: 'white'
+                                    color: 'white' // Title color.
                                 },
-                                ticks: {
-                                    color: 'white'
+                                ticks: { // Axis tick label configuration.
+                                    color: 'white' // Tick label color.
                                 },
-                                grid: {
-                                    color: 'rgba(255, 255, 255, 0.1)'
+                                grid: { // Axis grid line configuration.
+                                    color: 'rgba(255, 255, 255, 0.1)' // Grid line color.
                                 }
                             },
-                            x: {
-                                title: {
+                            // X-axis configuration (Date).
+                            x: { 
+                                title: { // Axis title configuration.
                                     display: true,
                                     text: 'Date',
-                                    color: 'white'
+                                    color: 'white' // Title color.
                                 },
-                                ticks: {
-                                    color: 'white'
+                                ticks: { // Axis tick label configuration.
+                                    color: 'white' // Tick label color.
                                 },
-                                grid: {
-                                    color: 'rgba(255, 255, 255, 0.1)'
+                                grid: { // Axis grid line configuration.
+                                    color: 'rgba(255, 255, 255, 0.1)' // Grid line color.
                                 }
                             }
                         },
-                        responsive: true,
-                        maintainAspectRatio: false,
+                        responsive: true, // Allow chart to resize with container.
+                        maintainAspectRatio: false, // Allow chart height to be controlled by container height.
                         plugins: {
+                            // Tooltip configuration (popup on hover).
                             tooltip: {
                                 callbacks: {
+                                    // Set tooltip title to the date (label).
                                     title: function (tooltipItems) {
-                                        return tooltipItems[0].label;
+                                        return tooltipItems[0].label; 
                                     },
+                                    // Set tooltip body label to "Weight: value" (formatted to 2 decimal places).
                                     label: function (context) {
-                                        let label = context.dataset.label || '';
+                                        let label = context.dataset.label || ''; // Get dataset label ('Weight').
                                         if (label) {
                                             label += ': ';
                                         }
+                                        // Format the weight value.
                                         if (context.parsed.y !== null) {
                                             label += parseFloat(context.parsed.y).toFixed(2);
                                         }
@@ -306,70 +468,112 @@
                                     }
                                 }
                             },
-                            datalabels: {
-                                display: false,
+                            // Datalabels plugin configuration (if used - currently disabled).
+                            datalabels: { 
+                                display: false, // Do not display labels directly on data points.
                             },
+                            // Legend configuration.
                             legend: {
-                                display: false,
+                                display: false, // Hide the legend (only one dataset).
                             }
                         },
+                        /**
+                         * Handles clicks on the chart elements (data points).
+                         * Sets the `editIndex` to the index of the clicked point and populates the input field.
+                         * @param {Event} event - The click event object.
+                         * @param {Array} elements - An array of active chart elements that were clicked.
+                         */
                         onClick: (event, elements) => {
+                            // Check if any chart elements (points) were clicked.
                             if (elements.length > 0) {
-                                editIndex = elements[0].index;
+                                editIndex = elements[0].index; // Get the index of the clicked data point.
+                                // Populate the input field with the weight from the clicked data point.
                                 weightInput.value = weightData[editIndex].weight;
+                                displayMessage(`Editing entry for ${weightData[editIndex].date}. Enter new weight and click 'Log Weight'.`, 'info');
                             }
                         }
                     }
                 });
             }
 
+            /**
+             * Handles the logic when the 'Log Weight' button is clicked or Enter is pressed.
+             * Validates the input, then either updates an existing entry (if editing or current date exists) 
+             * or adds a new entry for the current date. Saves data and updates the chart.
+             */
             function handleLogWeight() {
-                const weightValueStr = weightInput.value.trim();
+                const weightValueStr = weightInput.value.trim(); // Get input value and remove whitespace.
+                
+                // Validate: Ensure input is not empty.
                 if (weightValueStr === '') {
                     displayMessage("Please enter your weight.", "error");
                     return;
                 }
-                const weightValue = parseFloat(weightValueStr);
+                
+                const weightValue = parseFloat(weightValueStr); // Convert input to a number.
+                
+                // Validate: Ensure input is a valid positive number.
                 if (isNaN(weightValue) || weightValue <= 0) {
                     displayMessage("Please enter a valid positive weight.", "error");
                     return;
                 }
-                const formattedWeight = parseFloat(weightValue.toFixed(2));
-                const currentDate = getCurrentDate();
+                
+                // Format weight to two decimal places.
+                const formattedWeight = parseFloat(weightValue.toFixed(2)); 
+                const currentDate = getCurrentDate(); // Get today's date (YYYY-MM-DD UTC).
 
                 if (editIndex !== -1) {
-                    weightData[editIndex].weight = formattedWeight;
-                    displayMessage(`Weight for ${weightData[editIndex].date} updated.`, 'success');
-                    editIndex = -1;
+                    // --- Editing an existing entry selected via chart click ---
+                    const editDate = weightData[editIndex].date; // Get the date of the entry being edited.
+                    weightData[editIndex].weight = formattedWeight; // Update the weight for that entry.
+                    displayMessage(`Weight for ${editDate} updated to ${formattedWeight.toFixed(2)}.`, 'success');
+                    editIndex = -1; // Reset edit mode.
                 } else {
+                    // --- Adding or updating today's entry ---
+                    // Check if an entry already exists for the current date.
                     const existingEntryIndex = weightData.findIndex(entry => entry.date === currentDate);
+                    
                     if (existingEntryIndex !== -1) {
+                        // Update existing entry for today.
                         weightData[existingEntryIndex].weight = formattedWeight;
                         displayMessage(`Updated weight for ${currentDate} to ${formattedWeight.toFixed(2)}.`, 'success');
                     } else {
+                        // Add a new entry for today.
                         weightData.push({ date: currentDate, weight: formattedWeight });
+                        // Sort data after adding to ensure chart remains chronological.
+                        weightData.sort((a, b) => new Date(a.date) - new Date(b.date)); 
                         displayMessage(`Weight ${formattedWeight.toFixed(2)} logged for ${currentDate}.`, 'success');
                     }
                 }
 
-                saveData();
-                updateChart();
-                weightInput.value = '';
+                saveData(); // Save the updated data array to localStorage.
+                updateChart(); // Redraw the chart with the new data.
+                weightInput.value = ''; // Clear the input field.
             }
 
+            // --- Event Listeners ---
+
+            // Listener for the 'Log Weight' button click.
             logButton.addEventListener('click', handleLogWeight);
+
+            // Listener for the 'Enter' key press within the weight input field.
             weightInput.addEventListener('keypress', function (event) {
                 if (event.key === 'Enter') {
-                    event.preventDefault();
-                    handleLogWeight();
+                    event.preventDefault(); // Prevent default form submission behavior (if inside a form).
+                    handleLogWeight(); // Trigger the same logic as clicking the button.
                 }
             });
             loadData();
             updateChart();
 
+            // Listener for the 'Return to Dashboard' button click.
             document.getElementById('dashboard-btn').addEventListener('click', () => {
-                window.location.href = 'MainDashboard.html';
+                window.location.href = 'MainDashboard.html'; // Navigate back to the main dashboard.
             });
+            
+            // --- Initial Setup ---
+            loadData(); // Load data from localStorage when the page loads.
+            updateChart(); // Create the initial chart with loaded data.
         });
     </script>
 </body>

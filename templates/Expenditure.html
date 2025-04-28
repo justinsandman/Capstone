@@ -12,6 +12,8 @@
 
     References: 
     - Universal Selector (selects all elements of any time) https://www.w3schools.com/cssref/sel_all.php
+    - https://developer.mozilla.org/en-US/docs/Web/CSS 
+    - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date 
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -228,20 +230,58 @@
   </div>
 
   <script>
+    /**
+     * @constant {HTMLElement} form - The main workout form element.
+     */
     const form = document.getElementById('workout-form');
+    /**
+     * @constant {HTMLSelectElement} typeSelect - The dropdown to select the workout type (weightlifting or cardio).
+     */
     const typeSelect = document.getElementById('type');
+    /**
+     * @constant {HTMLElement} dynamicFields - The container for dynamically generated form fields based on the workout type.
+     */
     const dynamicFields = document.getElementById('dynamic-fields');
+    /**
+     * @constant {HTMLElement} entriesContainer - The container where logged workout entries are displayed.
+     */
     const entriesContainer = document.getElementById('entries');
+    /**
+     * @type {Array<HTMLElement>} workoutExercises - An array to hold the dynamically created exercise input groups for weightlifting.
+     */
     const workoutExercises = [];
+    /**
+     * @type {Array<Object>} loggedWorkouts - An array to store the logged workout objects. Each object contains workout details.
+     */
     let loggedWorkouts = [];
+    /**
+     * @type {string|null} editingEntryId - The ID of the workout entry being edited, or null if not in edit mode.
+     */
     let editingEntryId = null;
 
+
+    /**
+     * @constant {string} STORAGE_KEY - The key used to store workout data in localStorage.
+     */
     const STORAGE_KEY = 'fitnessTrackerWorkouts';
 
+
+    /**
+     * Saves the `loggedWorkouts` array to localStorage as a JSON string.
+     * @function saveWorkouts
+     * @returns {void}
+     */
     function saveWorkouts() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(loggedWorkouts));
     }
 
+
+    /**
+     * Loads workout data from localStorage, parses it, and displays the entries.
+     * Handles potential errors during parsing and initializes `loggedWorkouts` if no data is found or if the stored data is invalid.
+     * @function loadWorkouts
+     * @returns {void}
+     */
     function loadWorkouts() {
       const storedWorkouts = localStorage.getItem(STORAGE_KEY);
       if (storedWorkouts) {
@@ -261,10 +301,24 @@
       loggedWorkouts.forEach(entry => displayWorkoutEntry(entry));
     }
 
+
+    /**
+     * Creates and appends a DOM element to display a single workout entry in the `entriesContainer`.
+     * The displayed information varies based on the `entryData.type` (weightlifting or cardio).
+     * Includes "Edit" and "Remove" buttons for each entry.
+     * @function displayWorkoutEntry
+     * @param {Object} entryData - An object containing the details of a workout entry.
+     * @param {string} entryData.id - The unique ID of the workout entry.
+     * @param {string} entryData.type - The type of workout ('weightlifting' or 'cardio').
+     * @param {string} entryData.date - The date of the workout.
+     * @param {Object} entryData.details - An object containing workout-specific details.
+     * @returns {void}
+     */
     function displayWorkoutEntry(entryData) {
       const entryDiv = document.createElement('div');
       entryDiv.classList.add('log-entry');
       entryDiv.dataset.id = entryData.id;
+
 
       let exercisesHtml = '';
       if (entryData.type === 'weightlifting') {
@@ -277,6 +331,7 @@
       }
       const cardioHtml = entryData.type === 'cardio' ? `<strong>RUN</strong><br /><p>Time: ${entryData.details.time || 0} mins<br />Distance: ${entryData.details.distance || 0} miles<br />Pace: ${entryData.details.pace || 'N/A'}<br />Heart Rate: ${entryData.details.heartRate || 0} bpm</p>` : '';
 
+
       entryDiv.innerHTML = `
           ${entryData.type === 'weightlifting' ? '' : (entryData.type === 'cardio' ? '' : `<strong>${entryData.type.toUpperCase()}</strong><br />`)}
           ${exercisesHtml}
@@ -286,11 +341,13 @@
           <button class="remove-log-btn">Remove</button>
         `;
 
+
       entryDiv.querySelector('.edit-btn').addEventListener('click', () => {
         editingEntryId = entryData.id;
         populateFormForEditing(entryData);
         form.scrollIntoView({ behavior: 'smooth' });
       });
+
 
       entryDiv.querySelector('.remove-log-btn').addEventListener('click', () => {
         const indexToRemove = loggedWorkouts.findIndex(entry => entry.id === entryData.id);
@@ -307,15 +364,28 @@
         }
       });
 
+
       entriesContainer.prepend(entryDiv);
     }
 
+
+    /**
+     * Handles the change event of the `typeSelect` dropdown.
+     * Clears the `dynamicFields` container and `workoutExercises` array.
+     * Dynamically generates form fields based on the selected workout type (weightlifting or cardio).
+     * If editing an entry, it populates the newly generated fields with the existing data.
+     * @function typeSelect~event:change
+     * @listens HTMLSelectElement#change
+     * @returns {void}
+     */
     typeSelect.addEventListener('change', () => {
       const type = typeSelect.value;
       dynamicFields.innerHTML = '';
       workoutExercises.length = 0;
 
+
       const currentEditData = editingEntryId ? loggedWorkouts.find(entry => entry.id === editingEntryId) : null;
+
 
       if (type === 'weightlifting') {
         dynamicFields.innerHTML = `
@@ -327,15 +397,18 @@
           <button type="button" id="add-exercise">Add Exercise</button>
         `;
 
+
         document.getElementById('add-exercise').addEventListener('click', () => {
           addExerciseField(workoutExercises.length);
         });
+
 
         if (currentEditData && currentEditData.type === 'weightlifting') {
           populateWeightliftingForm(currentEditData);
         } else {
           addExerciseField(0);
         }
+
 
       } else if (type === 'cardio') {
         dynamicFields.innerHTML = `
@@ -357,12 +430,27 @@
           </div>
         `;
 
+
         if (currentEditData && currentEditData.type === 'cardio') {
           populateCardioForm(currentEditData);
         }
       }
     });
 
+
+    /**
+     * Creates and appends a set of input fields for a single exercise in a weightlifting workout.
+     * If `exerciseData` is provided, it populates the fields with the exercise's details.
+     * Also adds an event listener to the "Remove Exercise" button for each exercise group.
+     * @function addExerciseField
+     * @param {number} index - The index of the exercise field group. Used for unique IDs.
+     * @param {Object} [exerciseData=null] - Optional data for pre-filling the exercise fields.
+     * @param {string} [exerciseData.name=''] - The name of the exercise.
+     * @param {string} [exerciseData.sets=''] - The number of sets for the exercise.
+     * @param {string} [exerciseData.reps=''] - The number of repetitions for the exercise.
+     * @param {number} [exerciseData.weight=''] - The weight used for the exercise.
+     * @returns {void}
+     */
     function addExerciseField(index, exerciseData = null) {
       const exerciseGroup = document.createElement('div');
       exerciseGroup.classList.add('exercise-group');
@@ -387,11 +475,14 @@
         <button type="button" class="remove-exercise">Remove Exercise</button>
       `;
 
+
       const container = document.getElementById('exercises-container');
       if (!container) return;
       container.appendChild(exerciseGroup);
 
+
       workoutExercises[index] = exerciseGroup;
+
 
       const removeButton = exerciseGroup.querySelector('.remove-exercise');
       removeButton.addEventListener('click', () => {
@@ -399,6 +490,15 @@
       });
     }
 
+
+    /**
+     * Populates the main form with data from a workout entry that is being edited.
+     * If the workout type of the entry is different from the currently selected type,
+     * it updates the selection and triggers the `change` event to regenerate the dynamic fields.
+     * @function populateFormForEditing
+     * @param {Object} entryData - The data of the workout entry to be edited.
+     * @returns {void}
+     */
     function populateFormForEditing(entryData) {
       if (typeSelect.value !== entryData.type) {
         typeSelect.value = entryData.type;
@@ -410,6 +510,14 @@
       form.querySelector('button[type="submit"]').textContent = 'Update Workout';
     }
 
+
+    /**
+     * Populates the common form fields (date) and calls the appropriate function
+     * to populate the type-specific fields based on the `entryData.type`.
+     * @function populateFields
+     * @param {Object} entryData - The data of the workout entry.
+     * @returns {void}
+     */
     function populateFields(entryData) {
       document.getElementById('date').value = entryData.date;
       if (entryData.type === 'weightlifting') {
@@ -419,14 +527,25 @@
       }
     }
 
+
+    /**
+     * Populates the weightlifting-specific form fields (workout name and exercise details).
+     * It clears any existing exercise fields and then adds new fields based on the
+     * `entryData.details.exercises` array.
+     * @function populateWeightliftingForm
+     * @param {Object} entryData - The data of the weightlifting workout entry.
+     * @returns {void}
+     */
     function populateWeightliftingForm(entryData) {
       const nameInput = document.getElementById('workout-name');
       const exercisesContainer = document.getElementById('exercises-container');
       if (!nameInput || !exercisesContainer) return;
 
+
       nameInput.value = entryData.details.workoutName || '';
       exercisesContainer.innerHTML = '';
       workoutExercises.length = 0;
+
 
       if (entryData.details.exercises && Array.isArray(entryData.details.exercises)) {
         entryData.details.exercises.forEach((exercise, index) => {
@@ -437,6 +556,13 @@
       }
     }
 
+
+    /**
+     * Populates the cardio-specific form fields (time, distance, pace, heart rate).
+     * @function populateCardioForm
+     * @param {Object} entryData - The data of the cardio workout entry.
+     * @returns {void}
+     */
     function populateCardioForm(entryData) {
       const timeInput = document.getElementById('time');
       const distanceInput = document.getElementById('distance');
@@ -444,12 +570,21 @@
       const heartRateInput = document.getElementById('heart-rate');
       if (!timeInput || !paceInput || !heartRateInput || !distanceInput) return;
 
+
       timeInput.value = entryData.details.time || '';
       distanceInput.value = entryData.details.distance || '';
       paceInput.value = entryData.details.pace || '';
       heartRateInput.value = entryData.details.heartRate || '';
     }
 
+
+    /**
+     * Resets the main form to its initial state. Clears input fields, dynamic fields,
+     * the `workoutExercises` array, resets the workout type selection, and clears the `editingEntryId`.
+     * Also resets the submit button text to "Add Workout".
+     * @function resetFormState
+     * @returns {void}
+     */
     function resetFormState() {
       form.reset();
       dynamicFields.innerHTML = '';
@@ -459,13 +594,26 @@
       form.querySelector('button[type="submit"]').textContent = 'Add Workout';
     }
 
+
+    /**
+     * Handles the submit event of the main workout form.
+     * Prevents the default form submission, gathers the workout data based on the selected type,
+     * and either adds a new workout entry or updates an existing one if `editingEntryId` is set.
+     * After saving, it updates the displayed list of workouts and resets the form.
+     * @function form~event:submit
+     * @listens HTMLFormElement#submit
+     * @param {Event} e - The submit event object.
+     * @returns {void}
+     */
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+
 
       const type = typeSelect.value;
       const date = document.getElementById('date').value;
       let details = {};
       let workoutData;
+
 
       if (type === 'weightlifting') {
         const exercises = [];
@@ -475,6 +623,7 @@
           const setsInput = group.querySelector(`#sets-${index}`);
           const repsInput = group.querySelector(`#reps-${index}`);
           const weightInput = group.querySelector(`#weight-${index}`);
+
 
           if (nameInput && setsInput && repsInput && weightInput) {
             exercises.push({
@@ -497,6 +646,7 @@
         };
       }
 
+
       if (editingEntryId) {
         const indexToUpdate = loggedWorkouts.findIndex(entry => entry.id === editingEntryId);
         if (indexToUpdate > -1) {
@@ -508,8 +658,10 @@
           };
           loggedWorkouts[indexToUpdate] = workoutData;
 
+
           const oldEntryDiv = entriesContainer.querySelector(`.log-entry[data-id="${editingEntryId}"]`);
           if (oldEntryDiv) oldEntryDiv.remove();
+
 
         } else {
           console.error("Could not find entry to update with ID:", editingEntryId);
@@ -523,18 +675,37 @@
         loggedWorkouts.push(workoutData);
       }
 
+
       saveWorkouts();
       displayWorkoutEntry(workoutData);
 
+
       resetFormState();
+
 
     });
 
+
+    /**
+     * Loads workout data from localStorage when the DOM is fully loaded.
+     * @function document~event:DOMContentLoaded
+     * @listens document#DOMContentLoaded
+     * @returns {void}
+     */
     document.addEventListener('DOMContentLoaded', loadWorkouts);
 
+
+    /**
+     * Handles the click event of the dashboard button, redirecting the user
+     * to the 'MainDashboard.html' page.
+     * @function dashboardButton~event:click
+     * @listens HTMLElement#click
+     * @returns {void}
+     */
     document.getElementById('dashboard-btn').addEventListener('click', () => {
         window.location.href = 'MainDashboard.html';
     });
+
 
   </script>
 </body>

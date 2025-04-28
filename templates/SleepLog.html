@@ -11,7 +11,8 @@
 
     References: 
     - https://chartscss.org/charts/bar/ 
-    - 
+    - https://www.w3schools.com/html/ 
+    - https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage 
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -21,194 +22,308 @@
   <title>Sleep Log</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    /* -----------------------------------------------------------------------------------------
+     Global Styles & Reset
+     -----------------------------------------------------------------------------------------
+     Basic reset and default font settings for the entire page.
+    */
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0; /* Remove default margins. */
+      padding: 0; /* Remove default padding. */
+      box-sizing: border-box; /* Include padding and border in element's total width and height. */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Default font stack. */
     }
 
+    /* -----------------------------------------------------------------------------------------
+     Body Styling
+     -----------------------------------------------------------------------------------------
+     Sets background color, text color, and base padding for the page body.
+    */
     body {
-      background-color: #121212;
-      color: #f5f5f5;
-      padding: 2rem;
-      padding-top: 5rem; /* Add padding to prevent overlap with fixed button */
+      background-color: #121212; /* Dark background. */
+      color: #f5f5f5; /* Light text color for contrast. */
+      padding: 2rem; /* Padding around the content. */
+      padding-top: 5rem; /* Extra top padding to avoid overlap with the fixed dashboard button. */
     }
 
+    /* -----------------------------------------------------------------------------------------
+     Main Container
+     -----------------------------------------------------------------------------------------
+     Constrains the maximum width of the main content area and centers it.
+    */
     .container {
-      max-width: 800px;
-      margin: 0 auto;
+      max-width: 800px; /* Limit content width for readability. */
+      margin: 0 auto; /* Center the container horizontally. */
     }
 
+    /* -----------------------------------------------------------------------------------------
+     Headings Styling
+     -----------------------------------------------------------------------------------------
+     Styles for h1 and h2 elements.
+    */
     h1 {
-      text-align: center;
-      margin-bottom: 2rem;
+      text-align: center; /* Center the main title. */
+      margin-bottom: 2rem; /* Space below the main title. */
     }
     
     h2 {
-        margin-bottom: 0.5rem; /* Reduced margin for h2 in log */
+        margin-bottom: 0.5rem; /* Smaller space below section titles (like in the log). */
     }
     
+    /* -----------------------------------------------------------------------------------------
+     Average Sleep Display
+     -----------------------------------------------------------------------------------------
+     Specific styles for the paragraph displaying the average sleep duration.
+    */
     #average-sleep {
-        margin-bottom: 1rem; /* Add margin below average sleep text */
-        font-size: 0.9rem;
-        color: #ccc;
-        text-align: left; /* Align text left */
+        margin-bottom: 1rem; /* Space below the average sleep text. */
+        font-size: 0.9rem; /* Slightly smaller font size. */
+        color: #ccc; /* Lighter gray color. */
+        text-align: left; /* Align text to the left within its container. */
     }
 
+    /* -----------------------------------------------------------------------------------------
+     Form Styling
+     -----------------------------------------------------------------------------------------
+     Styles for the sleep logging form container.
+    */
     form {
-      background: #2C2C2C;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
+      background: #2C2C2C; /* Dark gray background for the form. */
+      padding: 1.5rem; /* Padding inside the form. */
+      border-radius: 12px; /* Rounded corners. */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Subtle shadow for depth. */
+      margin-bottom: 2rem; /* Space below the form. */
     }
 
+    /* -----------------------------------------------------------------------------------------
+     Form Group & Label Styling
+     -----------------------------------------------------------------------------------------
+     Styles for grouping form elements and their labels.
+    */
     .form-group {
-      margin-bottom: 1rem;
+      margin-bottom: 1rem; /* Space between form groups. */
     }
 
     label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
+      display: block; /* Make labels take their own line. */
+      margin-bottom: 0.5rem; /* Space below labels. */
+      font-weight: 600; /* Slightly bolder font for labels. */
     }
 
+    /* -----------------------------------------------------------------------------------------
+     Input & Select Element Styling
+     -----------------------------------------------------------------------------------------
+     General styles for text inputs, date/time inputs, and select dropdowns.
+    */
     input, select { 
-      width: 100%;
-      padding: 0.75rem; 
-      border: 1px solid #555; 
-      border-radius: 8px;
-      font-size: 1rem;
-      background-color: #333; 
-      color: #f5f5f5; 
+      width: 100%; /* Make inputs fill their container width. */
+      padding: 0.75rem; /* Padding inside inputs. */
+      border: 1px solid #555; /* Subtle border. */
+      border-radius: 8px; /* Rounded corners for inputs. */
+      font-size: 1rem; /* Standard font size. */
+      background-color: #333; /* Dark background for inputs. */
+      color: #f5f5f5; /* Light text color for input content. */
     }
 
+    /* -----------------------------------------------------------------------------------------
+     Date/Time Picker Icon Styling
+     -----------------------------------------------------------------------------------------
+     Makes the calendar/clock icons visible on the dark input background in Webkit browsers.
+    */
     input[type="time"]::-webkit-calendar-picker-indicator,
     input[type="date"]::-webkit-calendar-picker-indicator {
-        filter: invert(1); /* Make picker icons visible on dark background */
+        filter: invert(1); /* Invert the color of the picker icon to make it white. */
     }
 
+    /* -----------------------------------------------------------------------------------------
+     General Button Styling
+     -----------------------------------------------------------------------------------------
+     Styles for the main submit button.
+    */
     button {
-      background: #007bff; 
-      color: #fff;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      font-size: 1rem; 
-      margin-top: 1rem; 
-      width: 100%; 
+      background: #007bff; /* Blue background for the primary action button. */
+      color: #fff; /* White text color. */
+      padding: 0.75rem 1.5rem; /* Padding inside the button. */
+      border: none; /* Remove default border. */
+      border-radius: 8px; /* Rounded corners. */
+      cursor: pointer; /* Indicate interactivity. */
+      transition: background 0.3s ease; /* Smooth background color transition on hover. */
+      font-size: 1rem; /* Standard font size. */
+      margin-top: 1rem; /* Space above the button. */
+      width: 100%; /* Make the button full width within the form. */
     }
 
+    /* -----------------------------------------------------------------------------------------
+     Button Hover Effect
+     -----------------------------------------------------------------------------------------
+     Darkens the button background on hover for visual feedback.
+    */
     button:hover {
-      background: #0056b3; 
+      background: #0056b3; /* Darker blue on hover. */
     }
 
+    /* -----------------------------------------------------------------------------------------
+     Sleep Log Container Styling
+     -----------------------------------------------------------------------------------------
+     Styles for the container displaying the list of past sleep entries.
+    */
     .log {
-      background: #2C2C2C;
-      border-radius: 12px;
-      padding: 1.5rem; 
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      margin-bottom: 2rem; 
+      background: #2C2C2C; /* Dark gray background, matching the form. */
+      border-radius: 12px; /* Rounded corners. */
+      padding: 1.5rem; /* Padding inside the log container. */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Subtle shadow. */
+      margin-bottom: 2rem; /* Space below the log container. */
     }
 
+    /* -----------------------------------------------------------------------------------------
+     Individual Log Entry Styling
+     -----------------------------------------------------------------------------------------
+     Styles for each row representing a single sleep log entry.
+    */
     .log-entry {
-      border-bottom: 1px solid #555; 
-      padding: 1rem 0;
-      display: flex; 
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap; 
+      border-bottom: 1px solid #555; /* Separator line between entries. */
+      padding: 1rem 0; /* Vertical padding for each entry. */
+      display: flex; /* Use flexbox for layout. */
+      justify-content: space-between; /* Space out text content and buttons. */
+      align-items: center; /* Vertically align items. */
+      flex-wrap: wrap; /* Allow items to wrap on smaller screens. */
     }
     
+    /* -----------------------------------------------------------------------------------------
+     Log Entry Content Area
+     -----------------------------------------------------------------------------------------
+     Allows the main text content area of the log entry to grow.
+    */
     .log-entry div:first-child { 
-        flex-grow: 1; 
-        margin-right: 1rem; 
+        flex-grow: 1; /* Allow the first div (text content) to take available space. */
+        margin-right: 1rem; /* Add space between text and buttons. */
     }
 
+    /* -----------------------------------------------------------------------------------------
+     Last Log Entry Styling
+     -----------------------------------------------------------------------------------------
+     Removes the bottom border from the very last entry in the log.
+    */
     .log-entry:last-child {
-      border-bottom: none;
+      border-bottom: none; /* No separator after the final entry. */
     }
     
+    /* -----------------------------------------------------------------------------------------
+     Log Entry Small Text Styling
+     -----------------------------------------------------------------------------------------
+     Styles for smaller text elements within a log entry (if used).
+    */
     .log-entry small {
-        display: block; 
-        margin-top: 0.5rem;
-        color: #aaa; 
+        display: block; /* Ensure it takes its own line. */
+        margin-top: 0.5rem; /* Space above the small text. */
+        color: #aaa; /* Lighter gray color for less emphasis. */
     }
 
-    /* Styles for Edit and Remove Buttons in Log */
+    /* -----------------------------------------------------------------------------------------
+     Edit/Remove Button Styling (Log Entries)
+     -----------------------------------------------------------------------------------------
+     Specific styles for the Edit and Remove buttons within each log entry.
+    */
     .edit-btn, .remove-log-btn {
-        background: transparent; 
-        color: #ffa500; 
-        padding: 0.25rem 0.75rem;
-        border: 1px solid #ffa500; 
-        border-radius: 4px;
-        cursor: pointer;
-        margin-left: 10px;
-        transition: background 0.3s ease, color 0.3s ease;
-        width: auto; 
-        margin-top: 0; 
-        font-size: 0.9rem; 
+        background: transparent; /* No background fill. */
+        color: #ffa500; /* Orange color for Edit button text/border. */
+        padding: 0.25rem 0.75rem; /* Smaller padding for smaller buttons. */
+        border: 1px solid #ffa500; /* Orange border for Edit button. */
+        border-radius: 4px; /* Slightly rounded corners. */
+        cursor: pointer; /* Indicate interactivity. */
+        margin-left: 10px; /* Space between buttons if needed. */
+        transition: background 0.3s ease, color 0.3s ease; /* Smooth transition on hover. */
+        width: auto; /* Allow button width to fit content. */
+        margin-top: 0; /* Override general button margin. */
+        font-size: 0.9rem; /* Smaller font size. */
     }
 
     .remove-log-btn {
-        color: #f44336; 
-        border-color: #f44336;
+        color: #f44336; /* Red color for Remove button text/border. */
+        border-color: #f44336; /* Red border for Remove button. */
     }
 
+    /* -----------------------------------------------------------------------------------------
+     Edit/Remove Button Hover Effects
+     -----------------------------------------------------------------------------------------
+     Provides visual feedback when hovering over Edit and Remove buttons.
+    */
     .edit-btn:hover {
-        background: #ffa500;
-        color: #fff;
+        background: #ffa500; /* Orange background fill on hover. */
+        color: #fff; /* White text on hover. */
     }
 
     .remove-log-btn:hover {
-        background: #f44336;
-        color: #fff;
+        background: #f44336; /* Red background fill on hover. */
+        color: #fff; /* White text on hover. */
     }
     
+    /* -----------------------------------------------------------------------------------------
+     Log Button Group Styling
+     -----------------------------------------------------------------------------------------
+     Container to hold the Edit and Remove buttons together in a log entry.
+    */
     .button-group { 
-        display: flex;
-        align-items: center;
-        margin-top: 0.5rem; 
+        display: flex; /* Align buttons in a row. */
+        align-items: center; /* Vertically center buttons. */
+        margin-top: 0.5rem; /* Add some space above buttons if they wrap. */
     }
 
+    /* -----------------------------------------------------------------------------------------
+     Dashboard Button Styling
+     -----------------------------------------------------------------------------------------
+     Styles for the button that navigates back to the main dashboard. Fixed position.
+    */
     #dashboard-btn {
-      position: absolute; 
-      top: 1rem;  
-      left: 1rem;   
-      background: #555; 
-      color: #fff;
-      padding: 0.5rem 1rem; 
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      width: auto; 
-      margin-top: 0; 
-      z-index: 10; 
+      position: absolute; /* Position relative to the viewport initially (changed from fixed). */
+      /* Note: Changed from fixed to absolute based on user testing; adjust if needed */
+      top: 1rem; /* Position from the top edge. */
+      left: 1rem; /* Position from the left edge. */
+      background: #555; /* Gray background. */
+      color: #fff; /* White text. */
+      padding: 0.5rem 1rem; /* Padding inside the button. */
+      border: none; /* No border. */
+      border-radius: 8px; /* Rounded corners. */
+      cursor: pointer; /* Indicate interactivity. */
+      transition: background 0.3s ease; /* Smooth hover transition. */
+      width: auto; /* Button width based on content. */
+      margin-top: 0; /* Override default button margin. */
+      z-index: 10; /* Ensure it stays above other content. */
     }
 
+    /* -----------------------------------------------------------------------------------------
+     Dashboard Button Hover Effect
+     -----------------------------------------------------------------------------------------
+     Slightly lighter background on hover for the dashboard button.
+    */
     #dashboard-btn:hover {
-      background: #777;
+      background: #777; /* Lighter gray on hover. */
     }
 
-    /* Container for chart display */
+    /* -----------------------------------------------------------------------------------------
+     Chart Container Styling
+     -----------------------------------------------------------------------------------------
+     Styles the container that holds the sleep data chart.
+    */
     .chart-container {
-        width: 100%; 
-        max-width: 800px; 
-        height: 500px;
-        background-color: #2C2C2C;
-        padding: 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        margin: 2rem auto; /* Added top margin */
+        width: 100%; /* Full width within its parent (.container). */
+        max-width: 800px; /* Match the main container width. */
+        height: 500px; /* Fixed height for the chart area. */
+        background-color: #2C2C2C; /* Dark gray background, matching form/log. */
+        padding: 1.5rem; /* Padding around the canvas. */
+        border-radius: 12px; /* Rounded corners. */
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Subtle shadow. */
+        margin: 2rem auto; /* Center horizontally and add space above/below. */
     }
 
-    /* Ensure chart is responsive and larger */
+    /* -----------------------------------------------------------------------------------------
+     Chart Canvas Styling
+     -----------------------------------------------------------------------------------------
+     Ensures the chart canvas itself behaves correctly within its container.
+    */
     #sleepChart {
-        max-height: 1000px; /* Increased max height for larger graph */
+        max-height: 1000px; /* Set a maximum height (adjust if needed for responsiveness). */
+        /* Chart.js handles responsiveness within the container via options. */
     }
     
   </style>
@@ -216,7 +331,9 @@
 <body>
   <div class="container">
     <button id="dashboard-btn">Return to Dashboard</button>
+
     <h1>Sleep Log</h1>
+
     <form id="sleep-form">
       <div class="form-group">
         <label for="date">Date</label>
@@ -245,89 +362,131 @@
   </div>
 
   <script>
-    const form = document.getElementById('sleep-form');
-    const dateInput = document.getElementById('date');
-    const sleepTimeInput = document.getElementById('sleep-time');
-    const wakeTimeInput = document.getElementById('wake-time');
-    const entriesContainer = document.getElementById('entries');
-    const submitButton = form.querySelector('button[type="submit"]');
-    const chartCanvas = document.getElementById('sleepChart'); 
-    const averageSleepElement = document.getElementById('average-sleep'); // Get average display element
+    // --- DOM Element References ---
+    const form = document.getElementById('sleep-form'); // The sleep logging form.
+    const dateInput = document.getElementById('date'); // Input field for the date.
+    const sleepTimeInput = document.getElementById('sleep-time'); // Input field for sleep start time.
+    const wakeTimeInput = document.getElementById('wake-time'); // Input field for wake up time.
+    const entriesContainer = document.getElementById('entries'); // Div container for log entries.
+    const submitButton = form.querySelector('button[type="submit"]'); // The form's submit button.
+    const chartCanvas = document.getElementById('sleepChart'); // Canvas element for the chart.
+    const averageSleepElement = document.getElementById('average-sleep'); // Paragraph element for displaying average sleep.
 
-    let loggedSleepData = [];
-    let editingEntryId = null;
-    let sleepChart = null; 
+    // --- Global State Variables ---
+    let loggedSleepData = []; // Array to hold all sleep log entry objects.
+    let editingEntryId = null; // Stores the ID of the entry being edited, or null if adding new.
+    let sleepChart = null; // Holds the Chart.js instance.
 
-    const STORAGE_KEY = 'fitnessTrackerSleepLogs';
+    // --- Constants ---
+    const STORAGE_KEY = 'fitnessTrackerSleepLogs'; // Key for localStorage.
 
-    // --- Date Helpers ---
+    // --- Date Helper Functions ---
+
+    /**
+     * Formats a Date object or date string into 'YYYY-MM-DD' format.
+     * @param {Date|string} date - The date to format.
+     * @returns {string} The formatted date string.
+     */
     function formatDate(date) {
         // Returns date in YYYY-MM-DD format
         const d = new Date(date);
         const year = d.getFullYear();
-        const month = (`0${d.getMonth() + 1}`).slice(-2);
-        const day = (`0${d.getDate()}`).slice(-2);
+        const month = (`0${d.getMonth() + 1}`).slice(-2); // Add leading zero if needed.
+        const day = (`0${d.getDate()}`).slice(-2); // Add leading zero if needed.
         return `${year}-${month}-${day}`;
     }
 
+    /**
+     * Gets an array of date strings ('YYYY-MM-DD') for the current week.
+     * @param {number} [startDay=1] - The starting day of the week (0=Sunday, 1=Monday, ...). Defaults to Monday.
+     * @returns {string[]} An array of 7 date strings for the current week.
+     */
     function getCurrentWeekDates(startDay = 1) { // 0=Sun, 1=Mon
         const dates = [];
         const today = new Date();
         const currentDay = today.getDay(); // 0 for Sunday, 1 for Monday, etc.
-        const diff = currentDay - startDay; // Difference from the desired start day
+        const diff = currentDay - startDay; // Difference from the desired start day.
         const startDate = new Date(today);
-        startDate.setDate(today.getDate() - (diff < 0 ? diff + 7 : diff)); // Adjust to the start of the week
+        // Adjust date to the actual start of the week based on the startDay parameter.
+        startDate.setDate(today.getDate() - (diff < 0 ? diff + 7 : diff)); 
 
+        // Generate dates for the 7 days of the week.
         for (let i = 0; i < 7; i++) {
             const weekDate = new Date(startDate);
             weekDate.setDate(startDate.getDate() + i);
-            dates.push(formatDate(weekDate));
+            dates.push(formatDate(weekDate)); // Add formatted date string to the array.
         }
         return dates;
     }
 
-    // --- Data Persistence ---
+    // --- Data Persistence Functions ---
+
+    /**
+     * Saves the current `loggedSleepData` array to localStorage.
+     */
     function saveSleepLogs() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(loggedSleepData));
     }
 
+    /**
+     * Loads sleep log data from localStorage, parses it, and updates the `loggedSleepData` array.
+     * Also triggers rendering, average calculation, and chart update.
+     */
     function loadSleepLogs() {
       const storedData = localStorage.getItem(STORAGE_KEY);
-      loggedSleepData = []; // Reset before loading
+      loggedSleepData = []; // Reset before loading to avoid duplicates if called multiple times.
       if (storedData) {
         try {
           const parsedData = JSON.parse(storedData);
+          // Basic validation to ensure loaded data is an array and entries have minimum required fields.
           if (Array.isArray(parsedData)) {
-             // Ensure data integrity (optional, good practice)
-             loggedSleepData = parsedData.filter(entry => entry && entry.id && entry.date && entry.details && entry.details.sleepTime && entry.details.wakeTime);
+              // Ensure data integrity (optional, but good practice)
+              loggedSleepData = parsedData.filter(entry => 
+                  entry && entry.id && entry.date && entry.details && 
+                  entry.details.sleepTime && entry.details.wakeTime
+              );
           }
         } catch (error) {
           console.error("Error parsing stored sleep logs:", error);
+          // Optionally clear corrupted data: localStorage.removeItem(STORAGE_KEY);
         }
       }
-      renderAllEntries();
-      updateAverageSleepDisplay(); // Update average display on load
-      updateChart(); // Update chart on load
+      renderAllEntries(); // Update the displayed log entries.
+      updateAverageSleepDisplay(); // Update the average sleep text.
+      updateChart(); // Update the chart visualization.
     }
 
-    // --- Display Logic ---
+    // --- Display Logic Functions ---
+
+    /**
+     * Clears the existing log entries from the DOM and renders all entries 
+     * from the `loggedSleepData` array, sorted by date (most recent first).
+     */
     function renderAllEntries() {
-        entriesContainer.innerHTML = '';
-        // Sort entries by date, most recent first for the log display
+        entriesContainer.innerHTML = ''; // Clear previous entries.
+        // Sort entries by date, most recent first for the log display.
+        // Create a shallow copy before sorting to avoid modifying the original array order if needed elsewhere.
         const sortedForLog = [...loggedSleepData].sort((a, b) => new Date(b.date) - new Date(a.date)); 
-        sortedForLog.forEach(entry => displaySleepEntry(entry));
+        sortedForLog.forEach(entry => displaySleepEntry(entry)); // Display each entry.
     }
 
+    /**
+     * Creates the HTML structure for a single sleep log entry and appends it to the log container.
+     * Includes details, duration, and Edit/Remove buttons with associated event listeners.
+     * @param {object} entryData - The sleep log entry object.
+     */
     function displaySleepEntry(entryData) {
       const entryDiv = document.createElement('div');
       entryDiv.classList.add('log-entry');
-      entryDiv.dataset.id = entryData.id;
+      entryDiv.dataset.id = entryData.id; // Store the entry ID on the element for later reference.
 
-      // Ensure duration is calculated if missing (e.g., from older data)
+      // Ensure duration is calculated if missing (e.g., from older data before duration was calculated dynamically).
       const duration = entryData.details.duration || calculateDurationString(entryData.details.sleepTime, entryData.details.wakeTime);
+      // Format times for display.
       const sleepTimeFormatted = formatTime(entryData.details.sleepTime);
       const wakeTimeFormatted = formatTime(entryData.details.wakeTime);
 
+      // Set the inner HTML for the entry.
       entryDiv.innerHTML = `
         <div>
             <strong>${entryData.date}</strong><br />
@@ -342,215 +501,297 @@
 
       // Add Edit functionality
       entryDiv.querySelector('.edit-btn').addEventListener('click', () => {
-        editingEntryId = entryData.id;
-        populateFormForEditing(entryData);
-        form.scrollIntoView({ behavior: 'smooth' });
+        editingEntryId = entryData.id; // Set the global editing ID.
+        populateFormForEditing(entryData); // Fill the form with this entry's data.
+        form.scrollIntoView({ behavior: 'smooth' }); // Scroll the form into view for easy editing.
       });
 
       // Add Remove functionality
       entryDiv.querySelector('.remove-log-btn').addEventListener('click', () => {
+        // Find the index of the entry to remove in the main data array.
         const indexToRemove = loggedSleepData.findIndex(entry => entry.id === entryData.id);
         if (indexToRemove > -1) {
-          loggedSleepData.splice(indexToRemove, 1);
-          saveSleepLogs();
-          entryDiv.remove(); // Remove from DOM
-          updateAverageSleepDisplay(); // Update average after removal
-          updateChart(); // Update chart after removal
+          loggedSleepData.splice(indexToRemove, 1); // Remove the entry from the array.
+          saveSleepLogs(); // Save the updated data.
+          entryDiv.remove(); // Remove the entry's HTML element from the DOM.
+          updateAverageSleepDisplay(); // Recalculate and display the new average.
+          updateChart(); // Update the chart data.
+          // If the removed entry was the one being edited, reset the form.
           if (editingEntryId === entryData.id) {
             resetFormState(); 
           }
         } else {
+          // Fallback if data is inconsistent (should not happen with findIndex).
           console.warn("Could not find sleep data to remove for ID:", entryData.id);
-          entryDiv.remove(); 
+          entryDiv.remove(); // Still remove from DOM to avoid user confusion.
         }
       });
 
+      // Append the newly created entry element to the container.
       entriesContainer.appendChild(entryDiv); 
     }
 
-    // --- Average Calculation & Display ---
-     function formatDurationFromHours(totalHours) {
-        if (isNaN(totalHours) || totalHours <= 0) return 'N/A';
-        const hours = Math.floor(totalHours);
-        const minutes = Math.round((totalHours - hours) * 60);
+    // --- Average Calculation & Display Functions ---
+
+    /**
+     * Formats a total duration in hours into a "X hours Y minutes" string.
+     * @param {number} totalHours - The total duration in hours (can be a float).
+     * @returns {string} The formatted duration string or 'N/A'.
+     */
+    function formatDurationFromHours(totalHours) {
+        if (isNaN(totalHours) || totalHours <= 0) return 'N/A'; // Handle invalid or zero input.
+        const hours = Math.floor(totalHours); // Get the whole number of hours.
+        const minutes = Math.round((totalHours - hours) * 60); // Calculate remaining minutes.
         return `${hours} hours ${minutes} minutes`;
     }
     
+    /**
+     * Calculates the average sleep duration from all entries in `loggedSleepData`
+     * and updates the text content of the `averageSleepElement`.
+     */
     function updateAverageSleepDisplay() {
         if (loggedSleepData.length === 0) {
+            // Display N/A if there are no entries.
             averageSleepElement.textContent = 'Average Sleep: N/A';
             return;
         }
 
         let totalHoursSum = 0;
+        // Sum the duration (in hours) for all entries.
         loggedSleepData.forEach(entry => {
             totalHoursSum += calculateDurationHours(entry.details.sleepTime, entry.details.wakeTime);
         });
 
+        // Calculate the average.
         const averageHours = totalHoursSum / loggedSleepData.length;
+        // Format and display the average.
         averageSleepElement.textContent = `Average Sleep: ${formatDurationFromHours(averageHours)}`;
     }
 
 
-    // --- Form Handling & Data Calculation ---
+    // --- Form Handling & Data Calculation Functions ---
+
+    /**
+     * Populates the form fields with data from a specific log entry for editing.
+     * @param {object} entryData - The sleep log entry object to edit.
+     */
     function populateFormForEditing(entryData) {
       dateInput.value = entryData.date;
       sleepTimeInput.value = entryData.details.sleepTime;
       wakeTimeInput.value = entryData.details.wakeTime;
-      submitButton.textContent = 'Update Sleep Log';
+      submitButton.textContent = 'Update Sleep Log'; // Change button text to indicate editing mode.
     }
 
+    /**
+     * Resets the form fields to their default state, clears the editing ID, 
+     * and resets the submit button text. Sets the date input to today.
+     */
     function resetFormState() {
-      form.reset(); 
-      editingEntryId = null;
-      submitButton.textContent = 'Log Sleep';
-      // Set default date to today after reset
+      form.reset(); // Reset form fields.
+      editingEntryId = null; // Clear the editing state.
+      submitButton.textContent = 'Log Sleep'; // Reset button text.
+      // Set default date to today after reset for convenience.
       dateInput.value = formatDate(new Date()); 
     }
 
+    /**
+     * Calculates the sleep duration between two time strings and returns it as a formatted string.
+     * @param {string} sleepTime - The sleep start time ("HH:MM").
+     * @param {string} wakeTime - The wake up time ("HH:MM").
+     * @returns {string} The formatted duration string (e.g., "8 hours 15 minutes") or 'N/A'.
+     */
     function calculateDurationString(sleepTime, wakeTime) {
-        if (!sleepTime || !wakeTime) return 'N/A';
+        if (!sleepTime || !wakeTime) return 'N/A'; // Basic check.
+        // Calculate duration in hours first.
         const durationHours = calculateDurationHours(sleepTime, wakeTime);
+        // Format the hours into the desired string.
         return formatDurationFromHours(durationHours);
     }
     
+    /**
+     * Calculates the sleep duration between two time strings in total hours.
+     * Handles overnight sleep (where wake time is on the next day).
+     * @param {string} sleepTime - The sleep start time ("HH:MM").
+     * @param {string} wakeTime - The wake up time ("HH:MM").
+     * @returns {number} The duration in hours (float), or 0 if calculation fails.
+     */
     function calculateDurationHours(sleepTime, wakeTime) {
-        if (!sleepTime || !wakeTime) return 0;
+        if (!sleepTime || !wakeTime) return 0; // Return 0 if times are missing.
         
         try {
+            // Split time strings into hours and minutes.
             const sleep = sleepTime.split(':');
             const wake = wakeTime.split(':');
             
-            // Use a consistent base date (like today) to handle potential DST issues slightly better
-            // We only care about the time difference, date part is just for calculation
+            // Use a consistent base date (like today) to handle potential DST issues slightly better.
+            // We only care about the time difference; the date part is just for calculation context.
             const baseDateStr = formatDate(new Date()); 
+            // Create Date objects for sleep and wake times using the base date.
             const sleepDate = new Date(`${baseDateStr}T${sleep[0]}:${sleep[1]}:00`);
             let wakeDate = new Date(`${baseDateStr}T${wake[0]}:${wake[1]}:00`);
 
-            // If wake time is earlier than sleep time, assume it's the next day
+            // If wake time is earlier than or same as sleep time, assume it's the next day.
             if (wakeDate <= sleepDate) {
-                wakeDate.setDate(wakeDate.getDate() + 1);
+                wakeDate.setDate(wakeDate.getDate() + 1); // Add one day to the wake date.
             }
 
+            // Calculate the difference in milliseconds.
             const diffMs = wakeDate - sleepDate;
-            if (isNaN(diffMs) || diffMs < 0) return 0; // Basic validation
+            if (isNaN(diffMs) || diffMs < 0) return 0; // Basic validation on the difference.
 
-            return diffMs / 3600000; // Duration in hours (can be float)
+            // Convert milliseconds to hours.
+            return diffMs / 3600000; // (1000 ms/s * 60 s/min * 60 min/hr)
         } catch(e) {
             console.error("Error calculating duration:", e);
-            return 0; // Return 0 if time parsing fails
+            return 0; // Return 0 if time parsing or calculation fails.
         }
     }
 
+    /**
+     * Formats a time string from "HH:MM" (24-hour) to "H:MM AM/PM" (12-hour).
+     * @param {string} timeString - The time string in "HH:MM" format.
+     * @returns {string} The formatted time string or 'N/A'.
+     */
     function formatTime(timeString) {
+        // Basic validation for the input string.
         if (!timeString || typeof timeString !== 'string' || !timeString.includes(':')) return 'N/A';
         try {
             const [hour, minute] = timeString.split(':');
             const hourInt = parseInt(hour, 10);
-            const ampm = hourInt >= 12 ? 'PM' : 'AM';
-            const formattedHour = hourInt % 12 === 0 ? 12 : hourInt % 12;
-            return `${formattedHour}:${minute} ${ampm}`;
+            const ampm = hourInt >= 12 ? 'PM' : 'AM'; // Determine AM or PM.
+            // Convert hour to 12-hour format (12 AM, 1 AM, ..., 11 AM, 12 PM, 1 PM, ...).
+            const formattedHour = hourInt % 12 === 0 ? 12 : hourInt % 12; 
+            return `${formattedHour}:${minute} ${ampm}`; // Construct the formatted string.
         } catch(e) {
              console.error("Error formatting time:", e);
-            return 'N/A';
+             return 'N/A'; // Return N/A if parsing fails.
         }
     }
 
+    /**
+     * Event Listener for the form submission.
+     * Handles both adding a new sleep log and updating an existing one.
+     */
     form.addEventListener('submit', function (e) {
-      e.preventDefault();
+      e.preventDefault(); // Prevent default form submission which reloads the page.
 
+      // Get values from form inputs.
       const date = dateInput.value;
       const sleepTime = sleepTimeInput.value;
       const wakeTime = wakeTimeInput.value;
 
-      // Basic validation
+      // Basic validation to ensure all fields are filled.
       if (!date || !sleepTime || !wakeTime) {
           alert("Please fill in all fields.");
           return;
       }
 
+      // Create the details object for the entry.
       const details = {
           sleepTime: sleepTime,
           wakeTime: wakeTime,
-          // Duration string is calculated dynamically or can be stored if preferred
+          // Duration string can be calculated dynamically when needed or stored here.
+          // Storing might be slightly more efficient if displayed often, but dynamic calculation ensures accuracy if times change.
           // duration: calculateDurationString(sleepTime, wakeTime) 
       };
 
-      let entryData;
+      let entryData; // Variable to hold the final entry data object.
 
       if (editingEntryId) {
-        // Update existing entry
+        // --- Update existing entry ---
         const indexToUpdate = loggedSleepData.findIndex(entry => entry.id === editingEntryId);
         if (indexToUpdate > -1) {
+          // Create updated entry data, preserving the original ID.
           entryData = {
-            ...loggedSleepData[indexToUpdate], 
-            date: date,
-            details: details
+            ...loggedSleepData[indexToUpdate], // Spread existing properties (like ID).
+            date: date, // Update date.
+            details: details // Update details.
           };
+          // Replace the old entry object with the updated one in the array.
           loggedSleepData[indexToUpdate] = entryData;
         } else {
+          // Should not happen if editingEntryId is set correctly.
           console.error("Could not find entry to update with ID:", editingEntryId);
-          resetFormState();
+          resetFormState(); // Reset form as a fallback.
           return; 
         }
       } else {
-        // Add new entry
-        const newId = Date.now().toString();
-        entryData = { id: newId, date, details };
-        loggedSleepData.push(entryData);
+        // --- Add new entry ---
+        const newId = Date.now().toString(); // Generate a unique ID based on timestamp.
+        entryData = { id: newId, date, details }; // Create the new entry object.
+        loggedSleepData.push(entryData); // Add the new entry to the array.
       }
 
-      saveSleepLogs();
-      renderAllEntries(); // Re-render log
-      updateAverageSleepDisplay(); // Update average display
-      updateChart(); // Update chart
-      resetFormState();
+      // --- Post-Add/Update Actions ---
+      saveSleepLogs(); // Save the updated array to localStorage.
+      renderAllEntries(); // Re-render the log display on the page.
+      updateAverageSleepDisplay(); // Update the calculated average.
+      updateChart(); // Update the chart visualization.
+      resetFormState(); // Clear the form for the next entry.
     });
 
-    // --- Chart Logic ---
-    function initializeChart() {
-        const ctx = chartCanvas.getContext('2d');
-        const weekDates = getCurrentWeekDates(1); // Get Mon-Sun dates for the current week
+    // --- Chart Logic Functions ---
 
+    /**
+     * Initializes the Chart.js instance for the sleep bar chart.
+     * Sets up labels for the current week, initial data, and chart options.
+     */
+    function initializeChart() {
+        const ctx = chartCanvas.getContext('2d'); // Get the 2D rendering context for the canvas.
+        const weekDates = getCurrentWeekDates(1); // Get Mon-Sun dates for the current week labels.
+
+        // Destroy existing chart instance if it exists, to prevent memory leaks on re-initialization.
+        if (sleepChart) {
+            sleepChart.destroy();
+        }
+
+        // Create the new Chart instance.
         sleepChart = new Chart(ctx, {
-            type: 'bar',
+            type: 'bar', // Bar chart type.
             data: {
-                labels: weekDates, // Set initial labels to current week days
+                labels: weekDates, // Set initial labels to current week days (Mon-Sun).
                 datasets: [{
-                    label: 'Hours Slept',
-                    data: Array(7).fill(0), // Initialize data with zeros for the week
-                    backgroundColor: 'rgba(0, 123, 255, 0.5)',
-                    borderColor: 'rgba(0, 123, 255, 1)',
-                    borderWidth: 1
+                    label: 'Hours Slept', // Legend label for the dataset.
+                    data: Array(7).fill(0), // Initialize data with zeros for the 7 days.
+                    backgroundColor: 'rgba(0, 123, 255, 0.5)', // Bar fill color (blue with transparency).
+                    borderColor: 'rgba(0, 123, 255, 1)', // Bar border color (solid blue).
+                    borderWidth: 1 // Bar border width.
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false, 
+                responsive: true, // Allow chart to resize with its container.
+                maintainAspectRatio: false, // Allow chart height to be controlled by the container.
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: { display: true, text: 'Hours', color: '#f5f5f5' },
-                        ticks: { color: '#f5f5f5' },
-                        grid: { color: '#555' }
+                    // Y-axis (Hours) configuration.
+                    y: { 
+                        beginAtZero: true, // Start y-axis at 0.
+                        title: { display: true, text: 'Hours', color: '#f5f5f5' }, // Y-axis title.
+                        ticks: { color: '#f5f5f5' }, // Y-axis label colors.
+                        grid: { color: '#555' } // Y-axis grid line color.
                     },
-                    x: {
-                         title: { display: true, text: 'Date (Current Week Mon-Sun)', color: '#f5f5f5'},
-                        ticks: { color: '#f5f5f5' },
-                         grid: { display: false } // Hide vertical grid lines for clarity
+                    // X-axis (Date) configuration.
+                    x: { 
+                        title: { display: true, text: 'Date (Current Week Mon-Sun)', color: '#f5f5f5'}, // X-axis title.
+                        ticks: { color: '#f5f5f5' }, // X-axis label colors.
+                        grid: { display: false } // Hide vertical grid lines for cleaner look.
                     }
                 },
                 plugins: {
-                    legend: { labels: { color: '#f5f5f5' } },
-                    tooltip: { // Customize tooltips if needed
-                         callbacks: {
+                    // Legend configuration.
+                    legend: { 
+                        labels: { color: '#f5f5f5' } // Legend text color.
+                    },
+                    // Tooltip configuration (when hovering over bars).
+                    tooltip: { 
+                        callbacks: {
+                            // Customize tooltip label to show formatted duration.
                             label: function(context) {
-                                let label = context.dataset.label || '';
+                                let label = context.dataset.label || ''; // Get dataset label (e.g., 'Hours Slept').
                                 if (label) {
                                     label += ': ';
                                 }
+                                // Format the y-value (hours) using the duration formatter.
                                 if (context.parsed.y !== null) {
-                                    // Format tooltip value nicely
                                     label += formatDurationFromHours(context.parsed.y);
                                 }
                                 return label;
@@ -562,45 +803,73 @@
         });
     }
 
+    /**
+     * Updates the data and labels of the existing sleep chart based on the 
+     * current `loggedSleepData` for the current week (Monday-Sunday).
+     */
     function updateChart() {
+        // Initialize chart if it doesn't exist yet.
         if (!sleepChart) {
             initializeChart(); 
+            // If initialized here, it already uses current week data, so we can return.
+            // If data loading happens after initialization, the logic below will run next time.
+            // return; // This return might be unnecessary depending on initialization flow.
         }
+        
+        // Ensure chart instance exists before proceeding.
+        if (!sleepChart) return; 
 
-        const weekDates = getCurrentWeekDates(1); // Get current Mon-Sun dates
-        const weeklyData = Array(7).fill(0); // Initialize data array for the week
+        const weekDates = getCurrentWeekDates(1); // Get date strings for the current Mon-Sun week.
+        const weeklyData = Array(7).fill(0); // Initialize data array for the 7 days with zeros.
 
-        // Map logged data onto the current week
+        // Map logged sleep data onto the correct day of the current week.
         loggedSleepData.forEach(entry => {
-            const entryDateStr = entry.date; // Already in YYYY-MM-DD format
-            const weekIndex = weekDates.indexOf(entryDateStr);
+            const entryDateStr = entry.date; // Date is already in 'YYYY-MM-DD' format.
+            const weekIndex = weekDates.indexOf(entryDateStr); // Find index of the entry's date within the week's dates.
             
-            if (weekIndex !== -1) { // If the entry's date is in the current week
+            // If the entry's date falls within the current week being displayed...
+            if (weekIndex !== -1) { 
+                // Calculate duration and place it in the corresponding index of the data array.
+                // If multiple entries exist for the same day, this will overwrite with the last processed one.
+                // Summing might be an alternative if desired: weeklyData[weekIndex] += ...
                 weeklyData[weekIndex] = calculateDurationHours(entry.details.sleepTime, entry.details.wakeTime);
             }
         });
         
-        // Update chart labels and data
+        // Update the chart's labels (in case the week changed, though less likely mid-session).
         sleepChart.data.labels = weekDates;
+        // Update the chart's dataset with the calculated weekly data.
         sleepChart.data.datasets[0].data = weeklyData;
         
-        // Update the chart
+        // Tell Chart.js to redraw the chart with the new data and labels.
         sleepChart.update();
     }
 
     // --- Initialization ---
+
+    /**
+     * Event Listener for the DOMContentLoaded event.
+     * Sets the default date, loads data from storage, and initializes the chart.
+     */
     document.addEventListener('DOMContentLoaded', () => {
-        dateInput.value = formatDate(new Date()); // Set default date to today
-        loadSleepLogs(); // Load data, render entries, calculate average, and update chart
-        // Initialize chart if it hasn't been already (e.g., if no data loaded)
+        dateInput.value = formatDate(new Date()); // Set default date input value to today.
+        loadSleepLogs(); // Load existing data, render it, calculate average, and update the chart.
+        // Explicitly initialize chart here ensures it's created even if loadSleepLogs finds no data.
+        // updateChart() called within loadSleepLogs will handle the data part.
         if (!sleepChart) {
              initializeChart();
         }
     });
 
     // --- Navigation ---
+
+    /**
+     * Event Listener for the "Return to Dashboard" button.
+     * Navigates the user back to the MainDashboard page.
+     */
     document.getElementById('dashboard-btn').addEventListener('click', () => {
-        window.location.href = 'MainDashboard.html'; // Ensure this path is correct
+        // Redirect to the main dashboard page. Ensure the path is correct relative to this file.
+        window.location.href = 'MainDashboard.html'; 
     });
 
   </script>
